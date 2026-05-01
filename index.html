@@ -2,119 +2,229 @@
 <html lang="el">
 <head>
     <meta charset="UTF-8">
-    <title>AGRO METEO LS | High-End Dashboard</title>
-    <!-- Βιβλιοθήκη για τα Ρολόγια -->
-    <script src="https://cdn.jsdelivr.net/npm/canvas-gauges@2.1.7/all.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AGRO METEO LS | Professional Edition</title>
     <style>
         :root {
-            --bg: #0d1117;
-            --card: #161b22;
-            --accent: #58a6ff;
-            --text: #c9d1d9;
+            --primary: #00e5ff;
+            --bg: #0a0c10;
+            --glass: rgba(255, 255, 255, 0.03);
+            --border: rgba(255, 255, 255, 0.1);
         }
-        body { background: var(--bg); color: var(--text); font-family: sans-serif; margin: 0; padding: 20px; }
-        .header { text-align: center; border-bottom: 2px solid var(--accent); padding: 20px; margin-bottom: 30px; }
-        .header h1 { margin: 0; color: #fff; letter-spacing: 2px; }
-        
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 25px; max-width: 1400px; margin: auto; }
-        
-        .card { background: var(--card); border: 1px solid #30363d; border-radius: 12px; padding: 20px; text-align: center; }
-        .val { font-size: 45px; font-weight: bold; color: #fff; margin: 10px 0; }
-        .unit { font-size: 18px; color: var(--accent); }
-        
-        canvas { margin: 15px auto; display: block; }
-        
-        .chart-box { background: #fff; border-radius: 8px; padding: 5px; margin-top: 15px; height: 200px; }
-        iframe { width: 100%; height: 100%; border: none; }
-        
-        .update-bar { background: #238636; color: white; padding: 5px 15px; border-radius: 20px; font-size: 12px; display: inline-block; margin-top: 10px; }
+
+        body {
+            background-color: var(--bg);
+            color: white;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            letter-spacing: 0.5px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* HEADER /
+        header {
+            text-align: left;
+            padding: 20px;
+            border-left: 4px solid var(--primary);
+            background: var(--glass);
+            margin-bottom: 30px;
+            border-radius: 0 15px 15px 0;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 28px;
+            font-weight: 300;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+        }
+
+        .station-meta {
+            color: #888;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        / LIVE INDICATOR /
+        .live-status {
+            display: inline-flex;
+            align-items: center;
+            background: rgba(0, 229, 255, 0.1);
+            color: var(--primary);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .pulse {
+            width: 8px;
+            height: 8px;
+            background: var(--primary);
+            border-radius: 50%;
+            margin-right: 10px;
+            box-shadow: 0 0 10px var(--primary);
+            animation: pulse-animation 2s infinite;
+        }
+
+        @keyframes pulse-animation {
+            0% { transform: scale(0.95); opacity: 0.7; }
+            50% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(0.95); opacity: 0.7; }
+        }
+
+        / GRID /
+        .main-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: var(--glass);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 25px;
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 2px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+        }
+
+        .label {
+            color: #888;
+            font-size: 13px;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+        }
+
+        .value {
+            font-size: 54px;
+            font-weight: 200;
+            margin-bottom: 10px;
+        }
+
+        .unit {
+            font-size: 20px;
+            color: var(--primary);
+            margin-left: 5px;
+        }
+
+        / CHARTS /
+        .chart-container {
+            margin-top: 20px;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            background: #fff; / Λευκό για να διαβάζεται το γράφημα του Thingspeak /
+        }
+
+        / SECONDARY STATS */
+        .secondary-grid {
+            margin-top: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .small-card {
+            background: var(--glass);
+            padding: 20px;
+            border-radius: 15px;
+            border: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .small-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        footer {
+            margin-top: 50px;
+            padding: 20px;
+            text-align: center;
+            border-top: 1px solid var(--border);
+            color: #444;
+            font-size: 13px;
+        }
     </style>
 </head>
 <body>
 
-<div class="header">
-    <h1>AGRO METEO LS</h1>
-    <div id="status" class="update-bar">ΑΝΑΜΟΝΗ ΔΕΔΟΜΕΝΩΝ...</div>
-</div>
+<div class="container">
+    <header>
+        <h1>AGRO METEO LS</h1>
+        <div class="station-meta">ΠΑΛΑΙΟΣ ΜΥΛΟΤΟΠΟΣ | Ιδιοκτήτης: Χ. Τσαβαλακογλου</div>
+    </header>
 
-<div class="grid">
-    <!-- ΘΕΡΜΟΚΡΑΣΙΑ -->
-    <div class="card">
-        <h3>ΘΕΡΜΟΚΡΑΣΙΑ</h3>
-        <div class="val" id="t-text">--<span class="unit">°C</span></div>
-        <canvas id="g-t"></canvas>
-        <div class="chart-box">
-            <iframe src="https://thingspeak.com/channels/3365350/charts/1?dynamic=true&results=20&color=%2358a6ff"></iframe>
+    <div class="live-status">
+        <div class="pulse"></div>
+        ΣΥΝΔΕΣΗ LIVE: <span id="last-update" style="margin-left: 5px;">---</span>
+    </div>
+
+    <div class="main-grid">
+        <!-- TEMP -->
+        <div class="card">
+            <div class="label">Θερμοκρασία</div>
+            <div class="value"><span id="val-temp">--</span><span class="unit">°C</span></div>
+            <div class="chart-container">
+                <iframe width="100%" height="200" style="border:none;" src="https://thingspeak.com/channels/3365350/charts/1?dynamic=true&results=15&color=%2300e5ff&background=%23ffffff"></iframe>
+            </div>
+        </div>
+
+        <!-- HUM -->
+        <div class="card">
+            <div class="label">Υγρασία</div>
+            <div class="value"><span id="val-hum">--</span><span class="unit">%</span></div>
+            <div class="chart-container">
+                <iframe width="100%" height="200" style="border:none;" src="https://thingspeak.com/channels/3365350/charts/2?dynamic=true&results=15&color=%2300e5ff&background=%23ffffff"></iframe>
+            </div>
+        </div>
+
+        <!-- PRES -->
+        <div class="card">
+            <div class="label">Πίεση</div>
+            <div class="value"><span id="val-pres">--</span><span class="unit">hPa</span></div>
+            <div class="chart-container">
+                <iframe width="100%" height="200" style="border:none;" src="https://thingspeak.com/channels/3365350/charts/3?dynamic=true&results=15&color=%2300e5ff&background=%23ffffff"></iframe>
+            </div>
         </div>
     </div>
 
-    <!-- ΥΓΡΑΣΙΑ -->
-    <div class="card">
-        <h3>ΥΓΡΑΣΙΑ</h3>
-        <div class="val" id="h-text">--<span class="unit">%</span></div>
-        <canvas id="g-h"></canvas>
-        <div class="chart-box">
-            <iframe src="https://thingspeak.com/channels/3365350/charts/2?dynamic=true&results=20&color=%2358a6ff"></iframe>
+    <div class="secondary-grid">
+        <div class="small-card">
+            <div class="label">Βροχόπτωση</div>
+            <div class="small-value"><span id="val-rain">--</span> mm</div>
+        </div>
+        <div class="small-card">
+            <div class="label">Μπαταρία Σταθμού</div>
+            <div class="small-value"><span id="val-batt">--</span> %</div>
         </div>
     </div>
 
-    <!-- ΠΙΕΣΗ -->
-    <div class="card">
-        <h3>ΑΤΜΟΣΦΑΙΡΙΚΗ ΠΙΕΣΗ</h3>
-        <div class="val" id="p-text">--<span class="unit">hPa</span></div>
-        <canvas id="g-p"></canvas>
-        <div class="chart-box">
-            <iframe src="https://thingspeak.com/channels/3365350/charts/3?dynamic=true&results=20&color=%2358a6ff"></iframe>
-        </div>
-    </div>
-</div>
-
-<div style="text-align: center; margin-top: 30px; color: #8b949e;">
-    <p>Βροχή: <span id="r-text" style="color: #fff; font-weight: bold;">--</span> mm | Μπαταρία: <span id="b-text" style="color: #fff; font-weight: bold;">--</span>%</p>
-    <p>Ιδιοκτησία: Χρήστος Τσαβαλακόγλου &copy; 2026</p>
+    <footer>
+        Σύστημα IoT Τσαβαλακογλου &copy; 2026 | Δεδομένα από ThingSpeak API
+    </footer>
 </div>
 
 <script>
-    // 1. ΔΗΜΙΟΥΡΓΙΑ ΡΟΛΟΓΙΩΝ
-    const gT = new RadialGauge({ renderTo: 'g-t', width: 220, height: 220, units: '°C', minValue: -10, maxValue: 50, colorPlate: '#161b22', colorNumbers: '#fff', colorUnits: '#58a6ff', borders: false, needleType: 'arrow', animationDuration: 1500 }).draw();
-    const gH = new RadialGauge({ renderTo: 'g-h', width: 220, height: 220, units: '%', minValue: 0, maxValue: 100, colorPlate: '#161b22', colorNumbers: '#fff', colorUnits: '#58a6ff', borders: false }).draw();
-    const gP = new RadialGauge({ renderTo: 'g-p', width: 220, height: 220, units: 'hPa', minValue: 950, maxValue: 1050, colorPlate: '#161b22', colorNumbers: '#fff', colorUnits: '#58a6ff', borders: false }).draw();
-
-    // 2. ΛΗΨΗ ΔΕΔΟΜΕΝΩΝ ΜΕ JSONP (Η ΜΟΝΗ ΠΟΥ ΔΟΥΛΕΥΕΙ ΠΑΝΤΑ)
-    function updateUI() {
+    // Χρησιμοποιούμε JSONP για να παρακάμψουμε το πρόβλημα των μετρήσεων που είδαμε στην image_16.png
+    function getData() {
         const script = document.createElement('script');
-        // Χρησιμοποιούμε το callback=displayData για να "τρυπήσουμε" το μπλοκάρισμα
-        script.src = "https://api.thingspeak.com/channels/3365350/feeds/last.json?callback=displayData&_=" + new Date().getTime();
-        document.body.appendChild(script);
-        document.body.removeChild(script);
-    }
-
-    function displayData(data) {
-        const t = parseFloat(data.field1);
-        const h = parseFloat(data.field2);
-        const p = parseFloat(data.field3);
-        const r = parseFloat(data.field4);
-        const b = parseFloat(data.field5);
-
-        // Ενημέρωση κειμένων
-        document.getElementById('t-text').innerHTML = t.toFixed(1) + '<span class="unit">°C</span>';
-        document.getElementById('h-text').innerHTML = h.toFixed(0) + '<span class="unit">%</span>';
-        document.getElementById('p-text').innerHTML = p.toFixed(1) + '<span class="unit">hPa</span>';
-        document.getElementById('r-text').innerText = r.toFixed(2);
-        document.getElementById('b-text').innerText = b.toFixed(0);
-
-        // Ενημέρωση ρολογιών
-        gT.value = t;
-        gH.value = h;
-        gP.value = p;
-
-        document.getElementById('status').innerText = "LIVE: " + new Date().toLocaleTimeString();
-    }
-
-    // Εκτέλεση κάθε 20 δευτερόλεπτα
-    updateUI();
-    setInterval(updateUI, 20000);
-</script>
-
-</body>
-</html>
+        script.src = `https://api.thingspeak.com/channels/3365350/feeds/last.json?callback=processData&_=${new Date().getTime()}`;
+        document.body.appendChild(s
