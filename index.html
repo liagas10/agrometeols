@@ -28,7 +28,6 @@
 <div class="overlay">
     <header><h1>Agro Meteo Ls</h1></header>
     <div class="dashboard">
-        <!-- Κάρτα Σταθμού -->
         <div class="card info-card">
             <h3>ΣΤΟΙΧΕΙΑ ΣΤΑΘΜΟΥ</h3>
             <div class="info-line"><strong>Σταθμός:</strong> Agro Meteo Ls</div>
@@ -39,20 +38,6 @@
             <div id="date">------</div>
         </div>
 
-        <!-- Κάρτα Ακρότατων -->
-        <div class="card info-card">
-            <h3>ΑΚΡΟΤΑΤΑ ΗΜΕΡΑΣ</h3>
-            <div class="info-line"><strong>Θερμ. Max:</strong> <span id="t-max">--</span>°C</div>
-            <div class="info-line"><strong>Θερμ. Min:</strong> <span id="t-min">--</span>°C</div>
-            <hr style="opacity:0.3">
-            <div class="info-line"><strong>Υγρασία Max:</strong> <span id="h-max">--</span>%</div>
-            <div class="info-line"><strong>Υγρασία Min:</strong> <span id="h-min">--</span>%</div>
-            <hr style="opacity:0.3">
-            <div class="info-line"><strong>Πίεση Max:</strong> <span id="p-max">--</span></div>
-            <div class="info-line"><strong>Πίεση Min:</strong> <span id="p-min">--</span></div>
-        </div>
-
-        <!-- Βασικές Κάρτες -->
         <div class="card">
             <h3>ΘΕΡΜΟΚΡΑΣΙΑ</h3>
             <div class="main-value"><span id="t-val">--</span><span class="unit">°C</span></div>
@@ -91,7 +76,6 @@
     setInterval(updateClock, 1000);
     updateClock();
 
-    // ΑΥΤΟΣ ΕΙΝΑΙ Ο ΔΙΚΟΣ ΣΟΥ ΚΩΔΙΚΑΣ - ΔΕΝ ΠΕΙΡΑΧΤΗΚΕ ΤΙΠΟΤΑ
     function fetchData() {
         fetch("https://api.thingspeak.com/channels/3365350/feeds/last.json")
         .then(response => response.json())
@@ -111,7 +95,8 @@
         .catch(error => console.log("Error"));
     }
 
-    // ΞΕΧΩΡΙΣΤΗ ΛΕΙΤΟΥΡΓΙΑ ΓΙΑ ΤΑ ΑΚΡΟΤΑΤΑ - ΤΡΕΧΕΙ ΜΟΝΟ ΤΗΝ ΠΡΩΤΗ ΦΟΡΑ ΚΑΙ ΜΕΤΑ ΑΡΑΙΑ
-    function fetchExtremes() {
-        fetch("https://api.thingspeak.com/channels/3365350/feeds.json?results=60")
-        .then(res => res.json())
+    fetchData();
+    setInterval(fetchData, 15000);
+</script>
+</body>
+</html>
