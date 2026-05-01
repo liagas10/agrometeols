@@ -8,28 +8,28 @@
         body { margin: 0; padding: 0; background: #2d5a27 url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1920&q=80') no-repeat center center fixed; background-size: cover; font-family: 'Segoe UI', Arial, sans-serif; }
         .overlay { min-height: 100vh; background: rgba(0,0,0,0.4); backdrop-filter: blur(4px); padding: 20px; box-sizing: border-box; }
         header { text-align: center; color: white; text-shadow: 2px 2px 8px rgba(0,0,0,0.6); margin-bottom: 25px; }
-        header h1 { margin: 0; font-size: 3rem; letter-spacing: 1px; }
+        header h1 { margin: 0; font-size: 2.8rem; letter-spacing: 1px; }
         .dashboard { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; max-width: 1400px; margin: 0 auto; }
         
-        /* Τα κουτάκια */
-        .card { background: rgba(255, 255, 255, 0.92); border-radius: 16px; padding: 20px; text-align: center; box-shadow: 0 8px 25px rgba(0,0,0,0.3); display: flex; flex-direction: column; }
-        .info-card { background: rgba(45, 90, 39, 0.9) !important; color: white !important; text-align: left !important; }
+        /* Κάρτες */
+        .card { background: rgba(255, 255, 255, 0.95); border-radius: 16px; padding: 20px; text-align: center; box-shadow: 0 8px 25px rgba(0,0,0,0.3); display: flex; flex-direction: column; justify-content: space-between; min-height: 380px; }
+        .info-card { background: rgba(45, 90, 39, 0.95) !important; color: white !important; text-align: left !important; justify-content: flex-start; }
         
-        .info-card h3 { margin-top: 0; border-bottom: 1px solid rgba(255,255,255,0.3); padding-bottom: 8px; color: #fff; font-size: 1.2rem; }
+        .info-card h3 { margin-top: 0; border-bottom: 1px solid rgba(255,255,255,0.3); padding-bottom: 8px; color: #fff; }
         .info-line { margin: 12px 0; font-size: 1.1rem; }
         .card h3 { margin: 0; font-size: 1.2rem; color: #2d5a27; text-transform: uppercase; font-weight: bold; }
         
-        .main-value { font-size: 3.5rem; font-weight: bold; margin: 10px 0; color: #111; }
-        .unit { font-size: 1.4rem; color: #444; margin-left: 5px; }
+        .main-value { font-size: 3.5rem; font-weight: bold; margin: 15px 0; color: #111; }
+        .unit { font-size: 1.4rem; color: #555; margin-left: 5px; }
         
-        .chart-frame { margin-top: 15px; border-radius: 10px; overflow: hidden; border: 1px solid #ccc; height: 200px; background: white; }
+        .chart-frame { margin-top: auto; border-radius: 10px; overflow: hidden; border: 1px solid #ddd; height: 180px; background: white; }
         iframe { width: 100%; height: 100%; border: none; }
         
-        #clock { font-size: 2.5rem; font-weight: bold; margin-top: 10px; color: #fff; }
-        #date { font-size: 1.2rem; opacity: 0.9; margin-bottom: 15px; }
+        #clock { font-size: 2.5rem; font-weight: bold; margin-top: 15px; color: #fff; }
+        #date { font-size: 1.1rem; opacity: 0.9; }
         
         hr { border: 0; border-top: 1px solid rgba(255,255,255,0.2); margin: 10px 0; }
-        footer { text-align: center; color: white; margin-top: 40px; padding: 20px; background: rgba(0,0,0,0.6); border-radius: 10px; font-size: 1.1rem; }
+        footer { text-align: center; color: white; margin-top: 40px; padding: 20px; background: rgba(0,0,0,0.6); border-radius: 10px; }
     </style>
 </head>
 <body>
@@ -37,7 +37,7 @@
     <header><h1>Agro Meteo Ls</h1></header>
     
     <div class="dashboard">
-        <!-- ΚΟΥΤΙ 1: ΣΤΟΙΧΕΙΑ ΣΤΑΘΜΟΥ -->
+        <!-- 1. ΣΤΟΙΧΕΙΑ ΣΤΑΘΜΟΥ -->
         <div class="card info-card">
             <h3>ΣΤΟΙΧΕΙΑ ΣΤΑΘΜΟΥ</h3>
             <div class="info-line"><strong>Σταθμός:</strong> Agro Meteo Ls</div>
@@ -48,7 +48,7 @@
             <div id="date">------</div>
         </div>
 
-        <!-- ΚΟΥΤΙ 2: ΑΚΡΟΤΑΤΑ ΗΜΕΡΑΣ -->
+        <!-- 2. ΑΚΡΟΤΑΤΑ ΗΜΕΡΑΣ -->
         <div class="card info-card">
             <h3>ΑΚΡΟΤΑΤΑ ΗΜΕΡΑΣ</h3>
             <div class="info-line"><strong>Θερμ. Max:</strong> <span id="t-max">--</span>°C</div>
@@ -61,39 +61,39 @@
             <div class="info-line"><strong>Πίεση Min:</strong> <span id="p-min">--</span> hPa</div>
         </div>
 
-        <!-- ΚΟΥΤΙ 3: ΘΕΡΜΟΚΡΑΣΙΑ -->
+        <!-- 3. ΘΕΡΜΟΚΡΑΣΙΑ -->
         <div class="card">
             <h3>ΘΕΡΜΟΚΡΑΣΙΑ</h3>
             <div class="main-value"><span id="t-val">--</span><span class="unit">°C</span></div>
-            <div class="chart-frame"><iframe src="https://thingspeak.com/channels/3365350/charts/1?results=20&color=%232d5a27&dynamic=true"></iframe></div>
+            <div class="chart-frame"><iframe src="https://thingspeak.com/channels/3365350/charts/1?results=15&color=%232d5a27"></iframe></div>
         </div>
 
-        <!-- ΚΟΥΤΙ 4: ΥΓΡΑΣΙΑ -->
+        <!-- 4. ΥΓΡΑΣΙΑ -->
         <div class="card">
             <h3>ΥΓΡΑΣΙΑ</h3>
             <div class="main-value"><span id="h-val">--</span><span class="unit">%</span></div>
-            <div class="chart-frame"><iframe src="https://thingspeak.com/channels/3365350/charts/2?results=20&color=%232d5a27&dynamic=true"></iframe></div>
+            <div class="chart-frame"><iframe src="https://thingspeak.com/channels/3365350/charts/2?results=15&color=%232d5a27"></iframe></div>
         </div>
 
-        <!-- ΚΟΥΤΙ 5: ΑΤΜΟΣΦΑΙΡΙΚΗ ΠΙΕΣΗ -->
+        <!-- 5. ΑΤΜΟΣΦΑΙΡΙΚΗ ΠΙΕΣΗ -->
         <div class="card">
             <h3>ΑΤΜΟΣΦΑΙΡΙΚΗ ΠΙΕΣΗ</h3>
             <div class="main-value"><span id="p-val">--</span><span class="unit">hPa</span></div>
-            <div class="chart-frame"><iframe src="https://thingspeak.com/channels/3365350/charts/3?results=20&color=%232d5a27&dynamic=true"></iframe></div>
+            <div class="chart-frame"><iframe src="https://thingspeak.com/channels/3365350/charts/3?results=15&color=%232d5a27"></iframe></div>
         </div>
 
-        <!-- ΚΟΥΤΙ 6: ΒΡΟΧΟΠΤΩΣΗ (Το προσθέσαμε!) -->
+        <!-- 6. ΒΡΟΧΟΠΤΩΣΗ -->
         <div class="card">
             <h3>ΒΡΟΧΟΠΤΩΣΗ</h3>
             <div class="main-value"><span id="r-val">--</span><span class="unit">mm</span></div>
-            <div class="chart-frame"><iframe src="https://thingspeak.com/channels/3365350/charts/4?results=20&color=%232d5a27&type=column&dynamic=true"></iframe></div>
+            <div class="chart-frame"><iframe src="https://thingspeak.com/channels/3365350/charts/4?results=15&color=%232d5a27&type=column"></iframe></div>
         </div>
 
-        <!-- ΚΟΥΤΙ 7: ΜΠΑΤΑΡΙΑ -->
-        <div class="card">
+        <!-- 7. ΜΠΑΤΑΡΙΑ -->
+        <div class="card" style="min-height: auto;">
             <h3>ΣΤΑΘΜΗ ΜΠΑΤΑΡΙΑΣ</h3>
             <div class="main-value"><span id="b-val">--</span><span class="unit">%</span></div>
-            <div id="b-label" style="font-weight: bold; font-size: 1.2rem; padding: 10px; border-radius: 8px;">--</div>
+            <div id="b-label" style="font-weight: bold; font-size: 1.2rem; padding: 10px;">--</div>
         </div>
     </div>
 
@@ -102,25 +102,27 @@
 
 <script>
     function updateDashboard() {
-        // Ρολόι
+        // Ρολόι & Ημερομηνία
         const now = new Date();
-        document.getElementById('clock').innerText = now.toLocaleTimeString('el-GR');
-        document.getElementById('date').innerText = now.toLocaleDateString('el-GR', {weekday:'long', day:'numeric', month:'long'});
+        const clockEl = document.getElementById('clock');
+        const dateEl = document.getElementById('date');
+        if(clockEl) clockEl.innerText = now.toLocaleTimeString('el-GR');
+        if(dateEl) dateEl.innerText = now.toLocaleDateString('el-GR', {weekday:'long', day:'numeric', month:'long'});
 
-        // Δεδομένα από ThingSpeak (80 εγγραφές για τα ακρότατα)
+        // Λήψη δεδομένων (Field 1-5)
         fetch("https://api.thingspeak.com/channels/3365350/feeds.json?results=80")
-        .then(res => res.json())
-        .then(data => {
+        .then(function(res) { return res.json(); })
+        .then(function(data) {
             if(!data.feeds || data.feeds.length === 0) return;
             
-            const last = data.feeds[data.feeds.length - 1];
+            var last = data.feeds[data.feeds.length - 1];
             
-            // 1. Τρέχουσες τιμές
+            // Τρέχουσες Τιμές
             if(last.field1) document.getElementById('t-val').innerText = parseFloat(last.field1).toFixed(1);
             if(last.field2) document.getElementById('h-val').innerText = parseFloat(last.field2).toFixed(0);
             if(last.field3) document.getElementById('p-val').innerText = parseFloat(last.field3).toFixed(1);
             if(last.field4) document.getElementById('r-val').innerText = parseFloat(last.field4).toFixed(2);
             
-            // Μπαταρία με χρώματα
-            let b = parseFloat(last.field5);
-            if(!isNaN(b)
+            // Μπαταρία (Field 5)
+            var b = parseFloat(last.field5);
+            if(!i
