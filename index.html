@@ -108,18 +108,17 @@
                 let mx = v.reduce((a, b) => parseFloat(a[f]) > parseFloat(b[f]) ? a : b);
                 let mn = v.reduce((a, b) => parseFloat(a[f]) < parseFloat(b[f]) ? a : b);
                 return {
-                    max: parseFloat(mx[f]),
+                    maxVal: parseFloat(mx[f]),
                     maxT: new Date(mx.created_at).toLocaleTimeString('el-GR', {hour:'2-digit', minute:'2-digit'}),
-                    min: parseFloat(mn[f]),
+                    minVal: parseFloat(mn[f]),
                     minT: new Date(mn.created_at).toLocaleTimeString('el-GR', {hour:'2-digit', minute:'2-digit'})
                 };
             };
 
             let T = getE('field1'); let H = getE('field2'); let P = getE('field3');
 
-            document.getElementById('t-max').innerText = T.max.toFixed(1);
+            document.getElementById('t-max').innerText = T.maxVal.toFixed(1);
             document.getElementById('t-max-t').innerText = "(" + T.maxT + ")";
-            document.getElementById('t-min').innerText = T.min.toFixed(1);
+            document.getElementById('t-min').innerText = T.minVal.toFixed(1);
             document.getElementById('t-min-t').innerText = "(" + T.minT + ")";
-            document.getElementById('h-max').innerText = H.max.toFixed(0);
-            documen
+            document.getElementById('h-max').innerText = H.maxVal.toFixed(0);
