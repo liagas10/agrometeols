@@ -17,6 +17,7 @@ header { text-align: center; color: white; margin-bottom: 20px; }
 iframe { width: 100%; height: 100%; border: none; }
 footer { text-align: center; color: white; margin-top: 20px; padding: 10px; background: rgba(0,0,0,0.5); }
 canvas { max-width: 240px; width: 100%; height: auto; }
+#status-badge { font-weight: bold; padding: 2px 8px; border-radius: 4px; }
 </style>
 </head>
 <body>
@@ -30,7 +31,8 @@ canvas { max-width: 240px; width: 100%; height: auto; }
 <p><strong>Ιδιοκτησία:</strong> Χρήστος Τσαβαλακόγλου</p>
 <p><strong>Υψόμετρο:</strong> 40m</p>
 <p><strong>Επίβλεψη:</strong> Χρήστος Τσαβαλακόγλου</p>
-<p><strong>Ο Σταθμός λειτουργεί:</strong> 24 ώρες το 24ωρο</p>
+<p><strong>Κατάσταση:</strong> <span id="status-badge">ΕΛΕΓΧΟΣ...</span></p>
+<p><strong>Λειτουργία:</strong> 24 ώρες το 24ωρο</p>
 <div id="clock" style="font-size:1.8rem; font-weight:bold">--:--:--</div>
 <div id="date">------</div>
 </div>
@@ -82,7 +84,7 @@ canvas { max-width: 240px; width: 100%; height: auto; }
 </div>
 
 <script>
-// Ρυθμίσεις Θερμοκρασίας (Βασισμένο στη φωτο 3)
+// Ρυθμίσεις Θερμοκρασίας
 var gTemp = new RadialGauge({
 renderTo: 'gauge-temp', width: 240, height: 240, units: "°C", minValue: -10, maxValue: 60,
 majorTicks: ["-10","0","10","20","30","40","50","60"], minorTicks: 2, strokeTicks: true,
@@ -98,7 +100,7 @@ colorPlate: "#fff", borderShadowWidth: 0, borders: true, needleType: "arrow", ne
 needleCircleSize: 7, needleCircleOuter: true, needleCircleInner: false, animationDuration: 1500, animationRule: "linear"
 }).draw();
 
-// Ρυθμίσεις Υγρασίας (Βασισμένο στη φωτο 1)
+// Ρυθμίσεις Υγρασίας
 var gHum = new RadialGauge({
 renderTo: 'gauge-hum', width: 240, height: 240, units: "%", minValue: 0, maxValue: 100,
 majorTicks: ["0","10","20","30","40","50","60","70","80","90","100"], minorTicks: 2, strokeTicks: true,
@@ -112,7 +114,7 @@ highlights: [
 colorPlate: "#fff", borders: true, needleType: "arrow", needleWidth: 4, animationDuration: 1500
 }).draw();
 
-// Ρυθμίσεις Πίεσης (Βασισμένο στη φωτο 2)
+// Ρυθμίσεις Πίεσης
 var gPress = new RadialGauge({
 renderTo: 'gauge-press', width: 240, height: 240, units: "hPa", minValue: 950, maxValue: 1050,
 majorTicks: ["950","960","970","980","990","1000","1010","1020","1030","1040","1050"],
@@ -135,6 +137,20 @@ fetch("https://api.thingspeak.com/channels/3365350/feeds.json?results=80")
 .then(data => {
 const feeds = data.feeds;
 const last = feeds[feeds.length - 1];
+
+// Έλεγχος Online/Offline (αν η μέτρηση είναι παλαιότερη από 20 λεπτά)
+const lastSeen = new Date(last.created_at);
+const now = new Date();
+const diffMinutes = (now - lastSeen) / 1000 / 60;
+const statusBadge = document.getElementById('status-badge');
+
+if (diffMinutes < 20) {
+statusBadge.innerText = "ONLINE";
+statusBadge.style.color = "#00FF00"; // Έντονο πράσινο
+} else {
+statusBadge.innerText = "OFFLINE";
+statusBadge.style.color = "#FF0000"; // Κόκκινο
+}
 
 // Ενημέρωση Οργάνων
 if(last.field1) gTemp.value = last.field1;
@@ -181,7 +197,11 @@ document.getElementById('p-min').innerText = pMin.v.toFixed(1);
 document.getElementById('p-min-t').innerText = "(" + new Date(pMin.t).toLocaleTimeString('el-GR', {hour:'2-digit', minute:'2-digit'}) + ")";
 }
 })
-.catch(err => console.log("Error fetching data"));
+.catch(err => {
+document.getElementById('status-badge').innerText = "OFFLINE";
+document.getElementById('status-badge').style.color = "#FF0000";
+console.log("Error fetching data");
+});
 }
 update();
 setInterval(update, 20000);
