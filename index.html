@@ -28,7 +28,6 @@
 <div class="overlay">
     <header><h1>Agro Meteo Ls</h1></header>
     <div class="dashboard">
-        <!-- ΣΤΟΙΧΕΙΑ ΣΤΑΘΜΟΥ -->
         <div class="card info-card">
             <h3>ΣΤΟΙΧΕΙΑ ΣΤΑΘΜΟΥ</h3>
             <div class="info-line"><strong>Σταθμός:</strong> Agro Meteo Ls</div>
@@ -39,7 +38,7 @@
             <div id="date">------</div>
         </div>
 
-        <!-- ΤΟ ΚΑΙΝΟΥΡΙΟ ΚΟΥΤΑΚΙ ΑΚΡΟΤΑΤΩΝ -->
+        <!-- ΤΟ ΝΕΟ ΚΟΥΤΙ ΠΟΥ ΖΗΤΗΣΕΣ -->
         <div class="card info-card">
             <h3>ΑΚΡΟΤΑΤΑ ΗΜΕΡΑΣ</h3>
             <div class="info-line"><strong>Θερμ. Max:</strong> <span id="t-max">--</span>°C</div>
@@ -90,7 +89,7 @@
     setInterval(updateClock, 1000);
     updateClock();
 
-    // Ο ΔΙΚΟΣ ΣΟΥ ΚΩΔΙΚΑΣ ΑΥΤΟΥΣΙΟΣ
+    // ΑΚΡΙΒΩΣ Ο ΚΩΔΙΚΑΣ ΣΟΥ ΟΠΩΣ ΗΤΑΝ ΣΤΗΝ ΦΩΤΟΓΡΑΦΙΑ
     function fetchData() {
         fetch("https://api.thingspeak.com/channels/3365350/feeds/last.json")
         .then(response => response.json())
@@ -110,10 +109,10 @@
         .catch(error => console.log("Error"));
     }
 
-    // Η ΠΡΟΣΘΗΚΗ ΓΙΑ ΤΑ ΑΚΡΟΤΑΤΑ ΜΕ ΤΟΝ ΔΙΚΟ ΣΟΥ ΤΡΟΠΟ (.then)
+    // Η ΠΡΟΣΘΗΚΗ ΜΕ ΤΟΝ ΙΔΙΟ ΤΡΟΠΟ (fetch...then) ΑΛΛΑ ΣΕ ΔΙΚΗ ΤΗΣ ΣΥΝΑΡΤΗΣΗ
     function fetchExtremes() {
         fetch("https://api.thingspeak.com/channels/3365350/feeds.json?results=60")
-        .then(res => res.json())
+        .then(response => response.json())
         .then(data => {
             let f = data.feeds;
-            let
+            l
