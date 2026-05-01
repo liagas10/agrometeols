@@ -80,6 +80,7 @@
 </div>
 
 <script>
+    // Ρολόι
     function updateClock() {
         const now = new Date();
         document.getElementById('clock').innerText = now.toLocaleTimeString('el-GR');
@@ -88,8 +89,8 @@
     setInterval(updateClock, 1000);
     updateClock();
 
+    // Βασικές Ενδείξεις - ΑΥΤΟΥΣΙΟΣ Ο ΚΩΔΙΚΑΣ ΣΟΥ
     function fetchData() {
-        // ΤΟ ΑΥΘΕΝΤΙΚΟ FETCH ΠΟΥ ΕΙΧΕΣ
         fetch("https://api.thingspeak.com/channels/3365350/feeds/last.json")
         .then(response => response.json())
         .then(data => {
@@ -104,11 +105,14 @@
             if(b > 75) { lbl.innerText="ΚΑΛΗ"; lbl.style.color="green"; }
             else if(b > 30) { lbl.innerText="ΜΕΤΡΙΑ"; lbl.style.color="orange"; }
             else { lbl.innerText="ΧΑΜΗΛΗ"; lbl.style.color="red"; }
+        })
+        .catch(error => console.log("Fetch error"));
+    }
 
-            // ΠΡΟΣΘΗΚΗ ΜΟΝΟ ΓΙΑ ΤΑ ΑΚΡΟΤΑΤΑ ΜΕΣΑ ΣΤΟ ΙΔΙΟ FLOW
-            fetch("https://api.thingspeak.com/channels/3365350/feeds.json?results=60")
-            .then(res => res.json())
-            .then(allData => {
-                let feeds = allData.feeds;
-                let t_vals = feeds.map(f => parseFloat(f.field1)).filter(v => !isNaN(v));
-                let h_vals = feeds.map(f => parseFloat(f.field2)).filter(
+    // Ανεξάρτητη λειτουργία για τα Max/Min
+    function fetchMaxMin() {
+        fetch("https://api.thingspeak.com/channels/3365350/feeds.json?results=60")
+        .then(res => res.json())
+        .then(data => {
+            let feeds = data.feeds;
+            let t = feeds.map(f => parseFloat(f.field1)).filter(v => !isNaN(v));
