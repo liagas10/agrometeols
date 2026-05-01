@@ -3,94 +3,88 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agro Meteo LS - Professional Portal</title>
+    <title>Agro Meteo LS - Παλαιός Μυλότοπος</title>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body { font-family: Arial, sans-serif; background-color: #d1d9e6; margin: 0; padding: 10px; }
+        /* ΧΡΩΜΑΤΑ ΣΤΡΑΒΩΝ (image_8.png) /
+        body { font-family: Arial, sans-serif; background-color: #fdfdfd; margin: 0; padding: 10px; color: #333; }
         
-        /* Πάνω μέρος - Ταυτότητα /
-        .header-identity { background: #f8f9fa; border: 1px solid #999; padding: 10px; display: flex; justify-content: space-between; margin-bottom: 10px; }
-        .station-info { font-size: 0.85em; }
-        .station-info table { border-collapse: collapse; background: white; }
-        .station-info td { border: 1px solid #ccc; padding: 3px 10px; }
-
-        / Κύριο Layout /
-        .wrapper { display: flex; flex-wrap: wrap; gap: 15px; align-items: flex-start; }
-
-        / Αριστερή Στήλη (Πίνακας) /
-        .sidebar { width: 320px; background: white; border: 1px solid #999; }
-        .sidebar-header { background: #7b8d43; color: white; padding: 8px; font-weight: bold; text-align: center; font-size: 0.9em; }
-        .data-table { width: 100%; border-collapse: collapse; }
-        .data-table td { padding: 10px; border-bottom: 1px solid #eee; font-size: 0.9em; }
-        .label { font-weight: bold; color: #444; }
-        .val { color: #0000ff; font-weight: bold; text-align: right; }
-
-        / Δεξιά Στήλη (Περιεχόμενο) /
-        .main-content { flex: 1; min-width: 400px; display: flex; flex-direction: column; gap: 15px; }
-
-        / Gauges /
-        .gauges-container { background: white; border: 1px solid #999; padding: 15px; display: flex; justify-content: space-around; }
+        .main-header { border: 1px solid #999; background: #f0f0f0; display: flex; justify-content: space-between; padding: 10px; margin-bottom: 5px; align-items: center; }
+        .station-name { color: #000; font-weight: bold; text-align: center; flex: 1; }
         
-        / Γραφήματα */
-        .charts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 15px; }
-        .chart-card { background: white; border: 1px solid #999; padding: 5px; }
-        .chart-header { background: #eee; border-bottom: 1px solid #ccc; padding: 5px; font-weight: bold; font-size: 0.8em; text-align: center; }
+        .info-table { font-size: 12px; border-collapse: collapse; }
+        .info-table td { border: 1px solid #ccc; padding: 3px 8px; background: white; }
 
-        .map-section { background: white; border: 1px solid #999; padding: 10px; }
+        .layout-container { display: flex; flex-wrap: wrap; gap: 10px; }
+
+        / ΑΡΙΣΤΕΡΗ ΣΤΗΛΗ - CURRENT WEATHER /
+        .sidebar { width: 300px; border: 1px solid #999; }
+        .sidebar-title { background: #7b8d43; color: white; padding: 5px; font-weight: bold; font-size: 13px; text-align: center; }
+        .live-data-table { width: 100%; border-collapse: collapse; background: white; }
+        .live-data-table td { border: 1px solid #ccc; padding: 8px; font-size: 13px; font-weight: bold; }
+        .label-col { color: #b01a1a; width: 60%; } / Κόκκινα γράμματα labels /
+        .val-col { color: #0000ff; text-align: right; } / Μπλε γράμματα τιμές /
+
+        / ΔΕΞΙΑ ΣΤΗΛΗ - ΓΡΑΦΗΜΑΤΑ & ΡΟΛΟΓΙΑ */
+        .content { flex: 1; min-width: 400px; display: flex; flex-direction: column; gap: 10px; }
+        
+        .gauges-box { border: 1px solid #999; background: #e6e6e6; padding: 15px; display: flex; justify-content: space-around; flex-wrap: wrap; }
+        
+        .charts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 10px; }
+        .chart-card { border: 1px solid #999; background: white; }
+        .chart-header { background: #ccc; padding: 4px; font-size: 12px; font-weight: bold; text-align: center; border-bottom: 1px solid #999; }
+
+        .map-box { border: 1px solid #999; padding: 5px; background: white; }
     </style>
 </head>
 <body>
 
-<div class="header-identity">
-    <div>
-        <h2 style="margin:0; color:#1a4a7a;">Agro-Meteo LS: Παλαιός Μυλότοπος</h2>
-        <p style="margin:5px 0; font-size:0.9em;"><b>Υψόμετρο:</b> 40 μ.</p>
+<div class="main-header">
+    <div style="width:150px"><img src="https://via.placeholder.com/120x40?text=AGRO+METEO" alt="logo"></div>
+    <div class="station-name">
+        Αγρο-Μετεωρολογικός σταθμός Παλαιός Μυλότοπος Πέλλας.<br>
+        Υψόμετρο: 40 μ.
     </div>
-    <div class="station-info">
-        <table>
-            <tr><td>Ιδιοκτησία:</td><td><b>Liagas-Home</b></td></tr>
-            <tr><td>Διαχειριστής:</td><td><b>Liagas10</b></td></tr>
-            <tr><td>Κατάσταση:</td><td><b style="color:green">ΣΕ ΛΕΙΤΟΥΡΓΙΑ</b></td></tr>
-        </table>
-    </div>
+    <table class="info-table">
+        <tr><td>Ιδιοκτησία:</td><td><b>Τσαβαλακογλου Χρήστος</b></td></tr>
+        <tr><td>Διαχειριστής:</td><td><b>Agro meteo Ls</b></td></tr>
+        <tr><td>Επίβλεψη:</td><td><b>LIVE</b></td></tr>
+    </table>
 </div>
 
-<div class="wrapper">
-    <!-- SIDEBAR ΑΡΙΣΤΕΡΑ -->
+<div class="layout-container">
+    <!-- ΑΡΙΣΤΕΡΑ: Ο ΠΙΝΑΚΑΣ ΤΟΥ ΣΤΡΑΒΩΝ -->
     <div class="sidebar">
-        <div class="sidebar-header">Τρέχουσες Συνθήκες</div>
-        <table class="data-table">
-            <tr><td class="label">Θερμοκρασία</td><td class="val" id="temp">-- °C</td></tr>
-            <tr><td class="label">Υγρασία</td><td class="val" id="hum">-- %</td></tr>
-            <tr><td class="label">Σημείο Δρόσου</td><td class="val" id="dew">-- °C</td></tr>
-            <tr><td class="label">Πίεση</td><td class="val" id="pres">-- hPa</td></tr>
-            <tr><td class="label">Βροχόπτωση</td><td class="val" id="rain">-- mm</td></tr>
-            <tr><td class="label">Μπαταρία</td><td class="val" id="batt">-- %</td></tr>
-            <tr style="background:#ffffcc;"><td class="label">Ενημέρωση</td><td class="val" id="time" style="font-size:0.8em; color:#333;">--:--:--</td></tr>
+        <div class="sidebar-title">Current Weather in Palaios Mylotopos</div>
+        <table class="live-data-table">
+            <tr><td class="label-col">Θερμοκρασία</td><td class="val-col" id="temp">-- °C</td></tr>
+            <tr><td class="label-col">Υγρασία</td><td class="val-col" id="hum">-- %</td></tr>
+            <tr><td class="label-col">Σημείο Δρόσου</td><td class="val-col" id="dew">-- °C</td></tr>
+            <tr><td class="label-col">Πίεση</td><td class="val-col" id="pres">-- hPa</td></tr>
+            <tr><td class="label-col">Βροχόπτωση</td><td class="val-col" id="rain">-- mm</td></tr>
+            <tr><td class="label-col">Μπαταρία</td><td class="val-col" id="batt">-- %</td></tr>
+            <tr style="background:#7b8d43; color:white;"><td colspan="2" style="text-align:center; font-size:11px;" id="time">Συγχρονισμός...</td></tr>
         </table>
         
-        <div class="sidebar-header" style="margin-top:10px;">Πρόγνωση 7 Ημερών</div>
-        <div style="padding:5px;">
+        <div class="sidebar-title" style="margin-top:5px;">Πρόγνωση</div>
+        <div style="padding:5px; background:white;">
             <a class="weatherwidget-io" href="https://forecast7.com/el/40d7922d39/palaio-mylotopo/" data-label_1="Π. ΜΥΛΟΤΟΠΟΣ" data-label_2="ΚΑΙΡΟΣ" data-theme="pure" >ΠΡΟΓΝΩΣΗ</a>
             <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https://weatherwidget.io/js/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js');</script>
         </div>
     </div>
 
-    <!-- MAIN CONTENT ΔΕΞΙΑ -->
-    <div class="main-content">
-        <!-- GAUGES -->
-        <div class="gauges-container">
+    <!-- ΔΕΞΙΑ: ΡΟΛΟΓΙΑ ΚΑΙ ΓΡΑΦΗΜΑΤΑ -->
+    <div class="content">
+        <div class="gauges-box">
             <div id="g_temp"></div>
             <div id="g_hum"></div>
             <div id="g_pres"></div>
         </div>
 
-        <!-- CHARTS -->
         <div class="charts-grid">
             <div class="chart-card">
                 <div class="chart-header">Θερμοκρασία (°C) - 24h</div>
-                <iframe width="100%" height="250" style="border:none;" src="https://thingspeak.com/channels/3365350/charts/1?dynamic=true&results=60&type=line&color=red"></iframe>
+                <iframe width="100%" height="250" style="border:none;" src="https://thingspeak.com/channels/3365350/charts/1?dynamic=true&results=60&type=line&color=%23b01a1a"></iframe>
             </div>
             <div class="chart-card">
                 <div class="chart-header">Βροχόπτωση (mm) - Ημερήσια</div>
@@ -98,37 +92,33 @@
             </div>
         </div>
 
-        <!-- MAP -->
-        <div class="map-section">
-            <div class="chart-header" style="margin-bottom:5px;">Τοποθεσία Σταθμού</div>
-            <iframe width="100%" height="300" style="border:0;" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3024.123!2d22.39!3d40.79!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDDCsDQ3JzI0LjAiTiAyMsKwMjMnMjQuMCJF!5e0!3m2!1sel!2sgr!4v123456789"></iframe>
+        <div class="map-box">
+             <iframe width="100%" height="250" style="border:0;" src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d12096.5!2d22.39!3d40.79!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sel!2sgr!4v1714567890000"></iframe>
         </div>
     </div>
 </div>
 
 <script>
     google.charts.load('current', {'packages':['gauge']});
-    google.charts.setOnLoadCallback(init);
+    google.charts.setOnLoadCallback(drawCharts);
 
-    let gData, gOptions, cT, cH, cP;
+    function drawCharts() {
+        var data = google.visualization.arrayToDataTable([['Label', 'Value'],['Temp', 0],['Hum', 0],['Pres', 0]]);
+        var options = { width: 400, height: 140, redFrom: 35, redTo: 50, yellowFrom: 30, yellowTo: 35, minorTicks: 5 };
+        var chartT = new google.visualization.Gauge(document.getElementById('g_temp'));
+        var chartH = new google.visualization.Gauge(document.getElementById('g_hum'));
+        var chartP = new google.visualization.Gauge(document.getElementById('g_pres'));
 
-    function init() {
-        gData = google.visualization.arrayToDataTable([['Label', 'Value'],['Temp', 0],['Hum', 0],['Pres', 0]]);
-        gOptions = { width: 400, height: 150, redFrom: 38, redTo: 50, yellowFrom: 32, yellowTo: 38, minorTicks: 5 };
-        cT = new google.visualization.Gauge(document.getElementById('g_temp'));
-        cH = new google.visualization.Gauge(document.getElementById('g_hum'));
-        cP = new google.visualization.Gauge(document.getElementById('g_pres'));
-        update();
-    }
-
-    async function update() {
-        try {
-            const r = await fetch('https://api.thingspeak.com/channels/3365350/feeds/last.json');
-            const d = await r.json();
-            const t = parseFloat(d.field1);
-            const h = parseFloat(d.field2);
-            const p = parseFloat(d.field3);
-            
-            document.getElementById('temp').innerText = t.toFixed(1) + " °C";
-            document.getElementById('hum').innerText = h.toFixed(0) + " %";
-            document.getElementById('dew').innerText = (t - ((100 - h) / 5)).toFixed(1) + " °C"
+        async function update() {
+            try {
+                // Fetch με προσθήκη timestamp για να μην παίρνει παλιά δεδομένα η cache
+                const r = await fetch('https://api.thingspeak.com/channels/3365350/feeds/last.json?nocache=' + new Date().getTime());
+                const d = await r.json();
+                
+                const t = parseFloat(d.field1);
+                const h = parseFloat(d.field2);
+                const p = parseFloat(d.field3);
+                
+                document.getElementById('temp').innerText = t.toFixed(1) + " °C";
+                document.getElementById('hum').innerText = h.toFixed(0) + " %";
+                document.getElementById('dew').innerText = (t - ((100 - h) / 5)).toFixed(1)
