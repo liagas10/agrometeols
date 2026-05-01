@@ -36,9 +36,9 @@
         <!-- 2. ΑΚΡΟΤΑΤΑ -->
         <div class="card info-card">
             <h3 style="border-bottom:1px solid white">Today's Highs/Lows - Μέγιστες/Ελάχιστες</h3>
-            <p>T-Max: <span id="t-max">--</span>°C <small id="t-max-t"></small> | Min: <span id="t-min">--</span>°C <small id="t-min-t"></small></p>
-            <p>H-Max: <span id="h-max">--</span>% <small id="h-max-t"></small> | Min: <span id="h-min">--</span>% <small id="h-min-t"></small></p>
-            <p>P-Max: <span id="p-max">--</span> <small id="p-max-t"></small> | Min: <span id="p-min">--</span> <small id="p-min-t"></small></p>
+            <p>T-Max: <span id="t-max">--</span>°C <span id="t-max-t"></span> | Min: <span id="t-min">--</span>°C <span id="t-min-t"></span></p>
+            <p>H-Max: <span id="h-max">--</span>% <span id="h-max-t"></span> | Min: <span id="h-min">--</span>% <span id="h-min-t"></span></p>
+            <p>P-Max: <span id="p-max">--</span> <span id="p-max-t"></span> | Min: <span id="p-min">--</span> <span id="p-min-t"></span></p>
         </div>
 
         <!-- 3. ΘΕΡΜΟΚΡΑΣΙΑ -->
@@ -106,22 +106,16 @@
             else { lbl.innerText="ΧΑΜΗΛΗ"; lbl.style.color="red"; }
 
             // Ακρότατα
-            const getExtremes = (field) => {
-                let valid = feeds.filter(f => f[field] !== null && !isNaN(parseFloat(f[field])));
-                let max = valid.reduce((a, b) => parseFloat(a[field]) > parseFloat(b[field]) ? a : b);
-                let min = valid.reduce((a, b) => parseFloat(a[field]) < parseFloat(b[field]) ? a : b);
-                return {
-                    maxV: parseFloat(max[field]),
-                    maxT: new Date(max.created_at).toLocaleTimeString('el-GR', {hour:'2-digit', minute:'2-digit'}),
-                    minV: parseFloat(min[field]),
-                    minT: new Date(min.created_at).toLocaleTimeString('el-GR', {hour:'2-digit', minute:'2-digit'})
-                };
-            };
+            let tArr = feeds.filter(f => f.field1 !== null).map(f => ({v: parseFloat(f.field1), t: f.created_at}));
+            let hArr = feeds.filter(f => f.field2 !== null).map(f => ({v: parseFloat(f.field2), t: f.created_at}));
+            let pArr = feeds.filter(f => f.field3 !== null).map(f => ({v: parseFloat(f.field3), t: f.created_at}));
+            
+            let tMax = tArr.reduce((prev, curr) => (prev.v > curr.v) ? prev : curr);
+            let tMin = tArr.reduce((prev, curr) => (prev.v < curr.v) ? prev : curr);
+            let hMax = hArr.reduce((prev, curr) => (prev.v > curr.v) ? prev : curr);
+            let hMin = hArr.reduce((prev, curr) => (prev.v < curr.v) ? prev : curr);
+            let pMax = pArr.reduce((prev, curr) => (prev.v > curr.v) ? prev : curr);
+            let pMin = pArr.reduce((prev, curr) => (prev.v < curr.v) ? prev : curr);
 
-            let t = getExtremes('field1');
-            let h = getExtremes('field2');
-            let p = getExtremes('field3');
-
-            document.getElementById('t-max').innerText = t.maxV.toFixed(1);
-            document.getElementById('t-max-t').innerText = "(" + t.maxT + ")";
-            document.getElementById('t-min').innerText =
+            document.getElementById('t-max').innerText = tMax.v.toFixed(1);
+            document.getElementById('t-max-t').innerText = "(" + new Date(tMax.t).toLocaleTimeString('el-GR', {hour:'2-digit', minute:'2-digit'})
