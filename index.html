@@ -70,7 +70,7 @@
             <div id="date">------</div>
         </div>
 
-        <!-- ΚΑΡΤΑ ΑΚΡΟΤΑΤΩΝ ΗΜΕΡΑΣ -->
+        <!-- ΤΟ ΝΕΟ ΚΟΥΤΑΚΙ ΓΙΑ ΤΑ ΑΚΡΟΤΑΤΑ -->
         <div class="card info-card">
             <h3>ΑΚΡΟΤΑΤΑ ΗΜΕΡΑΣ</h3>
             <div class="info-line"><strong>Θερμ. Max:</strong> <span id="t-max">--</span>°C (<span id="t-max-time">--:--</span>)</div>
@@ -136,13 +136,13 @@
     setInterval(updateTime, 1000);
     updateTime();
 
-    // 1. ΑΥΤΟ ΔΙΑΒΑΖΕΙ ΤΙΣ ΤΡΕΧΟΥΣΕΣ ΤΙΜΕΣ (ΟΠΩΣ ΤΟ ΕΙΧΕΣ)
-    async function fetchLastValues() {
-        const url = "https://api.thingspeak.com/channels/3365350/feeds/last.json?_=" + new Date().getTime();
+    async function fetchLastFeed() {
+        // 1. Παίρνουμε την τελευταία τιμή ακριβώς όπως πριν
+        const lastUrl = "https://api.thingspeak.com/channels/3365350/feeds/last.json?_=" + new Date().getTime();
         try {
-            const response = await fetch(url);
-            const data = await response.json();
+            const resLast = await fetch(lastUrl);
+            const data = await resLast.json();
             
             if (data.field1) document.getElementById('t-val').innerText = parseFloat(data.field1).toFixed(1);
             if (data.field2) document.getElementById('h-val').innerText = parseFloat(data.field2).toFixed(0);
-            if (data.field3) doc
+            if (dat
