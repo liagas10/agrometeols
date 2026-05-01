@@ -70,7 +70,7 @@
             <div id="date">------</div>
         </div>
 
-        <!-- ΚΟΥΤΑΚΙ ΑΚΡΟΤΑΤΩΝ -->
+        <!-- ΤΟ ΚΟΥΤΑΚΙ ΜΕ ΤΑ ΑΚΡΟΤΑΤΑ -->
         <div class="card info-card">
             <h3>ΑΚΡΟΤΑΤΑ ΗΜΕΡΑΣ</h3>
             <div class="info-line"><strong>Θερμ. Max:</strong> <span id="t-max">--</span>°C (<span id="t-max-time">--:--</span>)</div>
@@ -136,11 +136,14 @@
     setInterval(updateTime, 1000);
     updateTime();
 
-    // ΛΕΙΤΟΥΡΓΙΑ 1: ΤΡΕΧΟΥΣΕΣ ΤΙΜΕΣ (ΑΚΡΙΒΩΣ ΟΠΩΣ ΤΟ ΕΙΧΕΣ)
-    async function fetchLast() {
+    async function fetchLastFeed() {
+        // Χρησιμοποιούμε μόνο ΕΝΑ αίτημα που φέρνει τα τελευταία 50 αποτελέσματα
+        const url = "https://api.thingspeak.com/channels/3365350/feeds.json?results=50&_=" + new Date().getTime();
         try {
-            const r = await fetch("https://api.thingspeak.com/channels/3365350/feeds/last.json?nocache=" + Math.random());
-            const d = await r.json();
-            if(d.field1) document.getElementById('t-val').innerText = parseFloat(d.field1).toFixed(1);
-            if(d.field2) document.getElementById('h-val').innerText = parseFloat(d.field2).toFixed(0);
-            if(d.field3) document.getElementById('p-val').innerText = parseFloat(d.field3).toFixed(1);
+            const response = await fetch(url);
+            if (!response.ok) throw new Error("Σφάλμα σύνδεσης");
+            const data = await response.json();
+            const feeds = data.feeds;
+            
+            // Η τελευταία εγγραφή για τις κύριες ενδείξεις
+            const last = feeds[feeds.length - 1];
