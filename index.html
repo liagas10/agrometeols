@@ -72,14 +72,14 @@
 
         <div class="card info-card">
             <h3>ΑΚΡΟΤΑΤΑ ΗΜΕΡΑΣ</h3>
-            <div class="info-line"><strong>Θερμ. Max:</strong> <span id="t-max">--</span>°C (<span id="t-max-time">--:--</span>)</div>
-            <div class="info-line"><strong>Θερμ. Min:</strong> <span id="t-min">--</span>°C (<span id="t-min-time">--:--</span>)</div>
+            <div class="info-line"><strong>Θερμ. Max:</strong> <span id="t-max">--</span>°C</div>
+            <div class="info-line"><strong>Θερμ. Min:</strong> <span id="t-min">--</span>°C</div>
             <hr style="opacity:0.3">
-            <div class="info-line"><strong>Υγρασία Max:</strong> <span id="h-max">--</span>% (<span id="h-max-time">--:--</span>)</div>
-            <div class="info-line"><strong>Υγρασία Min:</strong> <span id="h-min">--</span>% (<span id="h-min-time">--:--</span>)</div>
+            <div class="info-line"><strong>Υγρασία Max:</strong> <span id="h-max">--</span>%</div>
+            <div class="info-line"><strong>Υγρασία Min:</strong> <span id="h-min">--</span>%</div>
             <hr style="opacity:0.3">
-            <div class="info-line"><strong>Πίεση Max:</strong> <span id="p-max">--</span> (<span id="p-max-time">--:--</span>)</div>
-            <div class="info-line"><strong>Πίεση Min:</strong> <span id="p-min">--</span> (<span id="p-min-time">--:--</span>)</div>
+            <div class="info-line"><strong>Πίεση Max:</strong> <span id="p-max">--</span></div>
+            <div class="info-line"><strong>Πίεση Min:</strong> <span id="p-min">--</span></div>
         </div>
 
         <div class="card">
@@ -127,21 +127,24 @@
 </div>
 
 <script>
-    // 1. Ρολόι (Όπως το είχες)
-    function updateTime() {
+    function updateClock() {
         const now = new Date();
         document.getElementById('clock').innerText = now.toLocaleTimeString('el-GR');
         document.getElementById('date').innerText = now.toLocaleDateString('el-GR', {weekday:'long', day:'numeric', month:'long'});
     }
-    setInterval(updateTime, 1000);
-    updateTime();
+    setInterval(updateClock, 1000);
+    updateClock();
 
-    // 2. Κύριες Ενδείξεις (Ο ΔΙΚΟΣ ΣΟΥ ΚΩΔΙΚΑΣ - ΑΠΕΙΡΑΧΤΟΣ)
-    async function fetchData() {
-        try {
-            const response = await fetch("https://api.thingspeak.com/channels/3365350/feeds/last.json");
-            const data = await response.json();
-            
+    // ΑΥΤΟΣ ΕΙΝΑΙ Ο ΔΙΚΟΣ ΣΟΥ ΚΩΔΙΚΑΣ - ΤΟΝ ΑΦΗΝΩ ΟΠΩΣ ΗΤΑΝ
+    function fetchData() {
+        fetch("https://api.thingspeak.com/channels/3365350/feeds/last.json")
+        .then(res => res.json())
+        .then(data => {
             if(data.field1) document.getElementById('t-val').innerText = parseFloat(data.field1).toFixed(1);
             if(data.field2) document.getElementById('h-val').innerText = parseFloat(data.field2).toFixed(0);
-            if(data.field3) document.getElementById('p-val').innerText = parseFloat(data.field3).
+            if(data.field3) document.getElementById('p-val').innerText = parseFloat(data.field3).toFixed(1);
+            if(data.field4) document.getElementById('r-val').innerText = parseFloat(data.field4).toFixed(2);
+            if(data.field5) {
+                let b = parseFloat(data.field5);
+                document.getElementById('b-val').innerText = b.toFixed(0);
+                let lbl = doc
