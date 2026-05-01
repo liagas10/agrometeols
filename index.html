@@ -2,85 +2,155 @@
 <html lang="el">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AGRO METEO LS</title>
     <style>
-        body { margin: 0; padding: 0; background: #2d5a27 url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1920&q=80') no-repeat center center fixed; background-size: cover; font-family: sans-serif; }
-        .overlay { min-height: 100vh; backdrop-filter: blur(5px); background: rgba(0,0,0,0.2); padding: 20px; }
-        header { text-align: center; color: white; text-shadow: 2px 2px 5px rgba(0,0,0,0.5); }
-        .dashboard { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; max-width: 1200px; margin: 20px auto; }
-        .card { background: rgba(255,255,255,0.9); border-radius: 15px; padding: 20px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.3); overflow: hidden; }
-        .info-card { background: #2d5a27 !important; color: white; text-align: left !important; }
+        body { 
+            margin: 0; padding: 0; 
+            background: #2d5a27 url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1920&q=80') no-repeat center center fixed; 
+            background-size: cover; 
+            font-family: 'Segoe UI', Arial, sans-serif; 
+        }
+        .overlay { min-height: 100vh; background: rgba(0,0,0,0.3); backdrop-filter: blur(4px); padding: 20px; box-sizing: border-box; }
+        header { text-align: center; color: white; text-shadow: 2px 2px 8px rgba(0,0,0,0.6); margin-bottom: 20px; }
+        header h1 { margin: 0; font-size: 2.8rem; letter-spacing: 1px; }
         
-        /* Το μυστικό: Iframes για τους αριθμούς */
-        .value-frame { width: 100%; height: 80px; border: none; margin: 5px 0; pointer-events: none; }
-        .chart-frame { width: 100%; height: 200px; border: none; margin-top: 10px; background: white; border-radius: 10px; }
+        .dashboard { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); 
+            gap: 20px; 
+            max-width: 1200px; 
+            margin: 0 auto; 
+        }
+        .card { 
+            background: rgba(255, 255, 255, 0.92); 
+            border-radius: 16px; 
+            padding: 22px; 
+            text-align: center; 
+            box-shadow: 0 8px 25px rgba(0,0,0,0.25); 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: space-between; 
+        }
+        .info-card { 
+            background: rgba(45, 90, 39, 0.9) !important; 
+            color: white !important; 
+            text-align: left !important; 
+        }
+        .info-card h3 { margin-top: 0; border-bottom: 1px solid rgba(255,255,255,0.3); padding-bottom: 8px; color: #fff; }
+        .info-line { margin: 10px 0; font-size: 1.05rem; }
         
-        #clock { font-size: 2.2rem; font-weight: bold; margin-top: 15px; }
-        #date { font-size: 1.1rem; opacity: 0.9; }
+        .card h3 { margin: 0; font-size: 1.15rem; color: #2d5a27; text-transform: uppercase; letter-spacing: 1px; }
+        .main-value { font-size: 3.5rem; font-weight: bold; margin: 15px 0; color: #111; }
+        .unit { font-size: 1.4rem; color: #555; margin-left: 4px; }
+        
+        .chart-frame { margin-top: 12px; border-radius: 10px; overflow: hidden; border: 1px solid #ddd; height: 190px; background: white; }
+        iframe { width: 100%; height: 100%; border: none; }
+        
+        #clock { font-size: 2.2rem; font-weight: bold; margin-top: 15px; color: #fff; }
+        #date { font-size: 1.1rem; opacity: 0.85; margin-top: 4px; }
+        
+        footer { text-align: center; color: white; margin-top: 35px; padding: 15px; background: rgba(0,0,0,0.5); border-radius: 8px; }
     </style>
 </head>
 <body>
 <div class="overlay">
-    <header><h1>AGRO METEO LS</h1></header>
+    <header>
+        <h1>AGRO METEO LS</h1>
+    </header>
+
     <div class="dashboard">
-        
-        <!-- ΚΑΡΤΑ ΠΛΗΡΟΦΟΡΙΩΝ -->
         <div class="card info-card">
-            <h3 style="margin-top:0">ΣΤΟΙΧΕΙΑ ΣΤΑΘΜΟΥ</h3>
-            <p style="margin: 5px 0;"><strong>Σταθμός:</strong> Agro Meteo Ls</p>
-            <p style="margin: 5px 0;"><strong>Ιδιοκτησία:</strong> Χρήστος Τσαβαλακόγλου</p>
-            <p style="margin: 5px 0;"><strong>Υψόμετρο:</strong> 40m</p>
-            <p style="margin: 5px 0;"><strong>Φιλοξενία:</strong> Τσαβαλακόγλου</p>
-            <div id="clock"></div>
-            <div id="date"></div>
+            <h3>ΣΤΟΙΧΕΙΑ ΣΤΑΘΜΟΥ</h3>
+            <div class="info-line"><strong>Σταθμός:</strong> Agro Meteo Ls</div>
+            <div class="info-line"><strong>Ιδιοκτησία:</strong> Χρήστος Τσαβαλακόγλου</div>
+            <div class="info-line"><strong>Υψόμετρο:</strong> 40m</div>
+            <div class="info-line"><strong>Φιλοξενία:</strong> Τσαβαλακόγλου</div>
+            <div id="clock">--:--:--</div>
+            <div id="date">------</div>
         </div>
 
-        <!-- ΘΕΡΜΟΚΡΑΣΙΑ -->
         <div class="card">
-            <h3>ΘΕΡΜΟΚΡΑΣΙΑ</h3>
-            <iframe class="value-frame" src="https://thingspeak.com/channels/3365350/widgets/1004140"></iframe>
-            <iframe class="chart-frame" src="https://thingspeak.com/channels/3365350/charts/1?dynamic=true&results=15&color=%232d5a27"></iframe>
+            <h3>Θερμοκρασία</h3>
+            <div class="main-value"><span id="t-val">--</span><span class="unit">°C</span></div>
+            <div class="chart-frame">
+                <iframe src="https://thingspeak.com/channels/3365350/charts/1?dynamic=true&results=15&color=%232d5a27"></iframe>
+            </div>
         </div>
 
-        <!-- ΥΓΡΑΣΙΑ -->
         <div class="card">
-            <h3>ΥΓΡΑΣΙΑ</h3>
-            <iframe class="value-frame" src="https://thingspeak.com/channels/3365350/widgets/1004141"></iframe>
-            <iframe class="chart-frame" src="https://thingspeak.com/channels/3365350/charts/2?dynamic=true&results=15&color=%232d5a27"></iframe>
+            <h3>Υγρασία</h3>
+            <div class="main-value"><span id="h-val">--</span><span class="unit">%</span></div>
+            <div class="chart-frame">
+                <iframe src="https://thingspeak.com/channels/3365350/charts/2?dynamic=true&results=15&color=%232d5a27"></iframe>
+            </div>
         </div>
 
-        <!-- ΠΙΕΣΗ -->
         <div class="card">
-            <h3>ΠΙΕΣΗ</h3>
-            <iframe class="value-frame" src="https://thingspeak.com/channels/3365350/widgets/1004142"></iframe>
-            <iframe class="chart-frame" src="https://thingspeak.com/channels/3365350/charts/3?dynamic=true&results=15&color=%232d5a27"></iframe>
+            <h3>Ατμοσφαιρική Πίεση</h3>
+            <div class="main-value"><span id="p-val">--</span><span class="unit">hPa</span></div>
+            <div class="chart-frame">
+                <iframe src="https://thingspeak.com/channels/3365350/charts/3?dynamic=true&results=15&color=%232d5a27"></iframe>
+            </div>
         </div>
 
-        <!-- ΒΡΟΧΟΠΤΩΣΗ -->
         <div class="card">
-            <h3>ΒΡΟΧΟΠΤΩΣΗ (24h)</h3>
-            <iframe class="value-frame" src="https://thingspeak.com/channels/3365350/widgets/1004143"></iframe>
-            <p style="color: #666; font-size: 0.9rem;">Συνολική μέτρηση ημέρας</p>
+            <h3>Βροχόπτωση</h3>
+            <div class="main-value"><span id="r-val">--</span><span class="unit">mm</span></div>
+            <p style="color: #666; font-size: 0.9rem; margin: 5px 0;">Τελευταίο 24ωρο</p>
         </div>
 
-        <!-- ΜΠΑΤΑΡΙΑ -->
         <div class="card">
-            <h3>ΣΤΑΘΜΗ ΜΠΑΤΑΡΙΑΣ</h3>
-            <iframe class="value-frame" src="https://thingspeak.com/channels/3365350/widgets/1004144"></iframe>
-            <p style="color: #666; font-size: 0.9rem;">Τάση συστήματος %</p>
+            <h3>Στάθμη Μπαταρίας</h3>
+            <div class="main-value"><span id="b-val">--</span><span class="unit">%</span></div>
+            <p id="b-label" style="font-weight: bold; font-size: 1rem; color: #555;">--</p>
         </div>
-
     </div>
+
+    <footer>
+        &copy; 2026 AGRO METEO LS | Σχεδίαση για τον Χρήστο Τσαβαλακόγλου
+    </footer>
 </div>
 
 <script>
+    // Ρολόι και Ημερομηνία
     function updateTime() {
-        const τ = new Date();
-        document.getElementById('clock').innerHTML = τ.toLocaleTimeString('el-GR');
-        document.getElementById('date').innerHTML = τ.toLocaleDateString('el-GR', {weekday:'long', day:'numeric', month:'long'});
+        const now = new Date();
+        document.getElementById('clock').innerText = now.toLocaleTimeString('el-GR');
+        document.getElementById('date').innerText = now.toLocaleDateString('el-GR', {weekday:'long', day:'numeric', month:'long'});
     }
     setInterval(updateTime, 1000);
     updateTime();
+
+    // Λήψη δεδομένων από το API με Fetch
+    async function fetchLastFeed() {
+        const url = "https://api.thingspeak.com/channels/3365350/feeds/last.json?_=" + new Date().getTime();
+        try {
+            const response = await fetch(url);
+            if (!response.ok) throw new Error("Σφάλμα σύνδεσης");
+            const data = await response.json();
+            
+            // Ενημέρωση τιμών στην οθόνη
+            if (data.field1) document.getElementById('t-val').innerText = parseFloat(data.field1).toFixed(1);
+            if (data.field2) document.getElementById('h-val').innerText = parseFloat(data.field2).toFixed(0);
+            if (data.field3) document.getElementById('p-val').innerText = parseFloat(data.field3).toFixed(1);
+            if (data.field4) document.getElementById('r-val').innerText = parseFloat(data.field4).toFixed(2);
+            if (data.field5) {
+                const b = parseFloat(data.field5);
+                document.getElementById('b-val').innerText = b.toFixed(0);
+                const bLabel = document.getElementById('b-label');
+                if (b > 75) { bLabel.innerText = "ΚΑΛΗ"; bLabel.style.color = "green"; }
+                else if (b > 30) { bLabel.innerText = "ΜΕΤΡΙΑ"; bLabel.style.color = "orange"; }
+                else { bLabel.innerText = "ΧΑΜΗΛΗ"; bLabel.style.color = "red"; }
+            }
+        } catch (error) {
+            console.error("Σφάλμα κατά την ανάγνωση των δεδομένων:", error);
+        }
+    }
+
+    // Ανανέωση δεδομένων κάθε 15 δευτερόλεπτα
+    fetchLastFeed();
+    setInterval(fetchLastFeed, 15000);
 </script>
 </body>
 </html>
