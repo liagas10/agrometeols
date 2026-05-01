@@ -8,101 +8,79 @@
         .overlay { min-height: 100vh; backdrop-filter: blur(5px); background: rgba(0,0,0,0.2); padding: 20px; }
         header { text-align: center; color: white; text-shadow: 2px 2px 5px rgba(0,0,0,0.5); }
         .dashboard { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; max-width: 1200px; margin: 20px auto; }
-        .card { background: rgba(255,255,255,0.9); border-radius: 15px; padding: 20px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+        .card { background: rgba(255,255,255,0.9); border-radius: 15px; padding: 20px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.3); overflow: hidden; }
         .info-card { background: #2d5a27 !important; color: white; text-align: left !important; }
-        .main-value { font-size: 3rem; font-weight: bold; margin: 10px 0; color: #111; }
-        .unit { font-size: 1.2rem; color: #555; }
-        .chart { width: 100%; height: 200px; border: none; margin-top: 10px; background: white; border-radius: 10px; }
-        #clock { font-size: 2rem; font-weight: bold; margin-top: 10px; }
+        
+        /* Το μυστικό: Iframes για τους αριθμούς */
+        .value-frame { width: 100%; height: 80px; border: none; margin: 5px 0; pointer-events: none; }
+        .chart-frame { width: 100%; height: 200px; border: none; margin-top: 10px; background: white; border-radius: 10px; }
+        
+        #clock { font-size: 2.2rem; font-weight: bold; margin-top: 15px; }
+        #date { font-size: 1.1rem; opacity: 0.9; }
     </style>
 </head>
 <body>
 <div class="overlay">
     <header><h1>AGRO METEO LS</h1></header>
     <div class="dashboard">
+        
         <!-- ΚΑΡΤΑ ΠΛΗΡΟΦΟΡΙΩΝ -->
         <div class="card info-card">
             <h3 style="margin-top:0">ΣΤΟΙΧΕΙΑ ΣΤΑΘΜΟΥ</h3>
-            <p><strong>Σταθμός:</strong> Agro Meteo Ls</p>
-            <p><strong>Ιδιοκτησία:</strong> Χρήστος Τσαβαλακόγλου</p>
-            <p><strong>Υψόμετρο:</strong> 40m</p>
-            <p><strong>Φιλοξενία:</strong> Τσαβαλακόγλου</p>
-            <div id="clock">--:--:--</div>
-            <div id="date">------</div>
+            <p style="margin: 5px 0;"><strong>Σταθμός:</strong> Agro Meteo Ls</p>
+            <p style="margin: 5px 0;"><strong>Ιδιοκτησία:</strong> Χρήστος Τσαβαλακόγλου</p>
+            <p style="margin: 5px 0;"><strong>Υψόμετρο:</strong> 40m</p>
+            <p style="margin: 5px 0;"><strong>Φιλοξενία:</strong> Τσαβαλακόγλου</p>
+            <div id="clock"></div>
+            <div id="date"></div>
         </div>
 
+        <!-- ΘΕΡΜΟΚΡΑΣΙΑ -->
         <div class="card">
             <h3>ΘΕΡΜΟΚΡΑΣΙΑ</h3>
-            <div class="main-value"><span id="t1">--</span><span class="unit">°C</span></div>
-            <iframe class="chart" src="https://thingspeak.com/channels/3365350/charts/1?dynamic=true&results=10&color=%232d5a27"></iframe>
+            <iframe class="value-frame" src="https://thingspeak.com/channels/3365350/widgets/1004140"></iframe>
+            <iframe class="chart-frame" src="https://thingspeak.com/channels/3365350/charts/1?dynamic=true&results=15&color=%232d5a27"></iframe>
         </div>
 
+        <!-- ΥΓΡΑΣΙΑ -->
         <div class="card">
             <h3>ΥΓΡΑΣΙΑ</h3>
-            <div class="main-value"><span id="h1">--</span><span class="unit">%</span></div>
-            <iframe class="chart" src="https://thingspeak.com/channels/3365350/charts/2?dynamic=true&results=10&color=%232d5a27"></iframe>
+            <iframe class="value-frame" src="https://thingspeak.com/channels/3365350/widgets/1004141"></iframe>
+            <iframe class="chart-frame" src="https://thingspeak.com/channels/3365350/charts/2?dynamic=true&results=15&color=%232d5a27"></iframe>
         </div>
 
+        <!-- ΠΙΕΣΗ -->
         <div class="card">
             <h3>ΠΙΕΣΗ</h3>
-            <div class="main-value"><span id="p1">--</span><span class="unit">hPa</span></div>
-            <iframe class="chart" src="https://thingspeak.com/channels/3365350/charts/3?dynamic=true&results=10&color=%232d5a27"></iframe>
+            <iframe class="value-frame" src="https://thingspeak.com/channels/3365350/widgets/1004142"></iframe>
+            <iframe class="chart-frame" src="https://thingspeak.com/channels/3365350/charts/3?dynamic=true&results=15&color=%232d5a27"></iframe>
         </div>
 
+        <!-- ΒΡΟΧΟΠΤΩΣΗ -->
         <div class="card">
-            <h3>ΒΡΟΧΟΠΤΩΣΗ</h3>
-            <div class="main-value"><span id="r1">--</span><span class="unit">mm</span></div>
-            <p>Τελευταίο 24ωρο</p>
+            <h3>ΒΡΟΧΟΠΤΩΣΗ (24h)</h3>
+            <iframe class="value-frame" src="https://thingspeak.com/channels/3365350/widgets/1004143"></iframe>
+            <p style="color: #666; font-size: 0.9rem;">Συνολική μέτρηση ημέρας</p>
         </div>
 
+        <!-- ΜΠΑΤΑΡΙΑ -->
         <div class="card">
-            <h3>ΜΠΑΤΑΡΙΑ</h3>
-            <div class="main-value"><span id="b1">--</span><span class="unit">%</span></div>
-            <p id="b-text">--</p>
+            <h3>ΣΤΑΘΜΗ ΜΠΑΤΑΡΙΑΣ</h3>
+            <iframe class="value-frame" src="https://thingspeak.com/channels/3365350/widgets/1004144"></iframe>
+            <p style="color: #666; font-size: 0.9rem;">Τάση συστήματος %</p>
         </div>
+
     </div>
 </div>
 
 <script>
-    // 1. ΡΟΛΟΪ (Αυτόνομο για να μη χαλάει αν κολλήσει το API)
-    function startClock() {
-        const now = new Date();
-        document.getElementById('clock').innerHTML = now.toLocaleTimeString('el-GR');
-        document.getElementById('date').innerHTML = now.toLocaleDateString('el-GR', {weekday:'long', day:'numeric', month:'long'});
-        setTimeout(startClock, 1000);
+    function updateTime() {
+        const τ = new Date();
+        document.getElementById('clock').innerHTML = τ.toLocaleTimeString('el-GR');
+        document.getElementById('date').innerHTML = τ.toLocaleDateString('el-GR', {weekday:'long', day:'numeric', month:'long'});
     }
-    startClock();
-
-    // 2. ΛΗΨΗ ΜΕΤΡΗΣΕΩΝ (Απλή μέθοδος JSONP)
-    function updateData() {
-        const oldScript = document.getElementById('ts-script');
-        if (oldScript) oldScript.remove();
-
-        const script = document.createElement('script');
-        script.id = 'ts-script';
-        // Προσοχή: Χρησιμοποιώ "renderData" ως όνομα της συνάρτησης
-        script.src = "https://api.thingspeak.com/channels/3365350/feeds/last.json?callback=renderData&_=" + Math.random();
-        document.body.appendChild(script);
-    }
-
-    function renderData(data) {
-        if (!data) return;
-        document.getElementById('t1').innerHTML = parseFloat(data.field1).toFixed(1);
-        document.getElementById('h1').innerHTML = parseFloat(data.field2).toFixed(0);
-        document.getElementById('p1').innerHTML = parseFloat(data.field3).toFixed(1);
-        document.getElementById('r1').innerHTML = parseFloat(data.field4).toFixed(2);
-        document.getElementById('b1').innerHTML = parseFloat(data.field5).toFixed(0);
-        
-        const b = parseFloat(data.field5);
-        const bt = document.getElementById('b-text');
-        if(b > 75) { bt.innerHTML = "ΥΨΗΛΗ"; bt.style.color = "green"; }
-        else if(b > 30) { bt.innerHTML = "ΙΚΑΝΟΠΟΙΗΤΙΚΗ"; bt.style.color = "orange"; }
-        else { bt.innerHTML = "ΧΑΜΗΛΗ"; bt.style.color = "red"; }
-    }
-
-    // Ανανέωση κάθε 20 δευτερόλεπτα
-    setInterval(updateData, 20000);
-    updateData();
+    setInterval(updateTime, 1000);
+    updateTime();
 </script>
 </body>
 </html>
