@@ -28,7 +28,7 @@
 <div class="overlay">
     <header><h1>Agro Meteo Ls</h1></header>
     <div class="dashboard">
-        <!-- ΣΤΑΘΜΟΣ -->
+        <!-- Πληροφορίες Σταθμού -->
         <div class="card info-card">
             <h3>ΣΤΟΙΧΕΙΑ ΣΤΑΘΜΟΥ</h3>
             <div class="info-line"><strong>Σταθμός:</strong> Agro Meteo Ls</div>
@@ -39,7 +39,7 @@
             <div id="date">------</div>
         </div>
 
-        <!-- ΑΚΡΟΤΑΤΑ (ΤΟ ΝΕΟ ΚΟΥΤΙ) -->
+        <!-- Ακρότατα Ημέρας -->
         <div class="card info-card">
             <h3>ΑΚΡΟΤΑΤΑ ΗΜΕΡΑΣ</h3>
             <div class="info-line"><strong>Θερμ. Max:</strong> <span id="t-max">--</span>°C</div>
@@ -52,7 +52,7 @@
             <div class="info-line"><strong>Πίεση Min:</strong> <span id="p-min">--</span></div>
         </div>
 
-        <!-- ΜΕΤΡΗΣΕΙΣ -->
+        <!-- Μετρήσεις -->
         <div class="card">
             <h3>ΘΕΡΜΟΚΡΑΣΙΑ</h3>
             <div class="main-value"><span id="t-val">--</span><span class="unit">°C</span></div>
@@ -85,8 +85,10 @@
 <script>
     function updateClock() {
         const now = new Date();
-        document.getElementById('clock').innerText = now.toLocaleTimeString('el-GR');
-        document.getElementById('date').innerText = now.toLocaleDateString('el-GR', {weekday:'long', day:'numeric', month:'long'});
+        const clockEl = document.getElementById('clock');
+        const dateEl = document.getElementById('date');
+        if(clockEl) clockEl.innerText = now.toLocaleTimeString('el-GR');
+        if(dateEl) dateEl.innerText = now.toLocaleDateString('el-GR', {weekday:'long', day:'numeric', month:'long'});
     }
     setInterval(updateClock, 1000);
     updateClock();
@@ -110,10 +112,6 @@
             if(!isNaN(b)) {
                 document.getElementById('b-val').innerText = b.toFixed(0);
                 let lbl = document.getElementById('b-label');
-                if(b > 75) { lbl.innerText="ΚΑΛΗ"; lbl.style.color="green"; }
-                else if(b > 30) { lbl.innerText="ΜΕΤΡΙΑ"; lbl.style.color="orange"; }
-                else { lbl.innerText="ΧΑΜΗΛΗ"; lbl.style.color="red"; }
-            }
-
-            // Ακρότατα
-            let tV
+                if(lbl) {
+                    if(b > 75) { lbl.innerText="ΚΑΛΗ"; lbl.style.color="green"; }
+                    else if(b > 30) { lbl.innerText="ΜΕΤΡΙΑ"; lbl.style.color="orange"; }
