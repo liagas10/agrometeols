@@ -76,8 +76,8 @@
             <div class="info-line"><strong>Θερμ. Max:</strong> <span id="t-max">--</span>°C (<span id="t-max-time">--:--</span>)</div>
             <div class="info-line"><strong>Θερμ. Min:</strong> <span id="t-min">--</span>°C (<span id="t-min-time">--:--</span>)</div>
             <hr style="opacity:0.3">
-            <div class="info-line"><strong>Υγρασ. Max:</strong> <span id="h-max">--</span>% (<span id="h-max-time">--:--</span>)</div>
-            <div class="info-line"><strong>Υγρασ. Min:</strong> <span id="h-min">--</span>% (<span id="h-min-time">--:--</span>)</div>
+            <div class="info-line"><strong>Υγρασία Max:</strong> <span id="h-max">--</span>% (<span id="h-max-time">--:--</span>)</div>
+            <div class="info-line"><strong>Υγρασία Min:</strong> <span id="h-min">--</span>% (<span id="h-min-time">--:--</span>)</div>
             <hr style="opacity:0.3">
             <div class="info-line"><strong>Πίεση Max:</strong> <span id="p-max">--</span> (<span id="p-max-time">--:--</span>)</div>
             <div class="info-line"><strong>Πίεση Min:</strong> <span id="p-min">--</span> (<span id="p-min-time">--:--</span>)</div>
@@ -136,14 +136,13 @@
     setInterval(updateTime, 1000);
     updateTime();
 
-    async function fetchLastFeed() {
-        // Χρησιμοποιούμε το feeds.json για να πάρουμε τα τελευταία 100 δεδομένα
-        const url = "https://api.thingspeak.com/channels/3365350/feeds.json?results=100&_=" + new Date().getTime();
+    // 1. ΑΥΤΟ ΔΙΑΒΑΖΕΙ ΤΙΣ ΤΡΕΧΟΥΣΕΣ ΤΙΜΕΣ (ΟΠΩΣ ΤΟ ΕΙΧΕΣ)
+    async function fetchLastValues() {
+        const url = "https://api.thingspeak.com/channels/3365350/feeds/last.json?_=" + new Date().getTime();
         try {
             const response = await fetch(url);
-            if (!response.ok) throw new Error("Σφάλμα σύνδεσης");
             const data = await response.json();
             
-            // Το data.feeds είναι η λίστα με τα 100 τελευταία
-            const feeds = data.feeds;
-            const last = feeds[feeds.length - 1]; // Η πιο πρ
+            if (data.field1) document.getElementById('t-val').innerText = parseFloat(data.field1).toFixed(1);
+            if (data.field2) document.getElementById('h-val').innerText = parseFloat(data.field2).toFixed(0);
+            if (data.field3) doc
