@@ -1,0 +1,92 @@
+[ Παρασκευή, 1 Μαΐου 2026 7:46 ΜΜ ] ⁨Chris Tsavalakoglou⁩: <!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agro Meteo LS - Live Station</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #e9ecef; margin: 0; padding: 10px; }
+        header { background: #1a4a7a; color: white; padding: 15px; text-align: center; border-radius: 5px; margin-bottom: 10px; }
+        
+        .main-container { display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; }
+        
+        /* Στυλ για το πινακάκι αριστερά (Στράβων Style) */
+        .sidebar { width: 320px; background: white; border: 1px solid #ccc; box-shadow: 2px 2px 5px rgba(0,0,0,0.1); }
+        .sidebar-header { background: #7b8d43; color: white; padding: 8px; font-weight: bold; font-size: 0.9em; }
+        .data-row { display: flex; justify-content: space-between; padding: 8px 12px; border-bottom: 1px solid #eee; font-size: 0.95em; }
+        .label { color: #555; font-weight: 600; }
+        .value { color: #0044cc; font-weight: bold; }
+        
+        /* Στυλ για τα γραφήματα δεξιά */
+        .charts-container { flex: 1; min-width: 350px; display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 15px; }
+        .chart-card { background: white; border: 1px solid #ccc; padding: 5px; box-shadow: 2px 2px 5px rgba(0,0,0,0.1); }
+        .chart-title { background: #f8f9fa; padding: 5px; font-size: 0.85em; font-weight: bold; text-align: center; border-bottom: 1px solid #eee; }
+    </style>
+</head>
+<body>
+
+<header>
+    <h2 style="margin:0;">Αγρο-Μετεωρολογικός Σταθμός: Agro Meteo LS</h2>
+</header>
+
+<div class="main-container">
+    <!-- ΑΡΙΣΤΕΡΗ ΣΤΗΛΗ: ΠΙΝΑΚΑΣ ΤΙΜΩΝ -->
+    <div class="sidebar">
+        <div class="sidebar-header">Τρέχουσες Συνθήκες</div>
+        <div class="data-row"><span class="label">Θερμοκρασία:</span><span class="value" id="temp">--°C</span></div>
+        <div class="data-row"><span class="label">Υγρασία:</span><span class="value" id="hum">--%</span></div>
+        <div class="data-row"><span class="label">Βαρομετρικό:</span><span class="value" id="pres">-- hPa</span></div>
+        <div class="data-row"><span class="label">Βροχόπτωση:</span><span class="value" id="rain">-- mm</span></div>
+        <div class="data-row"><span class="label">Μπαταρία:</span><span class="value" id="batt">--%</span></div>
+        <div class="data-row" style="background:#f9f9f9;"><span class="label">Τελ. Ενημέρωση:</span><span id="time" style="font-size:0.8em; color:#666;">--:--:--</span></div>
+    </div>
+
+    <!-- ΔΕΞΙΑ ΣΤΗΛΗ: ΓΡΑΦΗΜΑΤΑ -->
+    <div class="charts-container">
+        <div class="chart-card">
+            <div class="chart-title">Θερμοκρασία (°C)</div>
+            <iframe width="100%" height="240" style="border:none;" src="https://thingspeak.com/channels/3365350/charts/1?bgcolor=%23ffffff&color=%23d62020&dynamic=true&results=60&type=line&update=15"></iframe>
+        </div>
+        <div class="chart-card">
+            <div class="chart-title">Υγρασία (%)</div>
+            <iframe width="100%" height="240" style="border:none;" src="https://thingspeak.com/channels/3365350/charts/2?bgcolor=%23ffffff&color=%2332a852&dynamic=true&results=60&type=line&update=15"></iframe>
+        </div>
+        <div class="chart-card">
+            <div class="chart-title">Βαρομετρική Πίεση (hPa)</div>
+            <iframe width="100%" height="240" style="border:none;" src="https://thingspeak.com/channels/3365350/charts/3?bgcolor=%23ffffff&color=%23e8a317&dynamic=true&results=60&type=line&update=15"></iframe>
+        </div>
+        <div class="chart-card">
+            <div class="chart-title">Βροχόπτωση (mm)</div>
+            <iframe width="100%" height="240" style="border:none;" src="https://thingspeak.com/channels/3365350/charts/4?bgcolor=%23ffffff&color=%232980b9&dynamic=true&results=60&type=bar&update=15"></iframe>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Συνάρτηση που τραβάει τα δεδομένα από το ThingSpeak API
+    async function updateData() {
+        try {
+            const response = await fetch('https://api.thingspeak.com/channels/3365350/feeds/last.json');
+            const data = await response.json();
+            
+            document.getElementById('temp').innerText = parseFloat(data.field1).toFixed(1) + " °C";
+            document.getElementById('hum').innerText = parseFloat(data.field2).toFixed(0) + " %";
+            document.getElementById('pres').innerText = parseFloat(data.field3).toFixed(1) + " hPa";
+            document.getElementById('rain').innerText = parseFloat(data.field4).toFixed(2) + " mm";
+            document.getElementById('batt').innerText = parseFloat(data.field5).toFixed(0) + " %";
+            
+            // Μετατροπή ώρας από UTC σε Τοπική
+            let lastTime = new Date(data.created_at);
+            document.getElementById('time').innerText = lastTime.toLocaleTimeString('el-GR');
+        } catch (error) {
+            console.log("Error fetching data:", error);
+        }
+    }
+
+    // Ενημέρωση κάθε 20 δευτερόλεπτα
+    setInterval(updateData, 20000);
+    updateData(); // Πρώτη εκτέλεση
+</script>
+
+</body>
+</html>
