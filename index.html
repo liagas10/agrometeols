@@ -1,127 +1,158 @@
 <!DOCTYPE html>
 <html lang="el">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agro Meteo Ls</title>
-    <style>
-        body { margin: 0; padding: 0; background: #2d5a27 url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1920&q=80') no-repeat center center fixed; background-size: cover; font-family: sans-serif; }
-        .overlay { min-height: 100vh; background: rgba(0,0,0,0.4); padding: 20px; box-sizing: border-box; }
-        header { text-align: center; color: white; margin-bottom: 20px; }
-        .dashboard { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px; max-width: 1200px; margin: 0 auto; }
-        .card { background: rgba(255, 255, 255, 0.95); border-radius: 12px; padding: 15px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
-        .info-card { background: rgba(45, 90, 39, 0.95) !important; color: white !important; text-align: left !important; }
-        .main-value { font-size: 3rem; font-weight: bold; color: #111; margin: 5px 0; }
-        .unit { font-size: 1.2rem; color: #555; }
-        .chart-frame { height: 160px; margin-top: 10px; border-radius: 5px; overflow: hidden; background: white; border: 1px solid #ccc; }
-        iframe { width: 100%; height: 100%; border: none; }
-        footer { text-align: center; color: white; margin-top: 20px; padding: 10px; background: rgba(0,0,0,0.5); }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agro Meteo Ls</title>
+<!-- Βιβλιοθήκη για τα Gauges -->
+<script src="https://cdn.rawgit.com/Mikhus/canvas-gauges/gh-pages/download/2.1.7/all/gauge.min.js"></script>
+<style>
+body { margin: 0; padding: 0; background: #2d5a27 url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1920&q=80') no-repeat center center fixed; background-size: cover; font-family: sans-serif; }
+.overlay { min-height: 100vh; background: rgba(0,0,0,0.4); padding: 20px; box-sizing: border-box; }
+header { text-align: center; color: white; margin-bottom: 20px; }
+.dashboard { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px; max-width: 1200px; margin: 0 auto; }
+.card { background: rgba(255, 255, 255, 0.95); border-radius: 12px; padding: 15px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+.info-card { background: rgba(45, 90, 39, 0.95) !important; color: white !important; text-align: left !important; }
+.chart-frame { height: 160px; margin-top: 10px; border-radius: 5px; overflow: hidden; background: white; border: 1px solid #ccc; }
+iframe { width: 100%; height: 100%; border: none; }
+footer { text-align: center; color: white; margin-top: 20px; padding: 10px; background: rgba(0,0,0,0.5); }
+canvas { max-width: 220px; width: 100%; height: auto; }
+</style>
 </head>
 <body>
 <div class="overlay">
-    <header><h1>Agro Meteo Ls</h1></header>
-    <div class="dashboard">
-        <!-- 1. ΣΤΑΘΜΟΣ -->
-        <div class="card info-card">
-            <h3 style="border-bottom:1px solid white">Αγρο-Μετεωρολογικός σταθμός Νεος Μυλότοπος Πέλλας</h3>
-            <p><strong>Σταθμός:</strong> Agro Meteo Ls</p>
-            <p><strong>Ιδιοκτησία:</strong> Χρήστος Τσαβαλακόγλου</p>
-            <p><strong>Υψόμετρο:</strong> 40m</p>
-            <p><strong>Επίβλεψη:</strong> Χρήστος Τσαβαλακόγλου</p>
-            <div id="clock" style="font-size:1.8rem; font-weight:bold">--:--:--</div>
-            <div id="date">------</div>
-        </div>
+<header><h1>Agro Meteo Ls</h1></header>
+<div class="dashboard">
+<!-- 1. ΣΤΑΘΜΟΣ -->
+<div class="card info-card">
+<h3 style="border-bottom:1px solid white">Αγρο-Μετεωρολογικός σταθμός Νεος Μυλότοπος Πέλλας</h3>
+<p><strong>Σταθμός:</strong> Agro Meteo Ls</p>
+<p><strong>Ιδιοκτησία:</strong> Χρήστος Τσαβαλακόγλου</p>
+<p><strong>Υψόμετρο:</strong> 40m</p>
+<div id="clock" style="font-size:1.8rem; font-weight:bold">--:--:--</div>
+<div id="date">------</div>
+</div>
 
-        <!-- 2. ΑΚΡΟΤΑΤΑ -->
-        <div class="card info-card">
-            <h3 style="border-bottom:1px solid white">Today's Highs/Lows - Μέγιστες/Ελάχιστες</h3>
-            <p>Υψηλότερη Θερμοκρασία: <span id="t-max">--</span>°C <span id="t-max-t"></span> | Χαμηλότερη: <span id="t-min">--</span>°C <span id="t-min-t"></span></p>
-            <p>Υψηλότερη Υγρασία: <span id="h-max">--</span>% <span id="h-max-t"></span> | Χαμηλότερη: <span id="h-min">--</span>% <span id="h-min-t"></span></p>
-            <p>Υψηλότερη Πίεση: <span id="p-max">--</span> <span id="p-max-t"></span> | Χαμηλότερη: <span id="p-min">--</span> <span id="p-min-t"></span></p>
-        </div>
+<!-- 2. ΑΚΡΟΤΑΤΑ -->
+<div class="card info-card">
+<h3 style="border-bottom:1px solid white">Μέγιστες/Ελάχιστες</h3>
+<p>Υψηλότερη Θερμοκρασία: <span id="t-max">--</span>°C <span id="t-max-t"></span> | Χαμηλότερη: <span id="t-min">--</span>°C <span id="t-min-t"></span></p>
+<p>Υψηλότερη Υγρασία: <span id="h-max">--</span>% <span id="h-max-t"></span> | Χαμηλότερη: <span id="h-min">--</span>% <span id="h-min-t"></span></p>
+<p>Υψηλότερη Πίεση: <span id="p-max">--</span> <span id="p-max-t"></span> | Χαμηλότερη: <span id="p-min">--</span> <span id="p-min-t"></span></p>
+</div>
 
-        <div class="card">
-            <h3>Θερμοκρασία</h3>
-            <div class="main-value"><span id="t-val">--</span><span class="unit">°C</span></div>
-            <div class="chart-frame"><iframe src="https://thingspeak.com/channels/3365350/charts/1?results=15&color=%232d5a27"></iframe></div>
-        </div>
-        <div class="card">
-            <h3>Υγρασία</h3>
-            <div class="main-value"><span id="h-val">--</span><span class="unit">%</span></div>
-            <div class="chart-frame"><iframe src="https://thingspeak.com/channels/3365350/charts/2?results=15&color=%232d5a27"></iframe></div>
-        </div>
-        <div class="card">
-            <h3>Βαρομετρική πίεση</h3>
-            <div class="main-value"><span id="p-val">--</span><span class="unit">hPa</span></div>
-            <div class="chart-frame"><iframe src="https://thingspeak.com/channels/3365350/charts/3?results=15&color=%232d5a27"></iframe></div>
-        </div>
-        <div class="card">
-            <h3>Βροχόπτωση</h3>
-            <div class="main-value"><span id="r-val">--</span><span class="unit">mm</span></div>
-            <div class="chart-frame"><iframe src="https://thingspeak.com/channels/3365350/charts/4?results=15&color=%232d5a27&type=column"></iframe></div>
-        </div>
-        <div class="card">
-            <h3>Μπαταρία Σταθμού</h3>
-            <div class="main-value"><span id="b-val">--</span><span class="unit">%</span></div>
-            <div id="b-label" style="font-weight:bold">--</div>
-        </div>
-    </div>
-    <footer>&copy; 2026 Agro Meteo Ls | Προγραμματισμός Χρήστος Τσαβαλακόγλου Iot System</footer>
+<!-- ΘΕΡΜΟΚΡΑΣΙΑ GAUGE -->
+<div class="card">
+<h3>Θερμοκρασία</h3>
+<canvas id="gauge-temp"></canvas>
+<div class="chart-frame"><iframe src="https://thingspeak.com/channels/3365350/charts/1?results=15&color=%232d5a27"></iframe></div>
+</div>
+
+<!-- ΥΓΡΑΣΙΑ GAUGE -->
+<div class="card">
+<h3>Υγρασία</h3>
+<canvas id="gauge-hum"></canvas>
+<div class="chart-frame"><iframe src="https://thingspeak.com/channels/3365350/charts/2?results=15&color=%232d5a27"></iframe></div>
+</div>
+
+<!-- ΠΙΕΣΗ GAUGE -->
+<div class="card">
+<h3>Βαρομετρική πίεση</h3>
+<canvas id="gauge-press"></canvas>
+<div class="chart-frame"><iframe src="https://thingspeak.com/channels/3365350/charts/3?results=15&color=%232d5a27"></iframe></div>
+</div>
+
+<div class="card">
+<h3>Βροχόπτωση</h3>
+<div style="font-size: 3rem; font-weight: bold; color: #111;"><span id="r-val">--</span><span style="font-size: 1.2rem;">mm</span></div>
+<div class="chart-frame"><iframe src="https://thingspeak.com/channels/3365350/charts/4?results=15&color=%232d5a27&type=column"></iframe></div>
+</div>
+
+<div class="card">
+<h3>Μπαταρία Σταθμού</h3>
+<div style="font-size: 3rem; font-weight: bold; color: #111;"><span id="b-val">--</span><span style="font-size: 1.2rem;">%</span></div>
+<div id="b-label" style="font-weight:bold">--</div>
+</div>
+</div>
+<footer>&copy; 2026 Agro Meteo Ls | Προγραμματισμός Χρήστος Τσαβαλακόγλου Iot System</footer>
 </div>
 
 <script>
-    function update() {
-        const d = new Date();
-        document.getElementById('clock').innerText = d.toLocaleTimeString('el-GR');
-        document.getElementById('date').innerText = d.toLocaleDateString('el-GR', {weekday:'long', day:'numeric', month:'long'});
+// Ρυθμίσεις Gauges
+var gTemp = new RadialGauge({
+renderTo: 'gauge-temp', width: 200, height: 200, units: "°C", minValue: -10, maxValue: 50,
+majorTicks: ["-10","0","10","20","30","40","50"], minorTicks: 2, strokeTicks: true,
+highlights: [{ "from": -10, "to": 0, "color": "rgba(0,0,255,.3)" }, { "from": 35, "to": 50, "color": "rgba(255,0,0,.3)" }],
+colorPlate: "#fff", borderShadowWidth: 0, borders: false, needleType: "arrow", needleWidth: 2,
+needleCircleSize: 7, needleCircleOuter: true, needleCircleInner: false, animationDuration: 1500, animationRule: "linear"
+}).draw();
 
-        fetch("https://api.thingspeak.com/channels/3365350/feeds.json?results=80")
-        .then(res => res.json())
-        .then(data => {
-            const feeds = data.feeds;
-            const last = feeds[feeds.length - 1];
-            
-            document.getElementById('t-val').innerText = parseFloat(last.field1).toFixed(1);
-            document.getElementById('h-val').innerText = parseFloat(last.field2).toFixed(0);
-            document.getElementById('p-val').innerText = parseFloat(last.field3).toFixed(1);
-            document.getElementById('r-val').innerText = parseFloat(last.field4).toFixed(2);
-            
-            let b = parseFloat(last.field5);
-            document.getElementById('b-val').innerText = b.toFixed(0);
-            let lbl = document.getElementById('b-label');
-            if(b > 75) { lbl.innerText="ΚΑΛΗ"; lbl.style.color="green"; }
-            else if(b > 30) { lbl.innerText="ΜΕΤΡΙΑ"; lbl.style.color="orange"; }
-            else { lbl.innerText="ΧΑΜΗΛΗ"; lbl.style.color="red"; }
+var gHum = new RadialGauge({
+renderTo: 'gauge-hum', width: 200, height: 200, units: "%", minValue: 0, maxValue: 100,
+majorTicks: ["0","20","40","60","80","100"], minorTicks: 2, strokeTicks: true,
+highlights: [{ "from": 0, "to": 100, "color": "rgba(0,100,255,.1)" }],
+colorPlate: "#fff", borders: false, needleType: "arrow", animationDuration: 1500
+}).draw();
 
-            let tArr = feeds.filter(f => f.field1 !== null).map(f => ({v: parseFloat(f.field1), t: f.created_at}));
-            let hArr = feeds.filter(f => f.field2 !== null).map(f => ({v: parseFloat(f.field2), t: f.created_at}));
-            let pArr = feeds.filter(f => f.field3 !== null).map(f => ({v: parseFloat(f.field3), t: f.created_at}));
-            
-            let tMax = tArr.reduce((p, c) => (p.v > c.v) ? p : c);
-            let tMin = tArr.reduce((p, c) => (p.v < c.v) ? p : c);
-            let hMax = hArr.reduce((p, c) => (p.v > c.v) ? p : c);
-            let hMin = hArr.reduce((p, c) => (p.v < c.v) ? p : c);
-            let pMax = pArr.reduce((p, c) => (p.v > c.v) ? p : c);
-            let pMin = pArr.reduce((p, c) => (p.v < c.v) ? p : c);
+var gPress = new RadialGauge({
+renderTo: 'gauge-press', width: 200, height: 200, units: "hPa", minValue: 900, maxValue: 1100,
+majorTicks: ["900","950","1000","1050","1100"], minorTicks: 2, strokeTicks: true,
+highlights: [{ "from": 900, "to": 1100, "color": "rgba(100,100,100,.1)" }],
+colorPlate: "#fff", borders: false, needleType: "arrow", animationDuration: 1500
+}).draw();
 
-            document.getElementById('t-max').innerText = tMax.v.toFixed(1);
-            document.getElementById('t-max-t').innerText = "(" + new Date(tMax.t).toLocaleTimeString('el-GR', {hour:'2-digit', minute:'2-digit'}) + ")";
-            document.getElementById('t-min').innerText = tMin.v.toFixed(1);
-            document.getElementById('t-min-t').innerText = "(" + new Date(tMin.t).toLocaleTimeString('el-GR', {hour:'2-digit', minute:'2-digit'}) + ")";
-            
-            document.getElementById('h-max').innerText = hMax.v.toFixed(0);
-            document.getElementById('h-max-t').innerText = "(" + new Date(hMax.t).toLocaleTimeString('el-GR', {hour:'2-digit', minute:'2-digit'}) + ")";
-            document.getElementById('h-min').innerText = hMin.v.toFixed(0);
-            document.getElementById('h-min-t').innerText = "(" + new Date(hMin.t).toLocaleTimeString('el-GR', {hour:'2-digit', minute:'2-digit'}) + ")";
-            
-            document.getElementById('p-max').innerText = pMax.v.toFixed(1);
-            document.getElementById('p-max-t').innerText = "(" + new Date(pMax.t).toLocaleTimeString('el-GR', {hour:'2-digit', minute:'2-digit'}) + ")";
-            document.getElementById('p-min').innerText = pMin.v.toFixed(1);
-            document.getElementById('p-min-t').innerText = "(" + new Date(pMin.t).toLocaleTimeString('el-GR', {hour:'2-digit', minute:'2-digit'}) + ")";
-        })
-        .catch(err => console.log("Error"));
-    }
-    update();
-    setInterval(update, 20000);
+function update() {
+const d = new Date();
+document.getElementById('clock').innerText = d.toLocaleTimeString('el-GR');
+document.getElementById('date').innerText = d.toLocaleDateString('el-GR', {weekday:'long', day:'numeric', month:'long'});
+
+fetch("https://api.thingspeak.com/channels/3365350/feeds.json?results=80")
+.then(res => res.json())
+.then(data => {
+const feeds = data.feeds;
+const last = feeds[feeds.length - 1];
+
+// Ενημέρωση Gauges
+gTemp.value = last.field1;
+gHum.value = last.field2;
+gPress.value = last.field3;
+document.getElementById('r-val').innerText = parseFloat(last.field4).toFixed(2);
+
+let b = parseFloat(last.field5);
+document.getElementById('b-val').innerText = b.toFixed(0);
+let lbl = document.getElementById('b-label');
+if(b > 75) { lbl.innerText="ΚΑΛΗ"; lbl.style.color="green"; }
+else if(b > 30) { lbl.innerText="ΜΕΤΡΙΑ"; lbl.style.color="orange"; }
+else { lbl.innerText="ΧΑΜΗΛΗ"; lbl.style.color="red"; }
+
+let tArr = feeds.filter(f => f.field1 !== null).map(f => ({v: parseFloat(f.field1), t: f.created_at}));
+let hArr = feeds.filter(f => f.field2 !== null).map(f => ({v: parseFloat(f.field2), t: f.created_at}));
+let pArr = feeds.filter(f => f.field3 !== null).map(f => ({v: parseFloat(f.field3), t: f.created_at}));
+
+let tMax = tArr.reduce((p, c) => (p.v > c.v) ? p : c);
+let tMin = tArr.reduce((p, c) => (p.v < c.v) ? p : c);
+let hMax = hArr.reduce((p, c) => (p.v > c.v) ? p : c);
+let hMin = hArr.reduce((p, c) => (p.v < c.v) ? p : c);
+let pMax = pArr.reduce((p, c) => (p.v > c.v) ? p : c);
+let pMin = pArr.reduce((p, c) => (p.v < c.v) ? p : c);
+
+document.getElementById('t-max').innerText = tMax.v.toFixed(1);
+document.getElementById('t-max-t').innerText = "(" + new Date(tMax.t).toLocaleTimeString('el-GR', {hour:'2-digit', minute:'2-digit'}) + ")";
+document.getElementById('t-min').innerText = tMin.v.toFixed(1);
+document.getElementById('t-min-t').innerText = "(" + new Date(tMin.t).toLocaleTimeString('el-GR', {hour:'2-digit', minute:'2-digit'}) + ")";
+document.getElementById('h-max').innerText = hMax.v.toFixed(0);
+document.getElementById('h-max-t').innerText = "(" + new Date(hMax.t).toLocaleTimeString('el-GR', {hour:'2-digit', minute:'2-digit'}) + ")";
+document.getElementById('h-min').innerText = hMin.v.toFixed(0);
+document.getElementById('h-min-t').innerText = "(" + new Date(hMin.t).toLocaleTimeString('el-GR', {hour:'2-digit', minute:'2-digit'}) + ")";
+document.getElementById('p-max').innerText = pMax.v.toFixed(1);
+document.getElementById('p-max-t').innerText = "(" + new Date(pMax.t).toLocaleTimeString('el-GR', {hour:'2-digit', minute:'2-digit'}) + ")";
+document.getElementById('p-min').innerText = pMin.v.toFixed(1);
+document.getElementById('p-min-t').innerText = "(" + new Date(pMin.t).toLocaleTimeString('el-GR', {hour:'2-digit', minute:'2-digit'}) + ")";
+})
+.catch(err => console.log("Error"));
+}
+update();
+setInterval(update, 20000);
 </script>
+</body>
+</html>
