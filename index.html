@@ -28,6 +28,7 @@
 <div class="overlay">
     <header><h1>Agro Meteo Ls</h1></header>
     <div class="dashboard">
+        <!-- ΣΤΟΙΧΕΙΑ ΣΤΑΘΜΟΥ -->
         <div class="card info-card">
             <h3>ΣΤΟΙΧΕΙΑ ΣΤΑΘΜΟΥ</h3>
             <div class="info-line"><strong>Σταθμός:</strong> Agro Meteo Ls</div>
@@ -36,6 +37,19 @@
             <div class="info-line"><strong>Φιλοξενία:</strong> Τσαβαλακόγλου</div>
             <div id="clock">--:--:--</div>
             <div id="date">------</div>
+        </div>
+
+        <!-- ΤΟ ΚΑΙΝΟΥΡΙΟ ΚΟΥΤΑΚΙ ΑΚΡΟΤΑΤΩΝ -->
+        <div class="card info-card">
+            <h3>ΑΚΡΟΤΑΤΑ ΗΜΕΡΑΣ</h3>
+            <div class="info-line"><strong>Θερμ. Max:</strong> <span id="t-max">--</span>°C</div>
+            <div class="info-line"><strong>Θερμ. Min:</strong> <span id="t-min">--</span>°C</div>
+            <hr style="opacity:0.3">
+            <div class="info-line"><strong>Υγρασία Max:</strong> <span id="h-max">--</span>%</div>
+            <div class="info-line"><strong>Υγρασία Min:</strong> <span id="h-min">--</span>%</div>
+            <hr style="opacity:0.3">
+            <div class="info-line"><strong>Πίεση Max:</strong> <span id="p-max">--</span></div>
+            <div class="info-line"><strong>Πίεση Min:</strong> <span id="p-min">--</span></div>
         </div>
 
         <div class="card">
@@ -76,6 +90,7 @@
     setInterval(updateClock, 1000);
     updateClock();
 
+    // Ο ΔΙΚΟΣ ΣΟΥ ΚΩΔΙΚΑΣ ΑΥΤΟΥΣΙΟΣ
     function fetchData() {
         fetch("https://api.thingspeak.com/channels/3365350/feeds/last.json")
         .then(response => response.json())
@@ -95,8 +110,10 @@
         .catch(error => console.log("Error"));
     }
 
-    fetchData();
-    setInterval(fetchData, 15000);
-</script>
-</body>
-</html>
+    // Η ΠΡΟΣΘΗΚΗ ΓΙΑ ΤΑ ΑΚΡΟΤΑΤΑ ΜΕ ΤΟΝ ΔΙΚΟ ΣΟΥ ΤΡΟΠΟ (.then)
+    function fetchExtremes() {
+        fetch("https://api.thingspeak.com/channels/3365350/feeds.json?results=60")
+        .then(res => res.json())
+        .then(data => {
+            let f = data.feeds;
+            let
