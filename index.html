@@ -28,7 +28,7 @@
 <div class="overlay">
     <header><h1>Agro Meteo Ls</h1></header>
     <div class="dashboard">
-        <!-- ΣΤΟΙΧΕΙΑ ΣΤΑΘΜΟΥ -->
+        <!-- ΣΤΑΘΜΟΣ -->
         <div class="card info-card">
             <h3>ΣΤΟΙΧΕΙΑ ΣΤΑΘΜΟΥ</h3>
             <div class="info-line"><strong>Σταθμός:</strong> Agro Meteo Ls</div>
@@ -39,7 +39,7 @@
             <div id="date">------</div>
         </div>
 
-        <!-- ΑΚΡΟΤΑΤΑ ΗΜΕΡΑΣ -->
+        <!-- ΑΚΡΟΤΑΤΑ (ΤΟ ΝΕΟ ΚΟΥΤΙ) -->
         <div class="card info-card">
             <h3>ΑΚΡΟΤΑΤΑ ΗΜΕΡΑΣ</h3>
             <div class="info-line"><strong>Θερμ. Max:</strong> <span id="t-max">--</span>°C</div>
@@ -52,7 +52,7 @@
             <div class="info-line"><strong>Πίεση Min:</strong> <span id="p-min">--</span></div>
         </div>
 
-        <!-- ΚΑΡΤΕΣ ΜΕΤΡΗΣΕΩΝ -->
+        <!-- ΜΕΤΡΗΣΕΙΣ -->
         <div class="card">
             <h3>ΘΕΡΜΟΚΡΑΣΙΑ</h3>
             <div class="main-value"><span id="t-val">--</span><span class="unit">°C</span></div>
@@ -83,7 +83,6 @@
 </div>
 
 <script>
-    // Ρολόι και Ημερομηνία
     function updateClock() {
         const now = new Date();
         document.getElementById('clock').innerText = now.toLocaleTimeString('el-GR');
@@ -92,25 +91,29 @@
     setInterval(updateClock, 1000);
     updateClock();
 
-    // Κύρια λειτουργία λήψης δεδομένων
     function updateDashboard() {
-        // Τραβάμε τα τελευταία 80 feeds για να έχουμε και την τρέχουσα τιμή και τα ακρότατα
         fetch("https://api.thingspeak.com/channels/3365350/feeds.json?results=80")
-        .then(response => response.json())
+        .then(res => res.json())
         .then(data => {
             if(!data.feeds || data.feeds.length === 0) return;
-
-            // 1. Τρέχουσες Τιμές (Τελευταίο Feed)
+            
             let last = data.feeds[data.feeds.length - 1];
             
-            document.getElementById('t-val').innerText = last.field1 ? parseFloat(last.field1).toFixed(1) : "--";
-            document.getElementById('h-val').innerText = last.field2 ? parseFloat(last.field2).toFixed(0) : "--";
-            document.getElementById('p-val').innerText = last.field3 ? parseFloat(last.field3).toFixed(1) : "--";
-            document.getElementById('r-val').innerText = last.field4 ? parseFloat(last.field4).toFixed(2) : "--";
+            // Τρέχουσες τιμές
+            if(last.field1) document.getElementById('t-val').innerText = parseFloat(last.field1).toFixed(1);
+            if(last.field2) document.getElementById('h-val').innerText = parseFloat(last.field2).toFixed(0);
+            if(last.field3) document.getElementById('p-val').innerText = parseFloat(last.field3).toFixed(1);
+            if(last.field4) document.getElementById('r-val').innerText = parseFloat(last.field4).toFixed(2);
             
+            // Μπαταρία
             let b = parseFloat(last.field5);
             if(!isNaN(b)) {
                 document.getElementById('b-val').innerText = b.toFixed(0);
                 let lbl = document.getElementById('b-label');
                 if(b > 75) { lbl.innerText="ΚΑΛΗ"; lbl.style.color="green"; }
-                else if(b > 30)
+                else if(b > 30) { lbl.innerText="ΜΕΤΡΙΑ"; lbl.style.color="orange"; }
+                else { lbl.innerText="ΧΑΜΗΛΗ"; lbl.style.color="red"; }
+            }
+
+            // Ακρότατα
+            let tV
