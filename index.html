@@ -16,7 +16,6 @@
         .chart-frame { height: 160px; margin-top: 10px; border-radius: 5px; overflow: hidden; background: white; border: 1px solid #ccc; }
         iframe { width: 100%; height: 100%; border: none; }
         footer { text-align: center; color: white; margin-top: 20px; padding: 10px; background: rgba(0,0,0,0.5); }
-        .time-label { font-size: 0.8rem; opacity: 0.8; font-weight: normal; }
     </style>
 </head>
 <body>
@@ -34,12 +33,12 @@
             <div id="date">------</div>
         </div>
 
-        <!-- 2. ΑΚΡΟΤΑΤΑ ΜΕ ΩΡΕΣ -->
+        <!-- 2. ΑΚΡΟΤΑΤΑ -->
         <div class="card info-card">
             <h3 style="border-bottom:1px solid white">Today's Highs/Lows - Μέγιστες/Ελάχιστες</h3>
-            <p>T-Max: <span id="t-max">--</span>°C <span class="time-label" id="t-max-time"></span> | Min: <span id="t-min">--</span>°C <span class="time-label" id="t-min-time"></span></p>
-            <p>H-Max: <span id="h-max">--</span>% <span class="time-label" id="h-max-time"></span> | Min: <span id="h-min">--</span>% <span class="time-label" id="h-min-time"></span></p>
-            <p>P-Max: <span id="p-max">--</span> <span class="time-label" id="p-max-time"></span> | Min: <span id="p-min">--</span> <span class="time-label" id="p-min-time"></span></p>
+            <p>T-Max: <span id="t-max">--</span>°C <small id="t-max-time"></small> | Min: <span id="t-min">--</span>°C <small id="t-min-time"></small></p>
+            <p>H-Max: <span id="h-max">--</span>% <small id="h-max-time"></small> | Min: <span id="h-min">--</span>% <small id="h-min-time"></small></p>
+            <p>P-Max: <span id="p-max">--</span> <small id="p-max-time"></small> | Min: <span id="p-min">--</span> <small id="p-min-time"></small></p>
         </div>
 
         <!-- 3. ΘΕΡΜΟΚΡΑΣΙΑ -->
@@ -81,11 +80,6 @@
 </div>
 
 <script>
-    function formatTime(isoString) {
-        const date = new Date(isoString);
-        return date.toLocaleTimeString('el-GR', {hour: '2-digit', minute:'2-digit'});
-    }
-
     function update() {
         const d = new Date();
         document.getElementById('clock').innerText = d.toLocaleTimeString('el-GR');
@@ -97,11 +91,13 @@
             const feeds = data.feeds;
             const last = feeds[feeds.length - 1];
             
+            // Τιμές
             document.getElementById('t-val').innerText = parseFloat(last.field1).toFixed(1);
             document.getElementById('h-val').innerText = parseFloat(last.field2).toFixed(0);
             document.getElementById('p-val').innerText = parseFloat(last.field3).toFixed(1);
             document.getElementById('r-val').innerText = parseFloat(last.field4).toFixed(2);
             
+            // Μπαταρία
             let b = parseFloat(last.field5);
             document.getElementById('b-val').innerText = b.toFixed(0);
             let lbl = document.getElementById('b-label');
@@ -109,17 +105,22 @@
             else if(b > 30) { lbl.innerText="ΜΕΤΡΙΑ"; lbl.style.color="orange"; }
             else { lbl.innerText="ΧΑΜΗΛΗ"; lbl.style.color="red"; }
 
-            // Υπολογισμός Ακροτάτων με εύρεση ώρας
-            function getExtremes(fieldNum) {
-                let validFeeds = feeds.filter(f => !isNaN(parseFloat(f[fieldNum])));
-                if (validFeeds.length === 0) return null;
-                
-                let maxEntry = validFeeds.reduce((prev, current) => (parseFloat(prev[fieldNum]) > parseFloat(current[fieldNum])) ? prev : current);
-                let minEntry = validFeeds.reduce((prev, current) => (parseFloat(prev[fieldNum]) < parseFloat(current[fieldNum])) ? prev : current);
-                
-                return { max: maxEntry, min: minEntry };
-            }
+            // Ακρότατα με εύρεση ώρας
+            const getInfo = (arr, field) => {
+                let valid = arr.filter(f => f[field] !== null && !isNaN(parseFloat(f[field])));
+                if (valid.length === 0) return {val: '--', time: ''};
+                let max = valid.reduce((a, b) => parseFloat(a[field]) > parseFloat(b[field]) ? a : b);
+                let min = valid.reduce((a, b) => parseFloat(a[field]) < parseFloat(b[field]) ? a : b);
+                return {
+                    maxVal: parseFloat(max[field]),
+                    maxTime: new Date(max.created_at).toLocaleTimeString('el-GR', {hour:'2-digit', minute:'2-digit'}),
+                    minVal: parseFloat(min[field]),
+                    minTime: new Date(min.created_at).toLocaleTimeString('el-GR', {hour:'2-digit', minute:'2-digit'})
+                };
+            };
 
-            const tExt = getExtremes('field1');
-            const hExt = getExtremes('field2');
-            const pExt = getExtreme
+            const t = getInfo(feeds, 'field1');
+            const h = getInfo(feeds, 'field2');
+            const p = getInfo(feeds, 'field3');
+
+            document.getElementById('t-max').innerText = t.maxVal.toFixed(1);
