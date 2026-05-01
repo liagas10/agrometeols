@@ -5,60 +5,38 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Agro Meteo Ls</title>
     <style>
-        body { margin: 0; padding: 0; background: #2d5a27 url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1920&q=80') no-repeat center center fixed; background-size: cover; font-family: 'Segoe UI', Arial, sans-serif; }
-        .overlay { min-height: 100vh; background: rgba(0,0,0,0.4); backdrop-filter: blur(4px); padding: 20px; box-sizing: border-box; }
-        header { text-align: center; color: white; text-shadow: 2px 2px 8px rgba(0,0,0,0.6); margin-bottom: 25px; }
-        header h1 { margin: 0; font-size: 2.8rem; letter-spacing: 1px; }
-        .dashboard { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; max-width: 1400px; margin: 0 auto; }
-        
-        /* Κάρτες */
-        .card { background: rgba(255, 255, 255, 0.95); border-radius: 16px; padding: 20px; text-align: center; box-shadow: 0 8px 25px rgba(0,0,0,0.3); display: flex; flex-direction: column; justify-content: space-between; min-height: 380px; }
-        .info-card { background: rgba(45, 90, 39, 0.95) !important; color: white !important; text-align: left !important; justify-content: flex-start; }
-        
-        .info-card h3 { margin-top: 0; border-bottom: 1px solid rgba(255,255,255,0.3); padding-bottom: 8px; color: #fff; }
-        .info-line { margin: 12px 0; font-size: 1.1rem; }
-        .card h3 { margin: 0; font-size: 1.2rem; color: #2d5a27; text-transform: uppercase; font-weight: bold; }
-        
-        .main-value { font-size: 3.5rem; font-weight: bold; margin: 15px 0; color: #111; }
-        .unit { font-size: 1.4rem; color: #555; margin-left: 5px; }
-        
-        .chart-frame { margin-top: auto; border-radius: 10px; overflow: hidden; border: 1px solid #ddd; height: 180px; background: white; }
+        body { margin: 0; padding: 0; background: #2d5a27 url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1920&q=80') no-repeat center center fixed; background-size: cover; font-family: sans-serif; }
+        .overlay { min-height: 100vh; background: rgba(0,0,0,0.4); padding: 20px; box-sizing: border-box; }
+        header { text-align: center; color: white; margin-bottom: 20px; }
+        .dashboard { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px; max-width: 1200px; margin: 0 auto; }
+        .card { background: rgba(255, 255, 255, 0.95); border-radius: 12px; padding: 15px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+        .info-card { background: rgba(45, 90, 39, 0.95) !important; color: white !important; text-align: left !important; }
+        .main-value { font-size: 3rem; font-weight: bold; color: #111; margin: 5px 0; }
+        .unit { font-size: 1.2rem; color: #555; }
+        .chart-frame { height: 160px; margin-top: 10px; border-radius: 5px; overflow: hidden; background: white; border: 1px solid #ccc; }
         iframe { width: 100%; height: 100%; border: none; }
-        
-        #clock { font-size: 2.5rem; font-weight: bold; margin-top: 15px; color: #fff; }
-        #date { font-size: 1.1rem; opacity: 0.9; }
-        
-        hr { border: 0; border-top: 1px solid rgba(255,255,255,0.2); margin: 10px 0; }
-        footer { text-align: center; color: white; margin-top: 40px; padding: 20px; background: rgba(0,0,0,0.6); border-radius: 10px; }
+        footer { text-align: center; color: white; margin-top: 20px; padding: 10px; background: rgba(0,0,0,0.5); }
     </style>
 </head>
 <body>
 <div class="overlay">
     <header><h1>Agro Meteo Ls</h1></header>
-    
     <div class="dashboard">
-        <!-- 1. ΣΤΟΙΧΕΙΑ ΣΤΑΘΜΟΥ -->
+        <!-- 1. ΣΤΑΘΜΟΣ -->
         <div class="card info-card">
-            <h3>ΣΤΟΙΧΕΙΑ ΣΤΑΘΜΟΥ</h3>
-            <div class="info-line"><strong>Σταθμός:</strong> Agro Meteo Ls</div>
-            <div class="info-line"><strong>Ιδιοκτησία:</strong> Χρήστος Τσαβαλακόγλου</div>
-            <div class="info-line"><strong>Υψόμετρο:</strong> 40m</div>
-            <div class="info-line"><strong>Φιλοξενία:</strong> Τσαβαλακόγλου</div>
-            <div id="clock">--:--:--</div>
+            <h3 style="border-bottom:1px solid white">ΣΤΑΘΜΟΣ</h3>
+            <p><strong>Σταθμός:</strong> Agro Meteo Ls</p>
+            <p><strong>Ιδιοκτησία:</strong> Χρήστος Τσαβαλακόγλου</p>
+            <div id="clock" style="font-size:1.8rem; font-weight:bold">--:--:--</div>
             <div id="date">------</div>
         </div>
 
-        <!-- 2. ΑΚΡΟΤΑΤΑ ΗΜΕΡΑΣ -->
+        <!-- 2. ΑΚΡΟΤΑΤΑ -->
         <div class="card info-card">
-            <h3>ΑΚΡΟΤΑΤΑ ΗΜΕΡΑΣ</h3>
-            <div class="info-line"><strong>Θερμ. Max:</strong> <span id="t-max">--</span>°C</div>
-            <div class="info-line"><strong>Θερμ. Min:</strong> <span id="t-min">--</span>°C</div>
-            <hr>
-            <div class="info-line"><strong>Υγρασία Max:</strong> <span id="h-max">--</span>%</div>
-            <div class="info-line"><strong>Υγρασία Min:</strong> <span id="h-min">--</span>%</div>
-            <hr>
-            <div class="info-line"><strong>Πίεση Max:</strong> <span id="p-max">--</span> hPa</div>
-            <div class="info-line"><strong>Πίεση Min:</strong> <span id="p-min">--</span> hPa</div>
+            <h3 style="border-bottom:1px solid white">ΑΚΡΟΤΑΤΑ ΗΜΕΡΑΣ</h3>
+            <p>T-Max: <span id="t-max">--</span>°C | Min: <span id="t-min">--</span>°C</p>
+            <p>H-Max: <span id="h-max">--</span>% | Min: <span id="h-min">--</span>%</p>
+            <p>P-Max: <span id="p-max">--</span> | Min: <span id="p-min">--</span></p>
         </div>
 
         <!-- 3. ΘΕΡΜΟΚΡΑΣΙΑ -->
@@ -75,14 +53,14 @@
             <div class="chart-frame"><iframe src="https://thingspeak.com/channels/3365350/charts/2?results=15&color=%232d5a27"></iframe></div>
         </div>
 
-        <!-- 5. ΑΤΜΟΣΦΑΙΡΙΚΗ ΠΙΕΣΗ -->
+        <!-- 5. ΠΙΕΣΗ -->
         <div class="card">
-            <h3>ΑΤΜΟΣΦΑΙΡΙΚΗ ΠΙΕΣΗ</h3>
+            <h3>ΠΙΕΣΗ</h3>
             <div class="main-value"><span id="p-val">--</span><span class="unit">hPa</span></div>
             <div class="chart-frame"><iframe src="https://thingspeak.com/channels/3365350/charts/3?results=15&color=%232d5a27"></iframe></div>
         </div>
 
-        <!-- 6. ΒΡΟΧΟΠΤΩΣΗ -->
+        <!-- 6. ΒΡΟΧΗ -->
         <div class="card">
             <h3>ΒΡΟΧΟΠΤΩΣΗ</h3>
             <div class="main-value"><span id="r-val">--</span><span class="unit">mm</span></div>
@@ -90,39 +68,56 @@
         </div>
 
         <!-- 7. ΜΠΑΤΑΡΙΑ -->
-        <div class="card" style="min-height: auto;">
-            <h3>ΣΤΑΘΜΗ ΜΠΑΤΑΡΙΑΣ</h3>
+        <div class="card">
+            <h3>ΜΠΑΤΑΡΙΑ</h3>
             <div class="main-value"><span id="b-val">--</span><span class="unit">%</span></div>
-            <div id="b-label" style="font-weight: bold; font-size: 1.2rem; padding: 10px;">--</div>
+            <div id="b-label" style="font-weight:bold">--</div>
         </div>
     </div>
-
-    <footer>&copy; 2026 Agro Meteo Ls | Χρήστο Τσαβαλακόγλου Iot-System</footer>
+    <footer>&copy; 2026 Agro Meteo Ls | Χρήστο Τσαβαλακόγλου</footer>
 </div>
 
 <script>
-    function updateDashboard() {
-        // Ρολόι & Ημερομηνία
-        const now = new Date();
-        const clockEl = document.getElementById('clock');
-        const dateEl = document.getElementById('date');
-        if(clockEl) clockEl.innerText = now.toLocaleTimeString('el-GR');
-        if(dateEl) dateEl.innerText = now.toLocaleDateString('el-GR', {weekday:'long', day:'numeric', month:'long'});
+    function update() {
+        const d = new Date();
+        document.getElementById('clock').innerText = d.toLocaleTimeString('el-GR');
+        document.getElementById('date').innerText = d.toLocaleDateString('el-GR', {weekday:'long', day:'numeric', month:'long'});
 
-        // Λήψη δεδομένων (Field 1-5)
         fetch("https://api.thingspeak.com/channels/3365350/feeds.json?results=80")
-        .then(function(res) { return res.json(); })
-        .then(function(data) {
-            if(!data.feeds || data.feeds.length === 0) return;
+        .then(res => res.json())
+        .then(data => {
+            const last = data.feeds[data.feeds.length - 1];
             
-            var last = data.feeds[data.feeds.length - 1];
+            // Τιμές
+            document.getElementById('t-val').innerText = parseFloat(last.field1).toFixed(1);
+            document.getElementById('h-val').innerText = parseFloat(last.field2).toFixed(0);
+            document.getElementById('p-val').innerText = parseFloat(last.field3).toFixed(1);
+            document.getElementById('r-val').innerText = parseFloat(last.field4).toFixed(2);
             
-            // Τρέχουσες Τιμές
-            if(last.field1) document.getElementById('t-val').innerText = parseFloat(last.field1).toFixed(1);
-            if(last.field2) document.getElementById('h-val').innerText = parseFloat(last.field2).toFixed(0);
-            if(last.field3) document.getElementById('p-val').innerText = parseFloat(last.field3).toFixed(1);
-            if(last.field4) document.getElementById('r-val').innerText = parseFloat(last.field4).toFixed(2);
+            // Μπαταρία
+            let b = parseFloat(last.field5);
+            document.getElementById('b-val').innerText = b.toFixed(0);
+            let lbl = document.getElementById('b-label');
+            if(b > 75) { lbl.innerText="ΚΑΛΗ"; lbl.style.color="green"; }
+            else if(b > 30) { lbl.innerText="ΜΕΤΡΙΑ"; lbl.style.color="orange"; }
+            else { lbl.innerText="ΧΑΜΗΛΗ"; lbl.style.color="red"; }
+
+            // Ακρότατα
+            let tArr = data.feeds.map(f => parseFloat(f.field1)).filter(v => !isNaN(v));
+            let hArr = data.feeds.map(f => parseFloat(f.field2)).filter(v => !isNaN(v));
+            let pArr = data.feeds.map(f => parseFloat(f.field3)).filter(v => !isNaN(v));
             
-            // Μπαταρία (Field 5)
-            var b = parseFloat(last.field5);
-            if(!i
+            document.getElementById('t-max').innerText = Math.max(...tArr).toFixed(1);
+            document.getElementById('t-min').innerText = Math.min(...tArr).toFixed(1);
+            document.getElementById('h-max').innerText = Math.max(...hArr).toFixed(0);
+            document.getElementById('h-min').innerText = Math.min(...hArr).toFixed(0);
+            document.getElementById('p-max').innerText = Math.max(...pArr).toFixed(1);
+            document.getElementById('p-min').innerText = Math.min(...pArr).toFixed(1);
+        })
+        .catch(err => console.log("Error"));
+    }
+    update();
+    setInterval(update, 20000);
+</script>
+</body>
+</html>
