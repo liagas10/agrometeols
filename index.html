@@ -70,17 +70,17 @@
             <div id="date">------</div>
         </div>
 
-        <!-- ΝΕΑ ΚΑΡΤΑ ΑΚΡΟΤΑΤΩΝ -->
+        <!-- ΚΑΡΤΑ ΑΚΡΟΤΑΤΩΝ ΗΜΕΡΑΣ -->
         <div class="card info-card">
             <h3>ΑΚΡΟΤΑΤΑ ΗΜΕΡΑΣ</h3>
             <div class="info-line"><strong>Θερμ. Max:</strong> <span id="t-max">--</span>°C (<span id="t-max-time">--:--</span>)</div>
             <div class="info-line"><strong>Θερμ. Min:</strong> <span id="t-min">--</span>°C (<span id="t-min-time">--:--</span>)</div>
-            <hr style="border:0; border-top:1px solid rgba(255,255,255,0.2); margin: 8px 0;">
+            <hr style="opacity:0.3">
             <div class="info-line"><strong>Υγρασ. Max:</strong> <span id="h-max">--</span>% (<span id="h-max-time">--:--</span>)</div>
             <div class="info-line"><strong>Υγρασ. Min:</strong> <span id="h-min">--</span>% (<span id="h-min-time">--:--</span>)</div>
-            <hr style="border:0; border-top:1px solid rgba(255,255,255,0.2); margin: 8px 0;">
-            <div class="info-line"><strong>Πίεση Max:</strong> <span id="p-max">--</span> hPa (<span id="p-max-time">--:--</span>)</div>
-            <div class="info-line"><strong>Πίεση Min:</strong> <span id="p-min">--</span> hPa (<span id="p-min-time">--:--</span>)</div>
+            <hr style="opacity:0.3">
+            <div class="info-line"><strong>Πίεση Max:</strong> <span id="p-max">--</span> (<span id="p-max-time">--:--</span>)</div>
+            <div class="info-line"><strong>Πίεση Min:</strong> <span id="p-min">--</span> (<span id="p-min-time">--:--</span>)</div>
         </div>
 
         <div class="card">
@@ -137,10 +137,13 @@
     updateTime();
 
     async function fetchLastFeed() {
-        // Χρησιμοποιούμε feeds.json για να πάρουμε τις τελευταίες 100 εγγραφές ώστε να βρούμε Max/Min ημέρας
+        // Χρησιμοποιούμε το feeds.json για να πάρουμε τα τελευταία 100 δεδομένα
         const url = "https://api.thingspeak.com/channels/3365350/feeds.json?results=100&_=" + new Date().getTime();
         try {
             const response = await fetch(url);
             if (!response.ok) throw new Error("Σφάλμα σύνδεσης");
             const data = await response.json();
-            const feeds = d
+            
+            // Το data.feeds είναι η λίστα με τα 100 τελευταία
+            const feeds = data.feeds;
+            const last = feeds[feeds.length - 1]; // Η πιο πρ
