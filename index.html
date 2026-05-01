@@ -2,165 +2,107 @@
 <html lang="el">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AGRO METEO LS | Field Station</title>
+    <title>AGRO METEO LS</title>
     <style>
-        body {
-            margin: 0; padding: 0;
-            background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), 
-                        url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1920&q=80');
-            background-size: cover; background-position: center; background-attachment: fixed;
-            font-family: 'Segoe UI', sans-serif; color: #333;
-        }
-
-        .overlay { min-height: 100vh; backdrop-filter: blur(5px); padding: 20px; }
-
-        header { text-align: center; color: white; text-shadow: 2px 2px 10px rgba(0,0,0,0.5); margin-bottom: 30px; }
-        header h1 { font-size: 3rem; margin: 0; letter-spacing: 2px; }
-
-        .dashboard {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 20px; max-width: 1400px; margin: 0 auto;
-        }
-
-        .card {
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(10px);
-            border-radius: 20px; padding: 25px;
-            text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            display: flex; flex-direction: column; justify-content: center;
-            min-height: 250px;
-        }
-
-        .info-card {
-            background: rgba(45, 90, 39, 0.9) !important;
-            color: white !important;
-            text-align: left !important;
-        }
-
-        .info-card h2 { color: #fff !important; border-bottom: 1px solid rgba(255,255,255,0.2) !important; margin-bottom: 15px; }
-        .info-line { margin: 8px 0; font-size: 1.1rem; }
-        .info-line strong { color: #81c784; }
-
-        .card h2 { margin: 0; font-size: 1.1rem; color: #2d5a27; text-transform: uppercase; border-bottom: 1px solid #ddd; padding-bottom: 10px; }
-        .main-value { font-size: 3.8rem; font-weight: bold; margin: 10px 0; color: #1a1a1a; transition: all 0.5s ease; }
-        .unit { font-size: 1.5rem; color: #666; margin-left: 5px; }
-
-        .chart-frame { margin-top: 15px; border-radius: 12px; overflow: hidden; border: 1px solid #eee; height: 180px; background: white; }
-        iframe { width: 100%; height: 100%; border: none; }
-
-        #live-clock { font-size: 2rem; font-weight: bold; margin-top: 15px; color: #fff; }
-        #live-date { font-size: 1.1rem; opacity: 0.9; margin-top: 5px; }
-
-        .status-indicator { font-size: 0.8rem; margin-top: 10px; font-weight: bold; }
-
-        footer { text-align: center; color: white; margin-top: 40px; padding: 20px; background: rgba(0,0,0,0.6); }
+        body { margin: 0; padding: 0; background: #2d5a27 url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1920&q=80') no-repeat center center fixed; background-size: cover; font-family: sans-serif; }
+        .overlay { min-height: 100vh; backdrop-filter: blur(5px); background: rgba(0,0,0,0.2); padding: 20px; }
+        header { text-align: center; color: white; text-shadow: 2px 2px 5px rgba(0,0,0,0.5); }
+        .dashboard { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; max-width: 1200px; margin: 20px auto; }
+        .card { background: rgba(255,255,255,0.9); border-radius: 15px; padding: 20px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+        .info-card { background: #2d5a27 !important; color: white; text-align: left !important; }
+        .main-value { font-size: 3rem; font-weight: bold; margin: 10px 0; color: #111; }
+        .unit { font-size: 1.2rem; color: #555; }
+        .chart { width: 100%; height: 200px; border: none; margin-top: 10px; background: white; border-radius: 10px; }
+        #clock { font-size: 2rem; font-weight: bold; margin-top: 10px; }
     </style>
 </head>
 <body>
-
 <div class="overlay">
-    <header>
-        <h1>AGRO METEO LS</h1>
-        <p>Παλαιός Μυλότοπος - Γεωργία Ακριβείας</p>
-    </header>
-
+    <header><h1>AGRO METEO LS</h1></header>
     <div class="dashboard">
         <!-- ΚΑΡΤΑ ΠΛΗΡΟΦΟΡΙΩΝ -->
         <div class="card info-card">
-            <h2>ΣΤΟΙΧΕΙΑ ΣΤΑΘΜΟΥ</h2>
-            <div class="info-line"><strong>Σταθμός:</strong> Agro Meteo Ls</div>
-            <div class="info-line"><strong>Ιδιοκτησία:</strong> Χρήστος Τσαβαλακόγλου</div>
-            <div class="info-line"><strong>Υψόμετρο:</strong> 40m</div>
-            <div class="info-line"><strong>Φιλοξενία:</strong> Τσαβαλακόγλου</div>
-            <div id="live-clock">--:--:--</div>
-            <div id="live-date">------</div>
-            <div id="api-status" class="status-indicator">ΑΝΑΖΗΤΗΣΗ ΔΕΔΟΜΕΝΩΝ...</div>
+            <h3 style="margin-top:0">ΣΤΟΙΧΕΙΑ ΣΤΑΘΜΟΥ</h3>
+            <p><strong>Σταθμός:</strong> Agro Meteo Ls</p>
+            <p><strong>Ιδιοκτησία:</strong> Χρήστος Τσαβαλακόγλου</p>
+            <p><strong>Υψόμετρο:</strong> 40m</p>
+            <p><strong>Φιλοξενία:</strong> Τσαβαλακόγλου</p>
+            <div id="clock">--:--:--</div>
+            <div id="date">------</div>
         </div>
 
-        <!-- ΘΕΡΜΟΚΡΑΣΙΑ -->
         <div class="card">
-            <h2>Θερμοκρασία</h2>
-            <div class="main-value"><span id="t-val">--</span><span class="unit">°C</span></div>
-            <div class="chart-frame">
-                <iframe src="https://thingspeak.com/channels/3365350/charts/1?dynamic=true&results=15&color=%232d5a27"></iframe>
-            </div>
+            <h3>ΘΕΡΜΟΚΡΑΣΙΑ</h3>
+            <div class="main-value"><span id="t1">--</span><span class="unit">°C</span></div>
+            <iframe class="chart" src="https://thingspeak.com/channels/3365350/charts/1?dynamic=true&results=10&color=%232d5a27"></iframe>
         </div>
 
-        <!-- ΥΓΡΑΣΙΑ -->
         <div class="card">
-            <h2>Υγρασία</h2>
-            <div class="main-value"><span id="h-val">--</span><span class="unit">%</span></div>
-            <div class="chart-frame">
-                <iframe src="https://thingspeak.com/channels/3365350/charts/2?dynamic=true&results=15&color=%232d5a27"></iframe>
-            </div>
+            <h3>ΥΓΡΑΣΙΑ</h3>
+            <div class="main-value"><span id="h1">--</span><span class="unit">%</span></div>
+            <iframe class="chart" src="https://thingspeak.com/channels/3365350/charts/2?dynamic=true&results=10&color=%232d5a27"></iframe>
         </div>
 
-        <!-- ΠΙΕΣΗ -->
         <div class="card">
-            <h2>Ατμοσφαιρική Πίεση</h2>
-            <div class="main-value"><span id="p-val">--</span><span class="unit">hPa</span></div>
-            <div class="chart-frame">
-                <iframe src="https://thingspeak.com/channels/3365350/charts/3?dynamic=true&results=15&color=%232d5a27"></iframe>
-            </div>
+            <h3>ΠΙΕΣΗ</h3>
+            <div class="main-value"><span id="p1">--</span><span class="unit">hPa</span></div>
+            <iframe class="chart" src="https://thingspeak.com/channels/3365350/charts/3?dynamic=true&results=10&color=%232d5a27"></iframe>
         </div>
 
-        <!-- ΒΡΟΧΟΠΤΩΣΗ -->
         <div class="card">
-            <h2>Βροχόπτωση</h2>
-            <div class="main-value"><span id="r-val">--</span><span class="unit">mm</span></div>
-            <p style="font-size: 0.9rem; color: #444; font-weight: bold;">Τελευταίο 24ωρο</p>
+            <h3>ΒΡΟΧΟΠΤΩΣΗ</h3>
+            <div class="main-value"><span id="r1">--</span><span class="unit">mm</span></div>
+            <p>Τελευταίο 24ωρο</p>
         </div>
 
-        <!-- ΜΠΑΤΑΡΙΑ -->
         <div class="card">
-            <h2>Στάθμη Μπαταρίας</h2>
-            <div class="main-value"><span id="b-val">--</span><span class="unit">%</span></div>
-            <div id="batt-status" style="font-weight: bold; font-size: 1.2rem;">---</div>
+            <h3>ΜΠΑΤΑΡΙΑ</h3>
+            <div class="main-value"><span id="b1">--</span><span class="unit">%</span></div>
+            <p id="b-text">--</p>
         </div>
     </div>
-
-    <footer>
-        &copy; 2026 AGRO METEO LS | Σχεδίαση για τον Χρήστο Τσαβαλακόγλου
-    </footer>
 </div>
 
 <script>
-    // ΖΩΝΤΑΝΟ ΡΟΛΟΪ
-    function updateClock() {
+    // 1. ΡΟΛΟΪ (Αυτόνομο για να μη χαλάει αν κολλήσει το API)
+    function startClock() {
         const now = new Date();
-        document.getElementById('live-clock').innerText = now.toLocaleTimeString('el-GR');
-        document.getElementById('live-date').innerText = now.toLocaleDateString('el-GR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+        document.getElementById('clock').innerHTML = now.toLocaleTimeString('el-GR');
+        document.getElementById('date').innerHTML = now.toLocaleDateString('el-GR', {weekday:'long', day:'numeric', month:'long'});
+        setTimeout(startClock, 1000);
     }
-    setInterval(updateClock, 1000);
-    updateClock();
+    startClock();
 
-    // Η ΛΥΣΗ ΓΙΑ ΤΑ ΔΕΔΟΜΕΝΑ: Δοκιμάζουμε 2 τρόπους
-    async function getMeteoData() {
-        const url = `https://api.thingspeak.com/channels/3365350/feeds/last.json?api_key=YOUR_READ_API_KEY_IF_PRIVATE&_=${new Date().getTime()}`;
-        
-        try {
-            // Τρόπος 1: Απευθείας Fetch
-            const response = await fetch(url);
-            if (!response.ok) throw new Error('Network error');
-            const data = await response.json();
-            updateUI(data);
-        } catch (error) {
-            console.log("Fetch failed, trying JSONP fallback...");
-            // Τρόπος 2: JSONP Fallback (Η πιο σίγουρη μέθοδος για GitHub)
-            const script = document.createElement('script');
-            script.src = `https://api.thingspeak.com/channels/3365350/feeds/last.json?callback=updateUI&_=${new Date().getTime()}`;
-            document.body.appendChild(script);
-            document.body.removeChild(script);
-        }
+    // 2. ΛΗΨΗ ΜΕΤΡΗΣΕΩΝ (Απλή μέθοδος JSONP)
+    function updateData() {
+        const oldScript = document.getElementById('ts-script');
+        if (oldScript) oldScript.remove();
+
+        const script = document.createElement('script');
+        script.id = 'ts-script';
+        // Προσοχή: Χρησιμοποιώ "renderData" ως όνομα της συνάρτησης
+        script.src = "https://api.thingspeak.com/channels/3365350/feeds/last.json?callback=renderData&_=" + Math.random();
+        document.body.appendChild(script);
     }
 
-    function updateUI(data) {
+    function renderData(data) {
         if (!data) return;
+        document.getElementById('t1').innerHTML = parseFloat(data.field1).toFixed(1);
+        document.getElementById('h1').innerHTML = parseFloat(data.field2).toFixed(0);
+        document.getElementById('p1').innerHTML = parseFloat(data.field3).toFixed(1);
+        document.getElementById('r1').innerHTML = parseFloat(data.field4).toFixed(2);
+        document.getElementById('b1').innerHTML = parseFloat(data.field5).toFixed(0);
         
-        try {
-            // Αντιστοίχιση των πεδίων (Fields)
-            const fields = {
-                t: data.field1,
-                h: dat
+        const b = parseFloat(data.field5);
+        const bt = document.getElementById('b-text');
+        if(b > 75) { bt.innerHTML = "ΥΨΗΛΗ"; bt.style.color = "green"; }
+        else if(b > 30) { bt.innerHTML = "ΙΚΑΝΟΠΟΙΗΤΙΚΗ"; bt.style.color = "orange"; }
+        else { bt.innerHTML = "ΧΑΜΗΛΗ"; bt.style.color = "red"; }
+    }
+
+    // Ανανέωση κάθε 20 δευτερόλεπτα
+    setInterval(updateData, 20000);
+    updateData();
+</script>
+</body>
+</html>
