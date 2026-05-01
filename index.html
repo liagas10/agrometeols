@@ -41,35 +41,27 @@
             <p>P-Max: <span id="p-max">--</span> <span id="p-max-t"></span> | Min: <span id="p-min">--</span> <span id="p-min-t"></span></p>
         </div>
 
-        <!-- 3. ΘΕΡΜΟΚΡΑΣΙΑ -->
+        <!-- ΤΑ ΥΠΟΛΟΙΠΑ CARDS (ΘΕΡΜΟΚΡΑΣΙΑ, ΥΓΡΑΣΙΑ, ΠΙΕΣΗ, ΒΡΟΧΗ, ΜΠΑΤΑΡΙΑ) -->
         <div class="card">
             <h3>ΘΕΡΜΟΚΡΑΣΙΑ</h3>
             <div class="main-value"><span id="t-val">--</span><span class="unit">°C</span></div>
             <div class="chart-frame"><iframe src="https://thingspeak.com/channels/3365350/charts/1?results=15&color=%232d5a27"></iframe></div>
         </div>
-
-        <!-- 4. ΥΓΡΑΣΙΑ -->
         <div class="card">
             <h3>ΥΓΡΑΣΙΑ</h3>
             <div class="main-value"><span id="h-val">--</span><span class="unit">%</span></div>
             <div class="chart-frame"><iframe src="https://thingspeak.com/channels/3365350/charts/2?results=15&color=%232d5a27"></iframe></div>
         </div>
-
-        <!-- 5. ΠΙΕΣΗ -->
         <div class="card">
             <h3>ΠΙΕΣΗ</h3>
             <div class="main-value"><span id="p-val">--</span><span class="unit">hPa</span></div>
             <div class="chart-frame"><iframe src="https://thingspeak.com/channels/3365350/charts/3?results=15&color=%232d5a27"></iframe></div>
         </div>
-
-        <!-- 6. ΒΡΟΧΗ -->
         <div class="card">
             <h3>ΒΡΟΧΟΠΤΩΣΗ</h3>
             <div class="main-value"><span id="r-val">--</span><span class="unit">mm</span></div>
             <div class="chart-frame"><iframe src="https://thingspeak.com/channels/3365350/charts/4?results=15&color=%232d5a27&type=column"></iframe></div>
         </div>
-
-        <!-- 7. ΜΠΑΤΑΡΙΑ -->
         <div class="card">
             <h3>ΜΠΑΤΑΡΙΑ</h3>
             <div class="main-value"><span id="b-val">--</span><span class="unit">%</span></div>
@@ -91,7 +83,7 @@
             const feeds = data.feeds;
             const last = feeds[feeds.length - 1];
             
-            // Τιμές
+            // Τρέχουσες Τιμές
             document.getElementById('t-val').innerText = parseFloat(last.field1).toFixed(1);
             document.getElementById('h-val').innerText = parseFloat(last.field2).toFixed(0);
             document.getElementById('p-val').innerText = parseFloat(last.field3).toFixed(1);
@@ -105,7 +97,7 @@
             else if(b > 30) { lbl.innerText="ΜΕΤΡΙΑ"; lbl.style.color="orange"; }
             else { lbl.innerText="ΧΑΜΗΛΗ"; lbl.style.color="red"; }
 
-            // Ακρότατα (Όπως ακριβώς τα έχεις στην οθόνη σου)
+            // Υπολογισμός Ακροτάτων
             let tArr = feeds.filter(f => f.field1 !== null).map(f => ({v: parseFloat(f.field1), t: f.created_at}));
             let hArr = feeds.filter(f => f.field2 !== null).map(f => ({v: parseFloat(f.field2), t: f.created_at}));
             let pArr = feeds.filter(f => f.field3 !== null).map(f => ({v: parseFloat(f.field3), t: f.created_at}));
@@ -117,5 +109,6 @@
             let pMax = pArr.reduce((prev, curr) => (prev.v > curr.v) ? prev : curr);
             let pMin = pArr.reduce((prev, curr) => (prev.v < curr.v) ? prev : curr);
 
-            // Εμφάνιση τιμών και ωρών (Εδώ ήταν το λάθος στην προηγούμενη απάντηση, τώρα είναι όλα εδώ)
+            // Εμφάνιση στα Spans (Τιμή + Ώρα)
             document.getElementById('t-max').innerText = tMax.v.toFixed(1);
+            document.getElementById('t-max-t').innerText = "(" + new Date(tMax.t).toLocaleTimeString('el-GR', {hour:'2-digit', minute:'2-di
