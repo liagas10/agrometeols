@@ -88,32 +88,27 @@
     setInterval(updateClock, 1000);
     updateClock();
 
-    // Ο ΑΡΧΙΚΟΣ ΣΟΥ ΚΩΔΙΚΑΣ - ΔΕΝ ΑΛΛΑΞΕ ΤΙΠΟΤΑ ΕΔΩ
-    function fetchData() {
-        fetch("https://api.thingspeak.com/channels/3365350/feeds/last.json")
+    function getAllData() {
+        // Τραβάμε τα τελευταία 80 αποτελέσματα ΜΙΑ ΦΟΡΑ για όλα
+        fetch("https://api.thingspeak.com/channels/3365350/feeds.json?results=80")
         .then(response => response.json())
         .then(data => {
-            if(!data) return;
-            document.getElementById('t-val').innerText = parseFloat(data.field1).toFixed(1);
-            document.getElementById('h-val').innerText = parseFloat(data.field2).toFixed(0);
-            document.getElementById('p-val').innerText = parseFloat(data.field3).toFixed(1);
-            document.getElementById('r-val').innerText = parseFloat(data.field4).toFixed(2);
+            if(!data.feeds || data.feeds.length === 0) return;
             
-            let b = parseFloat(data.field5);
+            // 1. Παίρνουμε την τελευταία εγγραφή για τα κεντρικά κουτάκια
+            let last = data.feeds[data.feeds.length - 1];
+            
+            document.getElementById('t-val').innerText = parseFloat(last.field1).toFixed(1);
+            document.getElementById('h-val').innerText = parseFloat(last.field2).toFixed(0);
+            document.getElementById('p-val').innerText = parseFloat(last.field3).toFixed(1);
+            document.getElementById('r-val').innerText = parseFloat(last.field4).toFixed(2);
+            
+            let b = parseFloat(last.field5);
             document.getElementById('b-val').innerText = b.toFixed(0);
             let lbl = document.getElementById('b-label');
             if(b > 75) { lbl.innerText="ΚΑΛΗ"; lbl.style.color="green"; }
             else if(b > 30) { lbl.innerText="ΜΕΤΡΙΑ"; lbl.style.color="orange"; }
             else { lbl.innerText="ΧΑΜΗΛΗ"; lbl.style.color="red"; }
-        })
-        .catch(error => console.log("Fetch Error"));
-    }
 
-    // ΣΥΝΑΡΤΗΣΗ ΓΙΑ ΑΚΡΟΤΑΤΑ - ΜΕ ΤΟΝ ΔΙΚΟ ΣΟΥ ΤΡΟΠΟ
-    function fetchMaxMin() {
-        fetch("https://api.thingspeak.com/channels/3365350/feeds.json?results=80")
-        .then(res => res.json())
-        .then(data => {
-            if(!data.feeds) return;
-            let feeds = data.feeds;
-            let t
+            // 2. Υπολογίζουμε τα Ακρότατα από την ίδια λίστα (feeds)
+            let tValues = data.feeds.map(f => parseFloat(f.field1)).filter(v => !isNaN(v));
