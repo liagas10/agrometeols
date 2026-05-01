@@ -81,9 +81,9 @@
 
 <script>
     function updateClock() {
-        const now = new Date();
-        const c = document.getElementById('clock');
-        const d = document.getElementById('date');
+        var now = new Date();
+        var c = document.getElementById('clock');
+        var d = document.getElementById('date');
         if(c) c.innerText = now.toLocaleTimeString('el-GR');
         if(d) d.innerText = now.toLocaleDateString('el-GR', {weekday:'long', day:'numeric', month:'long'});
     }
@@ -94,17 +94,15 @@
         fetch("https://api.thingspeak.com/channels/3365350/feeds.json?results=80")
         .then(function(res) { return res.json(); })
         .then(function(data) {
-            if(!data.feeds || data.feeds.length === 0) return;
-            
+            if(!data || !data.feeds || data.feeds.length === 0) return;
             var last = data.feeds[data.feeds.length - 1];
             
-            // Τιμές
+            // Updates
             if(last.field1) document.getElementById('t-val').innerText = parseFloat(last.field1).toFixed(1);
             if(last.field2) document.getElementById('h-val').innerText = parseFloat(last.field2).toFixed(0);
             if(last.field3) document.getElementById('p-val').innerText = parseFloat(last.field3).toFixed(1);
             if(last.field4) document.getElementById('r-val').innerText = parseFloat(last.field4).toFixed(2);
             
-            // Μπαταρία
             var b = parseFloat(last.field5);
             if(!isNaN(b)) {
                 document.getElementById('b-val').innerText = b.toFixed(0);
@@ -115,3 +113,5 @@
                     else { lbl.innerText="ΧΑΜΗΛΗ"; lbl.style.color="red"; }
                 }
             }
+
+            var tV = data.feeds.map(funct
