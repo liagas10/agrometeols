@@ -127,24 +127,24 @@
 </div>
 
 <script>
-    function updateClock() {
+    // Ρολόι
+    function updateTime() {
         const now = new Date();
         document.getElementById('clock').innerText = now.toLocaleTimeString('el-GR');
         document.getElementById('date').innerText = now.toLocaleDateString('el-GR', {weekday:'long', day:'numeric', month:'long'});
     }
-    setInterval(updateClock, 1000);
-    updateClock();
+    setInterval(updateTime, 1000);
+    updateTime();
 
-    // ΑΥΤΟΣ ΕΙΝΑΙ Ο ΔΙΚΟΣ ΣΟΥ ΚΩΔΙΚΑΣ - ΤΟΝ ΑΦΗΝΩ ΟΠΩΣ ΗΤΑΝ
-    function fetchData() {
-        fetch("https://api.thingspeak.com/channels/3365350/feeds/last.json")
-        .then(res => res.json())
-        .then(data => {
-            if(data.field1) document.getElementById('t-val').innerText = parseFloat(data.field1).toFixed(1);
-            if(data.field2) document.getElementById('h-val').innerText = parseFloat(data.field2).toFixed(0);
-            if(data.field3) document.getElementById('p-val').innerText = parseFloat(data.field3).toFixed(1);
-            if(data.field4) document.getElementById('r-val').innerText = parseFloat(data.field4).toFixed(2);
-            if(data.field5) {
-                let b = parseFloat(data.field5);
-                document.getElementById('b-val').innerText = b.toFixed(0);
-                let lbl = doc
+    // Κύρια λειτουργία: Φέρνει δεδομένα με τη σειρά
+    async function startUpdate() {
+        try {
+            // 1. Φέρνουμε την ΤΕΛΕΥΤΑΙΑ τιμή (όπως το είχες αρχικά)
+            const resLast = await fetch("https://api.thingspeak.com/channels/3365350/feeds/last.json");
+            const lastData = await resLast.json();
+            
+            if(lastData.field1) document.getElementById('t-val').innerText = parseFloat(lastData.field1).toFixed(1);
+            if(lastData.field2) document.getElementById('h-val').innerText = parseFloat(lastData.field2).toFixed(0);
+            if(lastData.field3) document.getElementById('p-val').innerText = parseFloat(lastData.field3).toFixed(1);
+            if(lastData.field4) document.getElementById('r-val').innerText = parseFloat(lastData.field4).toFixed(2);
+            if(lastData.
