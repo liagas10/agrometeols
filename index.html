@@ -18,7 +18,7 @@ header { text-align: center; color: white; margin-bottom: 20px; }
 
 .ads-dashboard { max-width: 1200px; margin: 0 auto 20px auto; }
 
-.card { background: rgba(255, 255, 255, 0.95); border-radius: 12px; padding: 15px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.3); position: relative; }
+.card { background: rgba(255, 255, 255, 0.95); border-radius: 12px; padding: 15px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.3); position: relative; overflow: hidden; }
 .info-card { background: rgba(45, 90, 39, 0.95) !important; color: white !important; text-align: left !important; }
 
 .slideshow-container { position: relative; width: 100%; height: 200px; max-height: 250px; overflow: hidden; border-radius: 8px; margin-top: 10px; display: flex; justify-content: center; align-items: center; background: #f9f9f9; }
@@ -105,19 +105,17 @@ max-width: 1200px; font-size: 0.9rem; border: 1px solid rgba(255, 255, 255, 0.2)
 </div>
 </div>
 
-<!-- Η ΠΡΟΓΝΩΣΗ ΚΑΙ ΤΟ ΡΑΝΤΑΡ ΜΠΗΚΑΝ ΕΔΩ ΚΑΤΩ ΟΠΩΣ ΖΗΤΗΣΕΣ -->
 <h2 class="section-title">Πρόγνωση & Ραντάρ</h2>
 <div class="dashboard">
-<!-- ΝΕΑ ΠΡΟΓΝΩΣΗ OPENWEATHER -->
-<div class="card" style="padding: 10px; min-height: 350px; display: flex; align-items: center; justify-content: center;">
-<div id="openweathermap-widget-15"></div>
-<script>window.myWidgetParam ? window.myWidgetParam : window.myWidgetParam = []; window.myWidgetParam.push({id: 15,cityid: '256428',appid: 'e51969282200ef6ef9149f87459ef4e1',units: 'metric',containerid: 'openweathermap-widget-15', }); (function() {var script = document.createElement('script');script.async = true;script.charset = "utf-8";script.src = "//openweathermap.org/themes/openweathermap/assets/vendor/owm/js/widget-main.js";var s = document.getElementsByTagName('script')[0];s.parentNode.insertBefore(script, s); })();</script>
+<!-- ΠΡΟΓΝΩΣΗ METEOBLUE -->
+<div class="card" style="padding: 0;">
+<iframe src="https://www.meteoblue.com/el/weather/widget/three/neos-mylon-topos_%ce%95%ce%bb%ce%bb%ce%ac%ce%b4%ce%b1_844962?geoloc=fixed&nocurrent=0&noforecast=0&days=4&tempunit=CELSIUS&windunit=KILOMETER_PER_HOUR&layout=light" frameborder="0" scrolling="NO" allowtransparency="true" sandbox="allow-same-origin allow-scripts allow-popups allow-popups-to-escape-sandbox" style="width: 100%; height: 350px;"></iframe>
 </div>
 
-<!-- ΡΑΝΤΑΡ ΒΡΟΧΗΣ -->
-<div class="card" style="padding: 0; overflow: hidden; min-height: 350px;">
-<h3 style="position: absolute; top: 10px; left: 15px; margin: 0; z-index: 10; color: white; background: rgba(0,0,0,0.5); padding: 2px 5px; border-radius: 4px;">Ζωντανό Ραντάρ Βροχής</h3>
-<iframe src="https://www.rainviewer.com/map.html?loc=40.7922,22.39,12&oFa=0&oC=1&oU=0&oF=0&oSt=1&oT=1&oB=1&oP=1&oR=1&oS=0&oW=0&mT=3&ls=1&lm=1&th=1&oN=1" width="100%" height="350" frameborder="0" style="border:0; border-radius: 12px;" allowfullscreen></iframe>
+<!-- ΡΑΝΤΑΡ ΒΡΟΧΗΣ (ΔΙΟΡΘΩΜΕΝΟ ΠΛΑΙΣΙΟ) -->
+<div class="card" style="padding: 0;">
+<h3 style="margin: 10px 0; font-size: 1.1rem; color: #333;">Ζωντανό Ραντάρ Βροχής</h3>
+<iframe src="https://www.rainviewer.com/map.html?loc=40.7922,22.39,12&oFa=0&oC=1&oU=0&oF=0&oSt=1&oT=1&oB=1&oP=1&oR=1&oS=0&oW=0&mT=3&ls=1&lm=1&th=1&oN=1" width="100%" height="310" frameborder="0" style="border:0; border-radius: 0 0 12px 12px;" allowfullscreen></iframe>
 </div>
 </div>
 
