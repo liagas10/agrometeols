@@ -76,17 +76,17 @@ max-width: 1200px; font-size: 0.9rem; border: 1px solid rgba(255, 255, 255, 0.2)
 
 <h2 class="section-title">Πρόγνωση & Ραντάρ</h2>
 <div class="dashboard">
-<!-- ΚΑΡΤΑ ΠΡΟΓΝΩΣΗΣ METEOBLUE -->
-<div class="card" style="padding: 0; overflow: hidden; min-height: 410px;">
-<h3 style="margin: 10px 0;">Πρόγνωση 5 Ημερών</h3>
-<iframe src="https://www.meteoblue.com/el/weather/widget/three/neos-mylon-topos_%ce%95%ce%bb%ce%bb%ce%ac%ce%b4%ce%b1_256428?geoloc=fixed&nocurrent=0&noforecast=0&days=5&tempunit=CELSIUS&windunit=KILOMETER_PER_HOUR&layout=light" frameborder="0" scrolling="NO" allowtransparency="true" sandbox="allow-same-origin allow-scripts allow-popups allow-popups-to-escape-sandbox" style="width: 100%; height: 350px;"></iframe>
-<div style="font-size: 10px; margin-bottom: 5px;"><a href="https://www.meteoblue.com/el/weather/week/neos-mylon-topos_%ce%95%ce%bb%ce%bb%ce%ac%ce%b4%ce%b1_256428?utm_source=weather_widget&utm_medium=linkus&utm_content=three&utm_campaign=Weather%2BWidget" target="_blank" rel="noopener">meteoblue</a></div>
+<!-- ΝΕΟ ΚΟΥΤΑΚΙ ΠΡΟΓΝΩΣΗΣ -->
+<div class="card" style="padding: 10px; display: flex; flex-direction: column; justify-content: center;">
+<a class="weatherwidget-io" href="https://forecast7.com/el/40d8022d40/neos-mylon-topos/" data-label_1="ΝΕΟΣ ΜΥΛΟΤΟΠΟΣ" data-label_2="ΠΡΟΓΝΩΣΗ ΚΑΙΡΟΥ" data-font="Arial" data-icons="Climacons Animated" data-theme="pure" >ΝΕΟΣ ΜΥΛΟΤΟΠΟΣ ΠΡΟΓΝΩΣΗ</a>
+<script>
+!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https://weatherwidget.io/js/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js');
+</script>
 </div>
 
-<!-- ΚΑΡΤΑ ΡΑΝΤΑΡ -->
-<div class="card" style="padding: 0; overflow: hidden; min-height: 410px;">
-<h3 style="position: absolute; top: 10px; left: 15px; margin: 0; z-index: 10; color: white; background: rgba(0,0,0,0.5); padding: 2px 5px; border-radius: 4px;">Ζωντανό Ραντάρ Βροχής</h3>
-<iframe src="https://www.rainviewer.com/map.html?loc=40.7922,22.39,12&oFa=0&oC=1&oU=0&oF=0&oSt=1&oT=1&oB=1&oP=1&oR=1&oS=0&oW=0&mT=3&ls=1&lm=1&th=1&oN=1" width="100%" height="410" frameborder="0" style="border:0; border-radius: 12px;" allowfullscreen></iframe>
+<div class="card" style="padding: 0; overflow: hidden; min-height: 350px;">
+<h3 style="position: absolute; top: 10px; left: 15px; margin: 0; z-index: 10; color: white; background: rgba(0,0,0,0.5); padding: 2px 5px; border-radius: 4px;">Ζωντανό Ραντάρ Βροχής (RainViewer)</h3>
+<iframe src="https://www.rainviewer.com/map.html?loc=40.7922,22.39,12&oFa=0&oC=1&oU=0&oF=0&oSt=1&oT=1&oB=1&oP=1&oR=1&oS=0&oW=0&mT=3&ls=1&lm=1&th=1&oN=1" width="100%" height="350" frameborder="0" style="border:0; border-radius: 12px;" allowfullscreen></iframe>
 </div>
 </div>
 
@@ -101,20 +101,23 @@ max-width: 1200px; font-size: 0.9rem; border: 1px solid rgba(255, 255, 255, 0.2)
 <div class="dashboard">
 <div class="card">
 <h3>Θερμοκρασία</h3>
-<canvas id="gauge-temp"></canvas>
+<canvas id="gauge-temp" style="max-width: 240px; width: 100%; height: auto;"></canvas>
 </div>
+
 <div class="card">
 <h3>Υγρασία</h3>
-<canvas id="gauge-hum"></canvas>
+<canvas id="gauge-hum" style="max-width: 240px; width: 100%; height: auto;"></canvas>
 </div>
+
 <div class="card">
 <h3>Βαρομετρική πίεση</h3>
-<canvas id="gauge-press"></canvas>
+<canvas id="gauge-press" style="max-width: 240px; width: 100%; height: auto;"></canvas>
 </div>
+
 <div class="card" style="display: flex; flex-direction: column; justify-content: center; min-height: 270px;">
 <h3>Βροχόπτωση (Live)</h3>
 <div style="font-size: 4rem; font-weight: bold; color: #111; margin: 20px 0;"><span id="r-val">--</span><span style="font-size: 1.5rem;">mm</span></div>
-<small style="color: #666;">Μηδενίζει αυτόματα στις 00:00</small>
+<small id="reset-msg" style="color: #666;">Μηδενίζει αυτόματα στις 00:00</small>
 </div>
 </div>
 
@@ -131,10 +134,25 @@ max-width: 1200px; font-size: 0.9rem; border: 1px solid rgba(255, 255, 255, 0.2)
 
 <h2 class="section-title">Ιστορικά Γραφήματα</h2>
 <div class="charts-dashboard">
-<div class="card"><h3>Πορεία Θερμοκρασίας</h3><div class="chart-container"><canvas id="chart-temp"></canvas></div></div>
-<div class="card"><h3>Πορεία Υγρασία</h3><div class="chart-container"><canvas id="chart-hum"></canvas></div></div>
-<div class="card"><h3>Πορεία Πίεσης</h3><div class="chart-container"><canvas id="chart-press"></canvas></div></div>
-<div class="card"><h3>Πορεία Βροχόπτωσης</h3><div class="chart-container"><canvas id="chart-rain"></canvas></div></div>
+<div class="card">
+<h3>Πορεία Θερμοκρασίας</h3>
+<div class="chart-container"><canvas id="chart-temp"></canvas></div>
+</div>
+
+<div class="card">
+<h3>Πορεία Υγρασία</h3>
+<div class="chart-container"><canvas id="chart-hum"></canvas></div>
+</div>
+
+<div class="card">
+<h3>Πορεία Πίεσης</h3>
+<div class="chart-container"><canvas id="chart-press"></canvas></div>
+</div>
+
+<div class="card">
+<h3>Πορεία Βροχόπτωσης</h3>
+<div class="chart-container"><canvas id="chart-rain"></canvas></div>
+</div>
 </div>
 
 <div class="bottom-dashboard">
@@ -149,6 +167,7 @@ max-width: 1200px; font-size: 0.9rem; border: 1px solid rgba(255, 255, 255, 0.2)
 </div>
 
 <script>
+// Slideshow Logic
 let currentSlide = 0;
 const slides = document.querySelectorAll('#ad-slider img');
 function nextSlide() {
@@ -159,12 +178,53 @@ slides[currentSlide].classList.add('active');
 }
 setInterval(nextSlide, 4000);
 
-var gTemp = new RadialGauge({ renderTo: 'gauge-temp', width: 240, height: 240, units: "°C", minValue: -10, maxValue: 60, majorTicks: ["-10","0","10","20","30","40","50","60"], minorTicks: 2, strokeTicks: true, highlights: [{ "from": -10, "to": 0, "color": "rgba(0,255,255,.5)" },{ "from": 0, "to": 10, "color": "rgba(0,128,255,.5)" },{ "from": 10, "to": 20, "color": "rgba(154,205,50,.5)" },{ "from": 20, "to": 30, "color": "rgba(255,215,0,.5)" },{ "from": 30, "to": 40, "color": "rgba(255,165,0,.5)" },{ "from": 40, "to": 60, "color": "rgba(255,0,0,.5)" }], colorPlate: "#fff", borderShadowWidth: 0, borders: true, needleType: "arrow", needleWidth: 4, needleCircleSize: 7, needleCircleOuter: true, needleCircleInner: false, animationDuration: 1500, animationRule: "linear" }).draw();
-var gHum = new RadialGauge({ renderTo: 'gauge-hum', width: 240, height: 240, units: "%", minValue: 0, maxValue: 100, majorTicks: ["0","10","20","30","40","50","60","70","80","90","100"], minorTicks: 2, strokeTicks: true, highlights: [{ "from": 0, "to": 20, "color": "rgba(255,140,0,.5)" },{ "from": 20, "to": 40, "color": "rgba(255,165,0,.5)" },{ "from": 40, "to": 60, "color": "rgba(50,205,50,.5)" },{ "from": 60, "to": 80, "color": "rgba(0,191,255,.5)" },{ "from": 80, "to": 100, "color": "rgba(0,0,255,.5)" }], colorPlate: "#fff", borders: true, needleType: "arrow", needleWidth: 4, animationDuration: 1500 }).draw();
-var gPress = new RadialGauge({ renderTo: 'gauge-press', width: 240, height: 240, units: "hPa", minValue: 950, maxValue: 1050, majorTicks: ["950","960","970","980","990","1000","1010","1020","1030","1040","1050"], minorTicks: 2, strokeTicks: true, highlights: [{ "from": 950, "to": 1000, "color": "rgba(255,0,0,.5)" },{ "from": 1000, "to": 1020, "color": "rgba(0,255,0,.5)" },{ "from": 1020, "to": 1050, "color": "rgba(0,0,255,.5)" }], colorPlate: "#fff", borders: true, needleType: "arrow", needleWidth: 4, animationDuration: 1500 }).draw();
+// Gauges
+var gTemp = new RadialGauge({
+renderTo: 'gauge-temp', width: 240, height: 240, units: "°C", minValue: -10, maxValue: 60,
+majorTicks: ["-10","0","10","20","30","40","50","60"], minorTicks: 2, strokeTicks: true,
+highlights: [
+{ "from": -10, "to": 0, "color": "rgba(0,255,255,.5)" },
+{ "from": 0, "to": 10, "color": "rgba(0,128,255,.5)" },
+{ "from": 10, "to": 20, "color": "rgba(154,205,50,.5)" },
+{ "from": 20, "to": 30, "color": "rgba(255,215,0,.5)" },
+{ "from": 30, "to": 40, "color": "rgba(255,165,0,.5)" },
+{ "from": 40, "to": 60, "color": "rgba(255,0,0,.5)" }
+],
+colorPlate: "#fff", borderShadowWidth: 0, borders: true, needleType: "arrow", needleWidth: 4,
+needleCircleSize: 7, needleCircleOuter: true, needleCircleInner: false, animationDuration: 1500, animationRule: "linear"
+}).draw();
+
+var gHum = new RadialGauge({
+renderTo: 'gauge-hum', width: 240, height: 240, units: "%", minValue: 0, maxValue: 100,
+majorTicks: ["0","10","20","30","40","50","60","70","80","90","100"], minorTicks: 2, strokeTicks: true,
+highlights: [
+{ "from": 0, "to": 20, "color": "rgba(255,140,0,.5)" },
+{ "from": 20, "to": 40, "color": "rgba(255,165,0,.5)" },
+{ "from": 40, "to": 60, "color": "rgba(50,205,50,.5)" },
+{ "from": 60, "to": 80, "color": "rgba(0,191,255,.5)" },
+{ "from": 80, "to": 100, "color": "rgba(0,0,255,.5)" }
+],
+colorPlate: "#fff", borders: true, needleType: "arrow", needleWidth: 4, animationDuration: 1500
+}).draw();
+
+var gPress = new RadialGauge({
+renderTo: 'gauge-press', width: 240, height: 240, units: "hPa", minValue: 950, maxValue: 1050,
+majorTicks: ["950","960","970","980","990","1000","1010","1020","1030","1040","1050"],
+minorTicks: 2, strokeTicks: true,
+highlights: [
+{ "from": 950, "to": 1000, "color": "rgba(255,0,0,.5)" },
+{ "from": 1000, "to": 1020, "color": "rgba(0,255,0,.5)" },
+{ "from": 1020, "to": 1050, "color": "rgba(0,0,255,.5)" }
+],
+colorPlate: "#fff", borders: true, needleType: "arrow", needleWidth: 4, animationDuration: 1500
+}).draw();
 
 function createChart(canvasId, label, color) {
-return new Chart(document.getElementById(canvasId), { type: 'line', data: { labels: [], datasets: [{ label: label, data: [], borderColor: color, backgroundColor: color + '22', borderWidth: 3, tension: 0.3, fill: true }] }, options: { responsive: true, maintainAspectRatio: false, scales: { x: { grid: { display: false }, ticks: { color: '#666' } }, y: { grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { color: '#666' } } }, plugins: { legend: { display: false } } } });
+return new Chart(document.getElementById(canvasId), {
+type: 'line',
+data: { labels: [], datasets: [{ label: label, data: [], borderColor: color, backgroundColor: color + '22', borderWidth: 3, tension: 0.3, fill: true }] },
+options: { responsive: true, maintainAspectRatio: false, scales: { x: { grid: { display: false }, ticks: { color: '#666' } }, y: { grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { color: '#666' } } }, plugins: { legend: { display: false } } }
+});
 }
 
 var cTemp = createChart('chart-temp', 'Θερμοκρασία (°C)', '#d53a35');
@@ -174,6 +234,13 @@ var cRain = createChart('chart-rain', 'Βροχόπτωση (mm)', '#28a745');
 
 function update() {
 const d = new Date();
+const curHour = d.getHours();
+const curMin = d.getMinutes();
+
+if (curHour === 0 && curMin === 0) {
+localStorage.setItem('rain_reset_value', document.getElementById('r-val').innerText);
+}
+
 document.getElementById('clock').innerText = d.toLocaleTimeString('el-GR');
 document.getElementById('date').innerText = d.toLocaleDateString('el-GR', {weekday:'long', day:'numeric', month:'long'});
 
@@ -186,35 +253,42 @@ const temp = parseFloat(last.field1);
 const hum = parseFloat(last.field2);
 
 const lastSeen = new Date(last.created_at);
-const diffMinutes = (new Date() - lastSeen) / 1000 / 60;
+const now = new Date();
+const diffMinutes = (now - lastSeen) / 1000 / 60;
 const statusBadge = document.getElementById('status-badge');
-if (diffMinutes < 20) { statusBadge.innerText = "ONLINE"; statusBadge.style.color = "#00FF00"; }
-else { statusBadge.innerText = "OFFLINE"; statusBadge.style.color = "#FF0000"; }
+
+if (diffMinutes < 20) {
+statusBadge.innerText = "ONLINE";
+statusBadge.style.color = "#00FF00";
+} else {
+statusBadge.innerText = "OFFLINE";
+statusBadge.style.color = "#FF0000";
+}
 
 if(last.field1) gTemp.value = last.field1;
 if(last.field2) gHum.value = last.field2;
 if(last.field3) gPress.value = last.field3;
-if(last.field4) document.getElementById('r-val').innerText = parseFloat(last.field4).toFixed(2);
 
+// Alert Box Logic
 const alertBox = document.getElementById('alert-box');
-if (temp <= 2) { alertBox.innerText = "⚠️ ΠΡΟΣΟΧΗ: Κίνδυνος Παγετού!"; alertBox.className = "alert-danger"; }
-else if (hum > 85) { alertBox.innerText = "💧 Υψηλή Υγρασία: Κίνδυνος για Μύκητες."; alertBox.className = "alert-warning"; }
-else { alertBox.innerText = "✅ Ομαλές Συνθήκες."; alertBox.className = "alert-normal"; }
+if (temp <= 2) {
+alertBox.innerText = "⚠️ ΠΡΟΣΟΧΗ: Κίνδυνος Παγετού!";
+alertBox.className = "alert-danger";
+} else if (hum > 85) {
+alertBox.innerText = "💧 Υψηλή Υγρασία: Κίνδυνος για Μύκητες.";
+alertBox.className = "alert-warning";
+} else {
+alertBox.innerText = "✅ Ομαλές Συνθήκες.";
+alertBox.className = "alert-normal";
+}
 
-let labels = feeds.map(f => new Date(f.created_at).toLocaleTimeString('el-GR', {hour: '2-digit', minute:'2-digit'}));
-cTemp.data.labels = labels; cTemp.data.datasets[0].data = feeds.map(f => f.field1); cTemp.update();
-cHum.data.labels = labels; cHum.data.datasets[0].data = feeds.map(f => f.field2); cHum.update();
-cPress.data.labels = labels; cPress.data.datasets[0].data = feeds.map(f => f.field3); cPress.update();
-cRain.data.labels = labels; cRain.data.datasets[0].data = feeds.map(f => f.field4); cRain.update();
-
-let tArr = feeds.filter(f => f.field1 != null).map(f => ({v: parseFloat(f.field1), t: f.created_at}));
-if(tArr.length > 0) {
-let tMax = tArr.reduce((p, c) => (p.v > c.v) ? p : c);
-let tMin = tArr.reduce((p, c) => (p.v < c.v) ? p : c);
-document.getElementById('t-max').innerText = tMax.v.toFixed(1);
-document.getElementById('t-max-t').innerText = "(" + new Date(tMax.t).toLocaleTimeString('el-GR', {hour:'2-digit', minute:'2-digit'}) + ")";
-document.getElementById('t-min').innerText = tMin.v.toFixed(1);
-document.getElementById('t-min-t').innerText = "(" + new Date(tMin.t).toLocaleTimeString('el-GR', {hour:'2-digit', minute:'2-digit'}) + ")";
+let currentRainValue = 0;
+if(last.field4) {
+let liveRain = parseFloat(last.field4);
+let resetVal = parseFloat(localStorage.getItem('rain_reset_value')) || 0;
+currentRainValue = liveRain - resetVal;
+if (currentRainValue < 0) currentRainValue = 0;
+document.getElementById('r-val').innerText = currentRainValue.toFixed(2);
 }
 
 let b = parseFloat(last.field5);
@@ -223,9 +297,67 @@ let lbl = document.getElementById('b-label');
 if(b > 75) { lbl.innerText="ΚΑΛΗ"; lbl.style.color="green"; }
 else if(b > 30) { lbl.innerText="ΜΕΤΡΙΑ"; lbl.style.color="orange"; }
 else { lbl.innerText="ΧΑΜΗΛΗ"; lbl.style.color="red"; }
+
+let labels = feeds.map(f => new Date(f.created_at).toLocaleTimeString('el-GR', {hour: '2-digit', minute:'2-digit'}));
+cTemp.data.labels = labels;
+cTemp.data.datasets[0].data = feeds.map(f => f.field1);
+cTemp.update();
+cHum.data.labels = labels;
+cHum.data.datasets[0].data = feeds.map(f => f.field2);
+cHum.update();
+cPress.data.labels = labels;
+cPress.data.datasets[0].data = feeds.map(f => f.field3);
+cPress.update();
+cRain.data.labels = labels;
+cRain.data.datasets[0].data = feeds.map(f => f.field4);
+cRain.update();
+
+let rArr = feeds.filter(f => f.field4 != null).map(f => parseFloat(f.field4));
+if(rArr.length > 0) {
+let rMax = Math.max(...rArr);
+let rMin = Math.min(...rArr);
+let rTotalDay = rMax - rMin;
+document.getElementById('r-total-day').innerText = (rTotalDay > 0 ? rTotalDay : 0).toFixed(2);
+document.getElementById('r-total-month').innerText = (parseFloat(localStorage.getItem('rain_total_month')) || 0).toFixed(1);
+document.getElementById('r-total-year').innerText = (parseFloat(localStorage.getItem('rain_total_year')) || 0).toFixed(1);
+}
+
+let tArr = feeds.filter(f => f.field1 != null).map(f => ({v: parseFloat(f.field1), t: f.created_at}));
+let hArr = feeds.filter(f => f.field2 != null).map(f => ({v: parseFloat(f.field2), t: f.created_at}));
+let pArr = feeds.filter(f => f.field3 != null).map(f => ({v: parseFloat(f.field3), t: f.created_at}));
+
+if(tArr.length > 0) {
+let tMax = tArr.reduce((p, c) => (p.v > c.v) ? p : c);
+let tMin = tArr.reduce((p, c) => (p.v < c.v) ? p : c);
+document.getElementById('t-max').innerText = tMax.v.toFixed(1);
+document.getElementById('t-max-t').innerText = "(" + new Date(tMax.t).toLocaleTimeString('el-GR', {hour:'2-digit', minute:'2-digit'}) + ")";
+document.getElementById('t-min').innerText = tMin.v.toFixed(1);
+document.getElementById('t-min-t').innerText = "(" + new Date(tMin.t).toLocaleTimeString('el-GR', {hour:'2-digit', minute:'2-digit'}) + ")";
+}
+if(hArr.length > 0) {
+let hMax = hArr.reduce((p, c) => (p.v > c.v) ? p : c);
+let hMin = hArr.reduce((p, c) => (p.v < c.v) ? p : c);
+document.getElementById('h-max').innerText = hMax.v.toFixed(0);
+document.getElementById('h-max-t').innerText = "(" + new Date(hMax.t).toLocaleTimeString('el-GR', {hour:'2-digit', minute:'2-digit'}) + ")";
+document.getElementById('h-min').innerText = hMin.v.toFixed(0);
+document.getElementById('h-min-t').innerText = "(" + new Date(hMin.t).toLocaleTimeString('el-GR', {hour:'2-digit', minute:'2-digit'}) + ")";
+}
+if(pArr.length > 0) {
+let pMax = pArr.reduce((p, c) => (p.v > c.v) ? p : c);
+let pMin = pArr.reduce((p, c) => (p.v < c.v) ? p : c);
+document.getElementById('p-max').innerText = pMax.v.toFixed(1);
+document.getElementById('p-max-t').innerText = "(" + new Date(pMax.t).toLocaleTimeString('el-GR', {hour:'2-digit', minute:'2-digit'}) + ")";
+document.getElementById('p-min').innerText = pMin.v.toFixed(1);
+document.getElementById('p-min-t').innerText = "(" + new Date(pMin.t).toLocaleTimeString('el-GR', {hour:'2-digit', minute:'2-digit'}) + ")";
+}
+})
+.catch(err => {
+document.getElementById('status-badge').innerText = "OFFLINE";
+document.getElementById('status-badge').style.color = "#FF0000";
 });
 }
-update(); setInterval(update, 20000);
+update();
+setInterval(update, 20000);
 </script>
 </body>
 </html>
