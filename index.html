@@ -4,23 +4,28 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Agro Meteo Ls</title>
-<!-- Βιβλιοθήκη για τα Gauges -->
 <script src="https://cdn.rawgit.com/Mikhus/canvas-gauges/gh-pages/download/2.1.7/all/gauge.min.js"></script>
 <style>
 body { margin: 0; padding: 0; background: #2d5a27 url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1920&q=80') no-repeat center center fixed; background-size: cover; font-family: sans-serif; }
 .overlay { min-height: 100vh; background: rgba(0,0,0,0.4); padding: 20px; box-sizing: border-box; }
 header { text-align: center; color: white; margin-bottom: 20px; }
 
-/* Dashboard για τις κάρτες πληροφοριών και τα ρολόγια */
-.dashboard { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px; max-width: 1200px; margin: 0 auto 20px auto; }
+/* Dashboard για τα 2 πράσινα κουτάκια στην κορυφή */
+.top-dashboard { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px; max-width: 1200px; margin: 0 auto 20px auto; }
 
-/* Dashboard ειδικά για τα γραφήματα (λίγο μεγαλύτερα panels) */
-.charts-dashboard { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 15px; max-width: 1200px; margin: 0 auto; }
+/* Dashboard για τις 4 μεγάλες ενδείξεις (3 Gauges + Βροχόπτωση) */
+.dashboard { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; max-width: 1200px; margin: 0 auto 20px auto; }
+
+/* Dashboard για τα γραφήματα */
+.charts-dashboard { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 15px; max-width: 1200px; margin: 0 auto 20px auto; }
+
+/* Dashboard για την μπαταρία στο τέλος */
+.bottom-dashboard { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px; max-width: 1200px; margin: 0 auto; justify-content: center; }
 
 .card { background: rgba(255, 255, 255, 0.95); border-radius: 12px; padding: 15px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
 .info-card { background: rgba(45, 90, 39, 0.95) !important; color: white !important; text-align: left !important; }
 
-/* ΑΥΞΗΣΗ ΜΕΓΕΘΟΥΣ ΓΡΑΦΗΜΑΤΩΝ */
+/* Μέγεθος γραφημάτων */
 .chart-frame { height: 260px; margin-top: 10px; border-radius: 5px; overflow: hidden; background: white; border: 1px solid #ccc; }
 
 iframe { width: 100%; height: 100%; border: none; }
@@ -34,8 +39,7 @@ canvas { max-width: 240px; width: 100%; height: auto; }
 <div class="overlay">
 <header><h1>Agro Meteo Ls</h1></header>
 
-<div class="dashboard">
-<!-- 1. ΣΤΑΘΜΟΣ -->
+<div class="top-dashboard">
 <div class="card info-card">
 <h3 style="border-bottom:1px solid white">Αγρο-Μετεωρολογικός σταθμός Νεος Μυλότοπος Πέλλας</h3>
 <p><strong>Σταθμός:</strong> Agro Meteo Ls</p>
@@ -48,73 +52,65 @@ canvas { max-width: 240px; width: 100%; height: auto; }
 <div id="date">------</div>
 </div>
 
-<!-- 2. ΑΚΡΟΤΑΤΑ -->
 <div class="card info-card">
 <h3 style="border-bottom:1px solid white">Μέγιστες/Ελάχιστες</h3>
 <p>Υψηλότερη Θερμοκρασία: <span id="t-max">--</span>°C <span id="t-max-t"></span> | Χαμηλότερη: <span id="t-min">--</span>°C <span id="t-min-t"></span></p>
 <p>Υψηλότερη Υγρασία: <span id="h-max">--</span>% <span id="h-max-t"></span> | Χαμηλότερη: <span id="h-min">--</span>% <span id="h-min-t"></span></p>
 <p>Υψηλότερη Πίεση: <span id="p-max">--</span> <span id="p-max-t"></span> | Χαμηλότερη: <span id="p-min">--</span> <span id="p-min-t"></span></p>
 </div>
-
-<!-- ΜΠΑΤΑΡΙΑ -->
-<div class="card">
-<h3>Μπαταρία Σταθμού</h3>
-<div style="font-size: 3rem; font-weight: bold; color: #111;"><span id="b-val">--</span><span style="font-size: 1.2rem;">%</span></div>
-<div id="b-label" style="font-weight:bold">--</div>
-</div>
 </div>
 
 <h2 class="section-title">Τρέχουσες Ενδείξεις</h2>
 <div class="dashboard">
-<!-- ΘΕΡΜΟΚΡΑΣΙΑ GAUGE -->
 <div class="card">
 <h3>Θερμοκρασία</h3>
 <canvas id="gauge-temp"></canvas>
 </div>
 
-<!-- ΥΓΡΑΣΙΑ GAUGE -->
 <div class="card">
 <h3>Υγρασία</h3>
 <canvas id="gauge-hum"></canvas>
 </div>
 
-<!-- ΠΙΕΣΗ GAUGE -->
 <div class="card">
 <h3>Βαρομετρική πίεση</h3>
 <canvas id="gauge-press"></canvas>
 </div>
 
-<!-- ΒΡΟΧΗ ΤΙΜΗ -->
-<div class="card">
+<div class="card" style="display: flex; flex-direction: column; justify-content: center; min-height: 270px;">
 <h3>Βροχόπτωση</h3>
-<div style="font-size: 3rem; font-weight: bold; color: #111;"><span id="r-val">--</span><span style="font-size: 1.2rem;">mm</span></div>
+<div style="font-size: 4rem; font-weight: bold; color: #111; margin: 20px 0;"><span id="r-val">--</span><span style="font-size: 1.5rem;">mm</span></div>
 </div>
 </div>
 
 <h2 class="section-title">Ιστορικά Γραφήματα</h2>
 <div class="charts-dashboard">
-<!-- ΓΡΑΦΗΜΑ ΘΕΡΜΟΚΡΑΣΙΑΣ -->
 <div class="card">
 <h3>Πορεία Θερμοκρασίας</h3>
 <div class="chart-frame"><iframe src="https://thingspeak.com/channels/3365350/charts/1?results=15&color=%232d5a27"></iframe></div>
 </div>
 
-<!-- ΓΡΑΦΗΜΑ ΥΓΡΑΣΙΑΣ -->
 <div class="card">
 <h3>Πορεία Υγρασίας</h3>
 <div class="chart-frame"><iframe src="https://thingspeak.com/channels/3365350/charts/2?results=15&color=%232d5a27"></iframe></div>
 </div>
 
-<!-- ΓΡΑΦΗΜΑ ΠΙΕΣΗΣ -->
 <div class="card">
 <h3>Πορεία Πίεσης</h3>
 <div class="chart-frame"><iframe src="https://thingspeak.com/channels/3365350/charts/3?results=15&color=%232d5a27"></iframe></div>
 </div>
 
-<!-- ΓΡΑΦΗΜΑ ΒΡΟΧΗΣ -->
 <div class="card">
 <h3>Πορεία Βροχόπτωσης</h3>
 <div class="chart-frame"><iframe src="https://thingspeak.com/channels/3365350/charts/4?results=15&color=%232d5a27&type=column"></iframe></div>
+</div>
+</div>
+
+<div class="bottom-dashboard">
+<div class="card">
+<h3>Μπαταρία Σταθμού</h3>
+<div style="font-size: 3rem; font-weight: bold; color: #111;"><span id="b-val">--</span><span style="font-size: 1.2rem;">%</span></div>
+<div id="b-label" style="font-weight:bold">--</div>
 </div>
 </div>
 
