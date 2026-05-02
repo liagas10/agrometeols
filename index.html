@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Agro Meteo Ls</title>
 <script src="https://cdn.rawgit.com/Mikhus/canvas-gauges/gh-pages/download/2.1.7/all/gauge.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
 body { margin: 0; padding: 0; background: #2d5a27 url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1920&q=80') no-repeat center center fixed; background-size: cover; font-family: sans-serif; }
 .overlay { min-height: 100vh; background: rgba(0,0,0,0.4); padding: 20px; box-sizing: border-box; }
@@ -16,8 +17,8 @@ header { text-align: center; color: white; margin-bottom: 20px; }
 /* Dashboard για τις 4 μεγάλες ενδείξεις (3 Gauges + Βροχόπτωση) */
 .dashboard { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; max-width: 1200px; margin: 0 auto 20px auto; }
 
-/* Dashboard για τα γραφήματα */
-.charts-dashboard { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 15px; max-width: 1200px; margin: 0 auto 20px auto; }
+/* Dashboard για τα νέα γραφήματα */
+.charts-dashboard { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 15px; max-width: 1200px; margin: 0 auto 20px auto; }
 
 /* Dashboard για την μπαταρία στο τέλος */
 .bottom-dashboard { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px; max-width: 1200px; margin: 0 auto; justify-content: center; }
@@ -25,12 +26,10 @@ header { text-align: center; color: white; margin-bottom: 20px; }
 .card { background: rgba(255, 255, 255, 0.95); border-radius: 12px; padding: 15px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
 .info-card { background: rgba(45, 90, 39, 0.95) !important; color: white !important; text-align: left !important; }
 
-/* Μέγεθος γραφημάτων */
-.chart-frame { height: 260px; margin-top: 10px; border-radius: 5px; overflow: hidden; background: white; border: 1px solid #ccc; }
+/* Νέο Responsive Container για τα γραφήματα - Τέλεια προσαρμογή στο κινητό */
+.chart-container { position: relative; height: 240px; width: 100%; margin-top: 10px; }
 
-iframe { width: 100%; height: 100%; border: none; }
-footer { text-align: center; color: white; margin-top: 20px; padding: 10px; background: rgba(0,0,0,0.5); }
-canvas { max-width: 240px; width: 100%; height: auto; }
+canvas { max-width: 100%; height: auto; }
 #status-badge { font-weight: bold; padding: 2px 8px; border-radius: 4px; }
 .section-title { width: 100%; max-width: 1200px; margin: 20px auto 10px auto; color: white; border-left: 5px solid #fff; padding-left: 10px; }
 </style>
@@ -40,85 +39,85 @@ canvas { max-width: 240px; width: 100%; height: auto; }
 <header><h1>Agro Meteo Ls</h1></header>
 
 <div class="top-dashboard">
-<div class="card info-card">
-<h3 style="border-bottom:1px solid white">Αγρο-Μετεωρολογικός σταθμός Νεος Μυλότοπος Πέλλας</h3>
-<p><strong>Σταθμός:</strong> Agro Meteo Ls</p>
-<p><strong>Ιδιοκτησία:</strong> Χρήστος Τσαβαλακόγλου</p>
-<p><strong>Υψόμετρο:</strong> 40m</p>
-<p><strong>Επίβλεψη:</strong> Χρήστος Τσαβαλακόγλου</p>
-<p><strong>Κατάσταση:</strong> <span id="status-badge">ΕΛΕΓΧΟΣ...</span></p>
-<p><strong>Λειτουργία:</strong> 24 ώρες το 24ωρο</p>
-<div id="clock" style="font-size:1.8rem; font-weight:bold">--:--:--</div>
-<div id="date">------</div>
-</div>
+    <div class="card info-card">
+        <h3 style="border-bottom:1px solid white">Αγρο-Μετεωρολογικός σταθμός Νεος Μυλότοπος Πέλλας</h3>
+        <p><strong>Σταθμός:</strong> Agro Meteo Ls</p>
+        <p><strong>Ιδιοκτησία:</strong> Χρήστος Τσαβαλακόγλου</p>
+        <p><strong>Υψόμετρο:</strong> 40m</p>
+        <p><strong>Επίβλεψη:</strong> Χρήστος Τσαβαλακόγλου</p>
+        <p><strong>Κατάσταση:</strong> <span id="status-badge">ΕΛΕΓΧΟΣ...</span></p>
+        <p><strong>Λειτουργία:</strong> 24 ώρες το 24ωρο</p>
+        <div id="clock" style="font-size:1.8rem; font-weight:bold">--:--:--</div>
+        <div id="date">------</div>
+    </div>
 
-<div class="card info-card">
-<h3 style="border-bottom:1px solid white">Μέγιστες/Ελάχιστες</h3>
-<p>Υψηλότερη Θερμοκρασία: <span id="t-max">--</span>°C <span id="t-max-t"></span> | Χαμηλότερη: <span id="t-min">--</span>°C <span id="t-min-t"></span></p>
-<p>Υψηλότερη Υγρασία: <span id="h-max">--</span>% <span id="h-max-t"></span> | Χαμηλότερη: <span id="h-min">--</span>% <span id="h-min-t"></span></p>
-<p>Υψηλότερη Πίεση: <span id="p-max">--</span> <span id="p-max-t"></span> | Χαμηλότερη: <span id="p-min">--</span> <span id="p-min-t"></span></p>
-</div>
+    <div class="card info-card">
+        <h3 style="border-bottom:1px solid white">Μέγιστες/Ελάχιστες</h3>
+        <p>Υψηλότερη Θερμοκρασία: <span id="t-max">--</span>°C <span id="t-max-t"></span> | Χαμηλότερη: <span id="t-min">--</span>°C <span id="t-min-t"></span></p>
+        <p>Υψηλότερη Υγρασία: <span id="h-max">--</span>% <span id="h-max-t"></span> | Χαμηλότερη: <span id="h-min">--</span>% <span id="h-min-t"></span></p>
+        <p>Υψηλότερη Πίεση: <span id="p-max">--</span> <span id="p-max-t"></span> | Χαμηλότερη: <span id="p-min">--</span> <span id="p-min-t"></span></p>
+    </div>
 </div>
 
 <h2 class="section-title">Τρέχουσες Ενδείξεις</h2>
 <div class="dashboard">
-<div class="card">
-<h3>Θερμοκρασία</h3>
-<canvas id="gauge-temp"></canvas>
-</div>
+    <div class="card">
+        <h3>Θερμοκρασία</h3>
+        <canvas id="gauge-temp" style="max-width: 240px; width: 100%; height: auto;"></canvas>
+    </div>
 
-<div class="card">
-<h3>Υγρασία</h3>
-<canvas id="gauge-hum"></canvas>
-</div>
+    <div class="card">
+        <h3>Υγρασία</h3>
+        <canvas id="gauge-hum" style="max-width: 240px; width: 100%; height: auto;"></canvas>
+    </div>
 
-<div class="card">
-<h3>Βαρομετρική πίεση</h3>
-<canvas id="gauge-press"></canvas>
-</div>
+    <div class="card">
+        <h3>Βαρομετρική πίεση</h3>
+        <canvas id="gauge-press" style="max-width: 240px; width: 100%; height: auto;"></canvas>
+    </div>
 
-<div class="card" style="display: flex; flex-direction: column; justify-content: center; min-height: 270px;">
-<h3>Βροχόπτωση</h3>
-<div style="font-size: 4rem; font-weight: bold; color: #111; margin: 20px 0;"><span id="r-val">--</span><span style="font-size: 1.5rem;">mm</span></div>
-</div>
+    <div class="card" style="display: flex; flex-direction: column; justify-content: center; min-height: 270px;">
+        <h3>Βροχόπτωση</h3>
+        <div style="font-size: 4rem; font-weight: bold; color: #111; margin: 20px 0;"><span id="r-val">--</span><span style="font-size: 1.5rem;">mm</span></div>
+    </div>
 </div>
 
 <h2 class="section-title">Ιστορικά Γραφήματα</h2>
 <div class="charts-dashboard">
-<div class="card">
-<h3>Πορεία Θερμοκρασίας</h3>
-<div class="chart-frame"><iframe src="https://thingspeak.com/channels/3365350/charts/1?results=15&color=%232d5a27"></iframe></div>
-</div>
+    <div class="card">
+        <h3>Πορεία Θερμοκρασίας</h3>
+        <div class="chart-container"><canvas id="chart-temp"></canvas></div>
+    </div>
 
-<div class="card">
-<h3>Πορεία Υγρασίας</h3>
-<div class="chart-frame"><iframe src="https://thingspeak.com/channels/3365350/charts/2?results=15&color=%232d5a27"></iframe></div>
-</div>
+    <div class="card">
+        <h3>Πορεία Υγρασίας</h3>
+        <div class="chart-container"><canvas id="chart-hum"></canvas></div>
+    </div>
 
-<div class="card">
-<h3>Πορεία Πίεσης</h3>
-<div class="chart-frame"><iframe src="https://thingspeak.com/channels/3365350/charts/3?results=15&color=%232d5a27"></iframe></div>
-</div>
+    <div class="card">
+        <h3>Πορεία Πίεσης</h3>
+        <div class="chart-container"><canvas id="chart-press"></canvas></div>
+    </div>
 
-<div class="card">
-<h3>Πορεία Βροχόπτωσης</h3>
-<div class="chart-frame"><iframe src="https://thingspeak.com/channels/3365350/charts/4?results=15&color=%232d5a27&type=column"></iframe></div>
-</div>
+    <div class="card">
+        <h3>Πορεία Βροχόπτωσης</h3>
+        <div class="chart-container"><canvas id="chart-rain"></canvas></div>
+    </div>
 </div>
 
 <div class="bottom-dashboard">
-<div class="card">
-<h3>Μπαταρία Σταθμού</h3>
-<div style="font-size: 3rem; font-weight: bold; color: #111;"><span id="b-val">--</span><span style="font-size: 1.2rem;">%</span></div>
-<div id="b-label" style="font-weight:bold">--</div>
-</div>
+    <div class="card">
+        <h3>Μπαταρία Σταθμού</h3>
+        <div style="font-size: 3rem; font-weight: bold; color: #111;"><span id="b-val">--</span><span style="font-size: 1.2rem;">%</span></div>
+        <div id="b-label" style="font-weight:bold">--</div>
+    </div>
 </div>
 
 <footer>&copy; 2026 Agro Meteo Ls | Προγραμματισμός Χρήστος Τσαβαλακόγλου Iot System</footer>
 </div>
 
 <script>
-// ΤΟ JAVASCRIPT ΣΟΥ ΠΑΡΑΜΕΝΕΙ 100% ΤΟ ΙΔΙΟ
+// 1. Αρχικοποίηση των Gauges (Παραμένει ίδια)
 var gTemp = new RadialGauge({
 renderTo: 'gauge-temp', width: 240, height: 240, units: "°C", minValue: -10, maxValue: 60,
 majorTicks: ["-10","0","10","20","30","40","50","60"], minorTicks: 2, strokeTicks: true,
@@ -159,78 +158,112 @@ highlights: [
 colorPlate: "#fff", borders: true, needleType: "arrow", needleWidth: 4, animationDuration: 1500
 }).draw();
 
+// 2. Δημιουργία των 4 νέων Chart.js γραφημάτων
+function createChart(canvasId, label, color) {
+    return new Chart(document.getElementById(canvasId), {
+        type: 'line',
+        data: { labels: [], datasets: [{ label: label, data: [], borderColor: color, backgroundColor: color + '22', borderWidth: 3, tension: 0.3, fill: true }] },
+        options: { responsive: true, maintainAspectRatio: false, scales: { x: { grid: { display: false }, ticks: { color: '#666' } }, y: { grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { color: '#666' } } }, plugins: { legend: { display: false } } }
+    });
+}
+
+var cTemp = createChart('chart-temp', 'Θερμοκρασία (°C)', '#d53a35');
+var cHum = createChart('chart-hum', 'Υγρασία (%)', '#2f89fc');
+var cPress = createChart('chart-press', 'Πίεση (hPa)', '#ff9f43');
+var cRain = createChart('chart-rain', 'Βροχόπτωση (mm)', '#28a745');
+
 function update() {
-const d = new Date();
-document.getElementById('clock').innerText = d.toLocaleTimeString('el-GR');
-document.getElementById('date').innerText = d.toLocaleDateString('el-GR', {weekday:'long', day:'numeric', month:'long'});
+    const d = new Date();
+    document.getElementById('clock').innerText = d.toLocaleTimeString('el-GR');
+    document.getElementById('date').innerText = d.toLocaleDateString('el-GR', {weekday:'long', day:'numeric', month:'long'});
 
-fetch("https://api.thingspeak.com/channels/3365350/feeds.json?results=80")
-.then(res => res.json())
-.then(data => {
-const feeds = data.feeds;
-const last = feeds[feeds.length - 1];
+    fetch("https://api.thingspeak.com/channels/3365350/feeds.json?results=80")
+    .then(res => res.json())
+    .then(data => {
+        const feeds = data.feeds;
+        const last = feeds[feeds.length - 1];
 
-const lastSeen = new Date(last.created_at);
-const now = new Date();
-const diffMinutes = (now - lastSeen) / 1000 / 60;
-const statusBadge = document.getElementById('status-badge');
+        const lastSeen = new Date(last.created_at);
+        const now = new Date();
+        const diffMinutes = (now - lastSeen) / 1000 / 60;
+        const statusBadge = document.getElementById('status-badge');
 
-if (diffMinutes < 20) {
-statusBadge.innerText = "ONLINE";
-statusBadge.style.color = "#00FF00";
-} else {
-statusBadge.innerText = "OFFLINE";
-statusBadge.style.color = "#FF0000";
-}
+        if (diffMinutes < 20) {
+            statusBadge.innerText = "ONLINE";
+            statusBadge.style.color = "#00FF00";
+        } else {
+            statusBadge.innerText = "OFFLINE";
+            statusBadge.style.color = "#FF0000";
+        }
 
-if(last.field1) gTemp.value = last.field1;
-if(last.field2) gHum.value = last.field2;
-if(last.field3) gPress.value = last.field3;
-if(last.field4) document.getElementById('r-val').innerText = parseFloat(last.field4).toFixed(2);
+        if(last.field1) gTemp.value = last.field1;
+        if(last.field2) gHum.value = last.field2;
+        if(last.field3) gPress.value = last.field3;
+        if(last.field4) document.getElementById('r-val').innerText = parseFloat(last.field4).toFixed(2);
 
-let b = parseFloat(last.field5);
-document.getElementById('b-val').innerText = b.toFixed(0);
-let lbl = document.getElementById('b-label');
-if(b > 75) { lbl.innerText="ΚΑΛΗ"; lbl.style.color="green"; }
-else if(b > 30) { lbl.innerText="ΜΕΤΡΙΑ"; lbl.style.color="orange"; }
-else { lbl.innerText="ΧΑΜΗΛΗ"; lbl.style.color="red"; }
+        let b = parseFloat(last.field5);
+        document.getElementById('b-val').innerText = b.toFixed(0);
+        let lbl = document.getElementById('b-label');
+        if(b > 75) { lbl.innerText="ΚΑΛΗ"; lbl.style.color="green"; }
+        else if(b > 30) { lbl.innerText="ΜΕΤΡΙΑ"; lbl.style.color="orange"; }
+        else { lbl.innerText="ΧΑΜΗΛΗ"; lbl.style.color="red"; }
 
-let tArr = feeds.filter(f => f.field1 != null).map(f => ({v: parseFloat(f.field1), t: f.created_at}));
-let hArr = feeds.filter(f => f.field2 != null).map(f => ({v: parseFloat(f.field2), t: f.created_at}));
-let pArr = feeds.filter(f => f.field3 != null).map(f => ({v: parseFloat(f.field3), t: f.created_at}));
+        // Φιλτράρισμα και ενημέρωση των Chart.js γραφημάτων
+        let labels = feeds.map(f => new Date(f.created_at).toLocaleTimeString('el-GR', {hour: '2-digit', minute:'2-digit'}));
 
-if(tArr.length > 0) {
-let tMax = tArr.reduce((p, c) => (p.v > c.v) ? p : c);
-let tMin = tArr.reduce((p, c) => (p.v < c.v) ? p : c);
-document.getElementById('t-max').innerText = tMax.v.toFixed(1);
-document.getElementById('t-max-t').innerText = "(" + new Date(tMax.t).toLocaleTimeString('el-GR', {hour:'2-digit', minute:'2-digit'}) + ")";
-document.getElementById('t-min').innerText = tMin.v.toFixed(1);
-document.getElementById('t-min-t').innerText = "(" + new Date(tMin.t).toLocaleTimeString('el-GR', {hour:'2-digit', minute:'2-digit'}) + ")";
-}
+        cTemp.data.labels = labels;
+        cTemp.data.datasets[0].data = feeds.map(f => f.field1);
+        cTemp.update();
 
-if(hArr.length > 0) {
-let hMax = hArr.reduce((p, c) => (p.v > c.v) ? p : c);
-let hMin = hArr.reduce((p, c) => (p.v < c.v) ? p : c);
-document.getElementById('h-max').innerText = hMax.v.toFixed(0);
-document.getElementById('h-max-t').innerText = "(" + new Date(hMax.t).toLocaleTimeString('el-GR', {hour:'2-digit', minute:'2-digit'}) + ")";
-document.getElementById('h-min').innerText = hMin.v.toFixed(0);
-document.getElementById('h-min-t').innerText = "(" + new Date(hMin.t).toLocaleTimeString('el-GR', {hour:'2-digit', minute:'2-digit'}) + ")";
-}
+        cHum.data.labels = labels;
+        cHum.data.datasets[0].data = feeds.map(f => f.field2);
+        cHum.update();
 
-if(pArr.length > 0) {
-let pMax = pArr.reduce((p, c) => (p.v > c.v) ? p : c);
-let pMin = pArr.reduce((p, c) => (p.v < c.v) ? p : c);
-document.getElementById('p-max').innerText = pMax.v.toFixed(1);
-document.getElementById('p-max-t').innerText = "(" + new Date(pMax.t).toLocaleTimeString('el-GR', {hour:'2-digit', minute:'2-digit'}) + ")";
-document.getElementById('p-min').innerText = pMin.v.toFixed(1);
-document.getElementById('p-min-t').innerText = "(" + new Date(pMin.t).toLocaleTimeString('el-GR', {hour:'2-digit', minute:'2-digit'}) + ")";
-}
-})
-.catch(err => {
-document.getElementById('status-badge').innerText = "OFFLINE";
-document.getElementById('status-badge').style.color = "#FF0000";
-console.log("Error fetching data");
-});
+        cPress.data.labels = labels;
+        cPress.data.datasets[0].data = feeds.map(f => f.field3);
+        cPress.update();
+
+        cRain.data.labels = labels;
+        cRain.data.datasets[0].data = feeds.map(f => f.field4);
+        cRain.update();
+
+        // Ακρότατα (Παραμένουν ίδια)
+        let tArr = feeds.filter(f => f.field1 != null).map(f => ({v: parseFloat(f.field1), t: f.created_at}));
+        let hArr = feeds.filter(f => f.field2 != null).map(f => ({v: parseFloat(f.field2), t: f.created_at}));
+        let pArr = feeds.filter(f => f.field3 != null).map(f => ({v: parseFloat(f.field3), t: f.created_at}));
+
+        if(tArr.length > 0) {
+            let tMax = tArr.reduce((p, c) => (p.v > c.v) ? p : c);
+            let tMin = tArr.reduce((p, c) => (p.v < c.v) ? p : c);
+            document.getElementById('t-max').innerText = tMax.v.toFixed(1);
+            document.getElementById('t-max-t').innerText = "(" + new Date(tMax.t).toLocaleTimeString('el-GR', {hour:'2-digit', minute:'2-digit'}) + ")";
+            document.getElementById('t-min').innerText = tMin.v.toFixed(1);
+            document.getElementById('t-min-t').innerText = "(" + new Date(tMin.t).toLocaleTimeString('el-GR', {hour:'2-digit', minute:'2-digit'}) + ")";
+        }
+
+        if(hArr.length > 0) {
+            let hMax = hArr.reduce((p, c) => (p.v > c.v) ? p : c);
+            let hMin = hArr.reduce((p, c) => (p.v < c.v) ? p : c);
+            document.getElementById('h-max').innerText = hMax.v.toFixed(0);
+            document.getElementById('h-max-t').innerText = "(" + new Date(hMax.t).toLocaleTimeString('el-GR', {hour:'2-digit', minute:'2-digit'}) + ")";
+            document.getElementById('h-min').innerText = hMin.v.toFixed(0);
+            document.getElementById('h-min-t').innerText = "(" + new Date(hMin.t).toLocaleTimeString('el-GR', {hour:'2-digit', minute:'2-digit'}) + ")";
+        }
+
+        if(pArr.length > 0) {
+            let pMax = pArr.reduce((p, c) => (p.v > c.v) ? p : c);
+            let pMin = pArr.reduce((p, c) => (p.v < c.v) ? p : c);
+            document.getElementById('p-max').innerText = pMax.v.toFixed(1);
+            document.getElementById('p-max-t').innerText = "(" + new Date(pMax.t).toLocaleTimeString('el-GR', {hour:'2-digit', minute:'2-digit'}) + ")";
+            document.getElementById('p-min').innerText = pMin.v.toFixed(1);
+            document.getElementById('p-min-t').innerText = "(" + new Date(pMin.t).toLocaleTimeString('el-GR', {hour:'2-digit', minute:'2-digit'}) + ")";
+        }
+    })
+    .catch(err => {
+        document.getElementById('status-badge').innerText = "OFFLINE";
+        document.getElementById('status-badge').style.color = "#FF0000";
+        console.log("Error fetching data");
+    });
 }
 update();
 setInterval(update, 20000);
