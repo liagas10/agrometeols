@@ -16,16 +16,28 @@ header { text-align: center; color: white; margin-bottom: 20px; }
 .charts-dashboard { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 15px; max-width: 1200px; margin: 0 auto 20px auto; }
 .bottom-dashboard { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px; max-width: 1200px; margin: 0 auto; justify-content: center; }
 
-/* Dashboard για το κουτί των διαφημίσεων */
 .ads-dashboard { max-width: 1200px; margin: 0 auto 20px auto; }
 
 .card { background: rgba(255, 255, 255, 0.95); border-radius: 12px; padding: 15px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
 .info-card { background: rgba(45, 90, 39, 0.95) !important; color: white !important; text-align: left !important; }
 
-/* Στυλ για το Slideshow διαφημίσεων */
-.slideshow-container { position: relative; width: 100%; height: 200px; max-height: 250px; overflow: hidden; border-radius: 8px; margin-top: 10px; display: flex; justify-content: center; align-items: center; background: #f9f9f9; }
-.slideshow-container img { max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; display: none; transition: opacity 0.5s ease-in-out; }
-.slideshow-container img.active { display: block; }
+/* Στυλ για το Slideshow με απαλό εφέ (Fade effect) */
+.slideshow-container { position: relative; width: 100%; height: 200px; max-height: 250px; overflow: hidden; border-radius: 8px; margin-top: 10px; background: #f9f9f9; }
+.slideshow-container img {
+position: absolute;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+object-fit: contain;
+opacity: 0; /* Ξεκινάει κρυμμένη */
+transition: opacity 1.2s ease-in-out; /* Το εφέ διαρκεί 1.2 δευτερόλεπτα */
+z-index: 1;
+}
+.slideshow-container img.active {
+opacity: 1; /* Γίνεται ορατή */
+z-index: 2; /* Έρχεται μπροστά */
+}
 
 .chart-container { position: relative; height: 240px; width: 100%; margin-top: 10px; }
 canvas { max-width: 100%; height: auto; }
@@ -92,7 +104,7 @@ canvas { max-width: 100%; height: auto; }
 <div class="ads-dashboard">
 <div class="card" style="padding: 10px;">
 <div class="slideshow-container" id="ad-slider">
-<img src="https://i.imgur.com/oAWf4Ai.png" class="active" alt="Διαφήμιση 1">
+<img src="https://images.unsplash.com/photo-1599939575322-792a12953545?auto=format&fit=crop&w=800&q=80" class="active" alt="Διαφήμιση 1">
 <img src="https://images.unsplash.com/photo-1628352081506-83c43123ed6d?auto=format&fit=crop&w=800&q=80" alt="Διαφήμιση 2">
 <img src="https://images.unsplash.com/photo-1592982537447-7440774c39fa?auto=format&fit=crop&w=800&q=80" alt="Διαφήμιση 3">
 </div>
@@ -134,7 +146,7 @@ canvas { max-width: 100%; height: auto; }
 </div>
 
 <script>
-// Slideshow Logic: Αλλαγή εικόνων κάθε 4 δευτερόλεπτα
+// Slideshow Logic: Απαλή αλλαγή εικόνων κάθε 4 δευτερόλεπτα
 let currentSlide = 0;
 const slides = document.querySelectorAll('#ad-slider img');
 
@@ -144,7 +156,7 @@ slides[currentSlide].classList.remove('active');
 currentSlide = (currentSlide + 1) % slides.length;
 slides[currentSlide].classList.add('active');
 }
-setInterval(nextSlide, 4000); // 4000ms = 4 δευτερόλεπτα
+setInterval(nextSlide, 4000);
 
 // 1. Gauges
 var gTemp = new RadialGauge({
@@ -254,7 +266,6 @@ if(b > 75) { lbl.innerText="ΚΑΛΗ"; lbl.style.color="green"; }
 else if(b > 30) { lbl.innerText="ΜΕΤΡΙΑ"; lbl.style.color="orange"; }
 else { lbl.innerText="ΧΑΜΗΛΗ"; lbl.style.color="red"; }
 
-// Ενημέρωση γραφημάτων
 let labels = feeds.map(f => new Date(f.created_at).toLocaleTimeString('el-GR', {hour: '2-digit', minute:'2-digit'}));
 
 cTemp.data.labels = labels;
@@ -273,7 +284,6 @@ cRain.data.labels = labels;
 cRain.data.datasets[0].data = feeds.map(f => f.field4);
 cRain.update();
 
-// Σύνολα βροχής
 let rArr = feeds.filter(f => f.field4 != null).map(f => parseFloat(f.field4));
 
 if(rArr.length > 0) {
@@ -296,7 +306,6 @@ document.getElementById('r-total-month').innerText = rainMonth.toFixed(1);
 document.getElementById('r-total-year').innerText = rainYear.toFixed(1);
 }
 
-// Ακρότατα
 let tArr = feeds.filter(f => f.field1 != null).map(f => ({v: parseFloat(f.field1), t: f.created_at}));
 let hArr = feeds.filter(f => f.field2 != null).map(f => ({v: parseFloat(f.field2), t: f.created_at}));
 let pArr = feeds.filter(f => f.field3 != null).map(f => ({v: parseFloat(f.field3), t: f.created_at}));
