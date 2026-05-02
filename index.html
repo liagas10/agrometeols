@@ -9,7 +9,15 @@
 <style>
 body { margin: 0; padding: 0; background: #2d5a27 url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1920&q=80') no-repeat center center fixed; background-size: cover; font-family: sans-serif; }
 .overlay { min-height: 100vh; background: rgba(0,0,0,0.4); padding: 20px; box-sizing: border-box; }
-header { text-align: center; color: white; margin-bottom: 20px; }
+
+/* --- PREMIUM LOGO SECTION --- */
+header { text-align: center; color: white; margin-bottom: 30px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.logo-container { display: flex; align-items: center; gap: 15px; background: rgba(255,255,255,0.1); padding: 15px 30px; border-radius: 50px; backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.2); box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
+.logo-svg { filter: drop-shadow(0 0 5px rgba(0,255,0,0.5)); }
+.logo-text-wrapper { text-align: left; line-height: 1; }
+.logo-text-wrapper h1 { margin: 0; font-size: 2.2rem; letter-spacing: 1px; text-transform: uppercase; font-weight: 800; }
+.logo-text-wrapper span { color: #00ff00; font-size: 1.1rem; font-weight: bold; letter-spacing: 6px; text-transform: uppercase; }
+/* ---------------------------- */
 
 .top-dashboard { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px; max-width: 1200px; margin: 0 auto 20px auto; }
 .dashboard { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; max-width: 1200px; margin: 0 auto 20px auto; }
@@ -85,7 +93,23 @@ max-width: 1200px; font-size: 0.9rem; border: 1px solid rgba(255, 255, 255, 0.2)
 </head>
 <body>
 <div class="overlay">
-<header><h1>Agro Meteo Ls</h1></header>
+<header>
+  <div class="logo-container">
+    <div class="logo-svg">
+      <svg width="60" height="60" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M50 5L85 40L50 75L15 40L50 5Z" stroke="white" stroke-width="2"/>
+        <path d="M50 15L75 40L50 65L25 40L50 15Z" fill="#00ff00" fill-opacity="0.6"/>
+        <path d="M50 10V40" stroke="white" stroke-width="3" stroke-linecap="round"/>
+        <circle cx="50" cy="40" r="5" fill="white"/>
+        <path d="M30 60C40 55 60 55 70 60" stroke="#00ff00" stroke-width="4" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <div class="logo-text-wrapper">
+      <h1>Agro Meteo</h1>
+      <span>Ls System</span>
+    </div>
+  </div>
+</header>
 
 <div class="top-dashboard">
 <div class="card info-card">
