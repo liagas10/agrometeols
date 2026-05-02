@@ -18,7 +18,7 @@ header { text-align: center; color: white; margin-bottom: 20px; }
 
 .ads-dashboard { max-width: 1200px; margin: 0 auto 20px auto; }
 
-.card { background: rgba(255, 255, 255, 0.95); border-radius: 12px; padding: 15px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+.card { background: rgba(255, 255, 255, 0.95); border-radius: 12px; padding: 15px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.3); position: relative; }
 .info-card { background: rgba(45, 90, 39, 0.95) !important; color: white !important; text-align: left !important; }
 
 .slideshow-container { position: relative; width: 100%; height: 200px; max-height: 250px; overflow: hidden; border-radius: 8px; margin-top: 10px; display: flex; justify-content: center; align-items: center; background: #f9f9f9; }
@@ -30,7 +30,6 @@ canvas { max-width: 100%; height: auto; }
 #status-badge { font-weight: bold; padding: 2px 8px; border-radius: 4px; }
 .section-title { width: 100%; max-width: 1200px; margin: 20px auto 10px auto; color: white; border-left: 5px solid #fff; padding-left: 10px; }
 
-/* Alerts Style */
 #alert-box { font-weight: bold; padding: 15px; border-radius: 8px; margin-top: 10px; border: 2px solid transparent; }
 .alert-normal { background: #e7f3fe; color: #31708f; border-color: #bcdff1 !important; }
 .alert-danger { background: #f2dede; color: #a94442; border-color: #ebccd1 !important; animation: blink 2s infinite; }
@@ -75,14 +74,12 @@ max-width: 1200px; font-size: 0.9rem; border: 1px solid rgba(255, 255, 255, 0.2)
 </div>
 </div>
 
-<h2 class="section-title">Πρόγνωση & Προειδοποιήσεις</h2>
+<h2 class="section-title">Ραντάρ Βροχής & Προειδοποιήσεις</h2>
 <div class="dashboard">
-<div class="card">
-<h3>Πρόγνωση Περιοχής</h3>
-<a class="weatherwidget-io" href="https://forecast7.com/el/40.7922.39/militopos/" data-label_1="ΝΕΟΣ ΜΥΛΟΤΟΠΟΣ" data-label_2="ΠΡΟΓΝΩΣΗ" data-font="Arial" data-icons="Climacons Animated" data-theme="pure" >ΝΕΟΣ ΜΥΛΟΤΟΠΟΣ ΠΡΟΓΝΩΣΗ</a>
-<script>
-!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https://weatherwidget.io/js/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js');
-</script>
+<!-- ΕΔΩ ΜΠΗΚΕ ΤΟ RAINVIEWER ΑΝΤΙ ΓΙΑ ΤΗΝ ΠΡΟΓΝΩΣΗ -->
+<div class="card" style="padding: 0; overflow: hidden; min-height: 350px;">
+<h3 style="position: absolute; top: 10px; left: 15px; margin: 0; z-index: 10; color: white; background: rgba(0,0,0,0.5); padding: 2px 5px; border-radius: 4px;">Ζωντανό Ραντάρ Βροχής (RainViewer)</h3>
+<iframe src="https://www.rainviewer.com/map.html?loc=40.7922,22.39,12&oFa=0&oC=1&oU=0&oF=0&oSt=1&oT=1&oB=1&oP=1&oR=1&oS=0&oW=0&mT=3&ls=1&lm=1&th=1&oN=1" width="100%" height="350" frameborder="0" style="border:0; border-radius: 12px;" allowfullscreen></iframe>
 </div>
 <div class="card">
 <h3>Γεωργικές Προειδοποιήσεις</h3>
