@@ -29,7 +29,7 @@ position: relative;
 overflow: hidden;
 transition: transform 0.3s ease, box-shadow 0.3s ease;
 border: 1px solid rgba(255, 255, 255, 0.1);
-color: white; /* Όλα τα κείμενα λευκά */
+color: white;
 }
 
 .card:hover {
@@ -37,9 +37,7 @@ transform: translateY(-10px);
 box-shadow: 0 15px 40px rgba(0,0,0,0.5);
 }
 
-/* Διόρθωση για άσπρα mm και % */
 .card span, .card small { color: white !important; }
-
 .card h3 { color: white; }
 
 .info-card { background: rgba(45, 90, 39, 0.7) !important; color: white !important; text-align: left !important; }
@@ -52,7 +50,19 @@ box-shadow: 0 15px 40px rgba(0,0,0,0.5);
 
 .chart-container { position: relative; height: 240px; width: 100%; margin-top: 10px; }
 canvas { max-width: 100%; height: auto; }
-#status-badge { font-weight: bold; padding: 2px 8px; border-radius: 4px; }
+
+/* --- ΤΟ ΚΟΥΤΑΚΙ STATUS --- */
+#status-badge {
+font-weight: bold;
+padding: 5px 15px;
+border-radius: 4px;
+color: white !important; /* Λευκά γράμματα μέσα στο χρώμα */
+text-transform: uppercase;
+display: inline-block;
+margin-left: 5px;
+}
+/* -------------------------- */
+
 .section-title { width: 100%; max-width: 1200px; margin: 20px auto 10px auto; color: white; border-left: 5px solid #fff; padding-left: 10px; }
 
 #alert-box { font-weight: bold; padding: 15px; border-radius: 8px; margin-top: 10px; border: 2px solid transparent; color: white !important; }
@@ -254,8 +264,8 @@ maintainAspectRatio: false,
 scales: {
 x: { grid: { display: false }, ticks: { color: '#ffffff' } },
 y: {
-min: minVal, // Διόρθωση για τη βροχή
-max: maxVal, // Διόρθωση για τη βροχή
+min: minVal,
+max: maxVal,
 grid: { color: 'rgba(255,255,255,0.1)' },
 ticks: { color: '#ffffff' }
 }
@@ -268,7 +278,6 @@ plugins: { legend: { labels: { color: '#fff' } } }
 var cTemp = createChart('chart-temp', 'Θερμοκρασία (°C)', '#d53a35');
 var cHum = createChart('chart-hum', 'Υγρασία (%)', '#2f89fc');
 var cPress = createChart('chart-press', 'Πίεση (hPa)', '#ff9f43');
-// Κλείδωμα άξονα βροχής 0 έως 50
 var cRain = createChart('chart-rain', 'Βροχόπτωση (mm)', '#28a745', 0, 50);
 
 function update() {
@@ -296,13 +305,15 @@ const now = new Date();
 const diffMinutes = (now - lastSeen) / 1000 / 60;
 const statusBadge = document.getElementById('status-badge');
 
+/* --- ΑΛΛΑΓΗ ΜΟΝΟ ΣΤΗΝ ΚΑΤΑΣΤΑΣΗ ONLINE/OFFLINE --- */
 if (diffMinutes < 20) {
 statusBadge.innerText = "ONLINE";
-statusBadge.style.color = "#00FF00";
+statusBadge.style.backgroundColor = "#00ff00"; // Πράσινο έντονο
 } else {
 statusBadge.innerText = "OFFLINE";
-statusBadge.style.color = "#FF0000";
+statusBadge.style.backgroundColor = "#ff0000"; // Κόκκινο έντονο
 }
+/* -------------------------------------------------- */
 
 if(last.field1) gTemp.value = last.field1;
 if(last.field2) gHum.value = last.field2;
@@ -391,7 +402,7 @@ document.getElementById('p-min-t').innerText = "(" + new Date(pMin.t).toLocaleTi
 })
 .catch(err => {
 document.getElementById('status-badge').innerText = "OFFLINE";
-document.getElementById('status-badge').style.color = "#FF0000";
+document.getElementById('status-badge').style.backgroundColor = "#ff0000";
 });
 }
 update();
