@@ -9,7 +9,13 @@
 <style>
 body { margin: 0; padding: 0; background: #2d5a27 url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1920&q=80') no-repeat center center fixed; background-size: cover; font-family: sans-serif; }
 .overlay { min-height: 100vh; background: rgba(0,0,0,0.4); padding: 20px; box-sizing: border-box; }
-header { text-align: center; color: white; margin-bottom: 20px; }
+
+/* --- LOGO STYLING --- */
+.logo-wrapper { display: flex; align-items: center; justify-content: center; margin-bottom: 25px; gap: 15px; }
+.logo-text-box { text-align: left; line-height: 1.1; }
+.logo-title { margin: 0; color: #ffffff; font-size: 2.2rem; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; }
+.logo-subtitle { color: #00ff00; font-size: 1.2rem; font-weight: bold; letter-spacing: 5px; }
+/* -------------------- */
 
 .top-dashboard { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px; max-width: 1200px; margin: 0 auto 20px auto; }
 .dashboard { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; max-width: 1200px; margin: 0 auto 20px auto; }
@@ -32,14 +38,9 @@ border: 1px solid rgba(255, 255, 255, 0.1);
 color: white;
 }
 
-.card:hover {
-transform: translateY(-10px);
-box-shadow: 0 15px 40px rgba(0,0,0,0.5);
-}
-
+.card:hover { transform: translateY(-10px); box-shadow: 0 15px 40px rgba(0,0,0,0.5); }
 .card span, .card small { color: white !important; }
 .card h3 { color: white; }
-
 .info-card { background: rgba(45, 90, 39, 0.7) !important; color: white !important; text-align: left !important; }
 
 #clock, #date, #r-val, #b-val, #reset-msg { color: white !important; }
@@ -51,17 +52,15 @@ box-shadow: 0 15px 40px rgba(0,0,0,0.5);
 .chart-container { position: relative; height: 240px; width: 100%; margin-top: 10px; }
 canvas { max-width: 100%; height: auto; }
 
-/* --- ΤΟ ΚΟΥΤΑΚΙ STATUS --- */
+/* --- STATUS BADGE (ΕΝΤΟΝΟ ΠΡΑΣΙΝΟ/ΚΟΚΚΙΝΟ) --- */
 #status-badge {
 font-weight: bold;
-padding: 5px 15px;
-border-radius: 4px;
-color: white !important; /* Λευκά γράμματα μέσα στο χρώμα */
+padding: 4px 12px;
+border-radius: 6px;
 text-transform: uppercase;
-display: inline-block;
-margin-left: 5px;
+letter-spacing: 1px;
+color: white !important;
 }
-/* -------------------------- */
 
 .section-title { width: 100%; max-width: 1200px; margin: 20px auto 10px auto; color: white; border-left: 5px solid #fff; padding-left: 10px; }
 
@@ -85,7 +84,24 @@ max-width: 1200px; font-size: 0.9rem; border: 1px solid rgba(255, 255, 255, 0.2)
 </head>
 <body>
 <div class="overlay">
-<header><h1>Agro Meteo Ls</h1></header>
+<header>
+<!-- LOGO CONCEPT 1 -->
+<div class="logo-wrapper">
+<svg width="70" height="70" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+<circle cx="50" cy="50" r="48" fill="rgba(255,255,255,0.1)" stroke="white" stroke-width="2"/>
+<circle cx="40" cy="35" r="12" fill="#FFD700"/>
+<path d="M40 18V22M40 48V52M57 35H61M19 35H23M52 23L49 26M31 44L28 47M52 47L49 44M31 23L28 26" stroke="#FFD700" stroke-width="2"/>
+<path d="M55 42C55 37 59 33 64 33C69 33 73 37 73 42C73 42 80 42 80 49C80 56 74 56 74 56H55C55 56 48 56 48 49C48 42 55 42 55 42Z" fill="#87CEEB"/>
+<path d="M60 58L58 63M68 58L66 63M75 58L73 63" stroke="#87CEEB" stroke-width="2" stroke-linecap="round"/>
+<path d="M20 75C35 65 65 65 80 75" stroke="#00ff00" stroke-width="4" stroke-linecap="round"/>
+<path d="M50 70V60M42 66L50 60L58 66" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
+<div class="logo-text-box">
+<h1 class="logo-title">Agro Meteo</h1>
+<div class="logo-subtitle">Ls</div>
+</div>
+</div>
+</header>
 
 <div class="top-dashboard">
 <div class="card info-card">
@@ -182,7 +198,7 @@ max-width: 1200px; font-size: 0.9rem; border: 1px solid rgba(255, 255, 255, 0.2)
 </div>
 
 <div class="card">
-<h3>Πoρεία Πίεσης</h3>
+<h3>Πορεία Πίεσης</h3>
 <div class="chart-container"><canvas id="chart-press"></canvas></div>
 </div>
 
@@ -305,15 +321,14 @@ const now = new Date();
 const diffMinutes = (now - lastSeen) / 1000 / 60;
 const statusBadge = document.getElementById('status-badge');
 
-/* --- ΑΛΛΑΓΗ ΜΟΝΟ ΣΤΗΝ ΚΑΤΑΣΤΑΣΗ ONLINE/OFFLINE --- */
+/* --- ΕΝΤΟΝΟ ONLINE/OFFLINE --- */
 if (diffMinutes < 20) {
 statusBadge.innerText = "ONLINE";
-statusBadge.style.backgroundColor = "#00ff00"; // Πράσινο έντονο
+statusBadge.style.backgroundColor = "#00ff00";
 } else {
 statusBadge.innerText = "OFFLINE";
-statusBadge.style.backgroundColor = "#ff0000"; // Κόκκινο έντονο
+statusBadge.style.backgroundColor = "#ff0000";
 }
-/* -------------------------------------------------- */
 
 if(last.field1) gTemp.value = last.field1;
 if(last.field2) gHum.value = last.field2;
