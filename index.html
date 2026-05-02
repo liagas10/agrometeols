@@ -3,102 +3,41 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Agro Meteo Ls - Premium Edition</title>
+<title>Agro Meteo Ls</title>
 <script src="https://cdn.rawgit.com/Mikhus/canvas-gauges/gh-pages/download/2.1.7/all/gauge.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
-/* Γενική Αισθητική */
-body {
-margin: 0;
-padding: 0;
-background: #1e3a1a url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1920&q=80') no-repeat center center fixed;
-background-size: cover;
-font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-color: white;
-}
+body { margin: 0; padding: 0; background: #2d5a27 url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1920&q=80') no-repeat center center fixed; background-size: cover; font-family: sans-serif; }
+.overlay { min-height: 100vh; background: rgba(0,0,0,0.4); padding: 20px; box-sizing: border-box; }
+header { text-align: center; color: white; margin-bottom: 20px; }
 
-.overlay {
-min-height: 100vh;
-background: rgba(0,0,0,0.5);
-padding: 20px;
-box-sizing: border-box;
-}
+.top-dashboard { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px; max-width: 1200px; margin: 0 auto 20px auto; }
+.dashboard { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; max-width: 1200px; margin: 0 auto 20px auto; }
+.charts-dashboard { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 15px; max-width: 1200px; margin: 0 auto 20px auto; }
+.bottom-dashboard { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px; max-width: 1200px; margin: 0 auto; justify-content: center; }
 
-header h1 {
-text-align: center;
-font-weight: 300;
-letter-spacing: 2px;
-text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-}
+.card { background: rgba(255, 255, 255, 0.95); border-radius: 12px; padding: 15px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.3); position: relative; overflow: hidden; }
 
-/* Εφέ Γυαλιού & Κίνησης στις Κάρτες */
-.card {
-background: rgba(255, 255, 255, 0.1); /* Διαφανές λευκό */
-backdrop-filter: blur(12px); /* Θόλωμα φόντου */
--webkit-backdrop-filter: blur(12px);
-border: 1px solid rgba(255, 255, 255, 0.2);
-border-radius: 15px;
-padding: 20px;
-text-align: center;
-box-shadow: 0 8px 32px rgba(0,0,0,0.3);
-transition: transform 0.3s ease, box-shadow 0.3s ease;
-color: white; /* Όλα τα γράμματα άσπρα */
-}
+/* Σκουρόχρωμες κάρτες για να φαίνονται τα άσπρα γράμματα */
+.info-card { background: rgba(45, 90, 39, 0.9) !important; color: white !important; text-align: left !important; }
+.white-text-card { background: rgba(0, 0, 0, 0.5) !important; color: white !important; border: 1px solid rgba(255,255,255,0.2); }
 
-.card:hover {
-transform: translateY(-5px);
-box-shadow: 0 12px 40px rgba(0,0,0,0.5);
-background: rgba(255, 255, 255, 0.15);
-}
+.section-title { width: 100%; max-width: 1200px; margin: 20px auto 10px auto; color: white; border-left: 5px solid #fff; padding-left: 10px; }
 
-/* Προσαρμογή Ειδικών Καρτών */
-.info-card { text-align: left !important; }
-.info-card h3 { border-bottom: 1px solid rgba(255,255,255,0.3) !important; padding-bottom: 10px; }
+/* Γεωργικές Προειδοποιήσεις - Άσπρα γράμματα */
+#alert-box { font-weight: bold; padding: 15px; border-radius: 8px; margin-top: 10px; border: 2px solid transparent; color: white !important; }
+.alert-normal { background: rgba(0, 128, 0, 0.6); }
+.alert-danger { background: rgba(255, 0, 0, 0.6); animation: blink 2s infinite; }
+.alert-warning { background: rgba(255, 165, 0, 0.6); }
 
-/* Dashboard Layouts */
-.top-dashboard, .dashboard, .charts-dashboard, .bottom-dashboard {
-display: grid;
-grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-gap: 20px;
-max-width: 1200px;
-margin: 0 auto 25px auto;
-}
+@keyframes blink { 0% {opacity: 1;} 50% {opacity: 0.7;} 100% {opacity: 1;} }
 
-.section-title {
-width: 100%; max-width: 1200px; margin: 30px auto 15px auto;
-color: white; border-left: 5px solid #4CAF50; padding-left: 15px;
-text-transform: uppercase; font-size: 1.1rem; letter-spacing: 1px;
-}
+/* Widgets Πρόγνωσης & Ραντάρ - Όπως τα κλειδώσαμε */
+.widget-card { padding: 0 !important; background: transparent !important; box-shadow: none !important; }
+.widget-title { margin: 15px 0; font-size: 1.2rem; color: #ffffff !important; text-align: center; }
+.forecast-frame, .radar-frame { width: 100%; height: 380px; border: none; border-radius: 12px; }
 
-/* Γεωργικές Προειδοποιήσεις - Άσπρα Γράμματα */
-#alert-box {
-font-weight: bold; padding: 15px; border-radius: 10px; margin-top: 10px;
-border: 1px solid rgba(255,255,255,0.2);
-color: white !important;
-}
-.alert-normal { background: rgba(76, 175, 80, 0.3); }
-.alert-danger { background: rgba(244, 67, 54, 0.4); animation: blink 2s infinite; }
-.alert-warning { background: rgba(255, 152, 0, 0.4); }
-
-/* Ραντάρ & Πρόγνωση (Όπως τα κλειδώσαμε) */
-.widget-card { padding: 0 !important; overflow: hidden; background: transparent !important; box-shadow: none !important; border: none !important; }
-.widget-card:hover { transform: none; }
-.widget-title { color: white !important; margin-bottom: 10px; }
-.forecast-frame, .radar-frame { width: 100%; height: 380px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.2); }
-
-/* Ιστορικά Γραφήματα - Άσπρα γράμματα μέσα */
-.chart-container { position: relative; height: 240px; width: 100%; }
-
-/* Custom Scrollbar */
-::-webkit-scrollbar { width: 8px; }
-::-webkit-scrollbar-track { background: rgba(0,0,0,0.1); }
-::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.3); border-radius: 10px; }
-::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.5); }
-
-footer {
-text-align: center; color: rgba(255,255,255,0.7); margin: 40px auto 20px auto;
-padding: 20px; background: rgba(0,0,0,0.3); border-radius: 15px; max-width: 1200px;
-}
+footer { text-align: center; color: white; margin: 30px auto; padding: 15px; background: rgba(0,0,0,0.5); border-radius: 10px; max-width: 1200px; }
 </style>
 </head>
 <body>
@@ -106,55 +45,35 @@ padding: 20px; background: rgba(0,0,0,0.3); border-radius: 15px; max-width: 1200
 <header><h1>Agro Meteo Ls</h1></header>
 
 <div class="top-dashboard">
-<!-- ΣΤΑΘΜΟΣ & ΡΟΛΟΪ -->
 <div class="card info-card">
-<h3>Σταθμός: Νέος Μυλότοπος</h3>
-<p><strong>Ιδιοκτησία:</strong> Χ. Τσαβαλακόγλου</p>
-<p><strong>Κατάσταση:</strong> <span id="status-badge" style="color: #00FF00; font-weight: bold;">ONLINE</span></p>
-<div id="clock" style="font-size:2.2rem; font-weight:bold; margin-top:10px; color: white;">--:--:--</div>
-<div id="date" style="color: rgba(255,255,255,0.8)">------</div>
+<h3 style="border-bottom:1px solid white">Σταθμός Νέος Μυλότοπος</h3>
+<p><strong>Κατάσταση:</strong> <span id="status-badge">ΕΛΕΓΧΟΣ...</span></p>
+<div id="clock" style="font-size:1.8rem; font-weight:bold; color: white;">--:--:--</div>
+<div id="date" style="color: white;">------</div>
 </div>
 
-<!-- ΜΕΓΙΣΤΑ/ΕΛΑΧΙΣΤΑ -->
 <div class="card info-card">
-<h3>Στατιστικά 24ώρου</h3>
-<p>Θερμοκρασία: <span style="color:#ff4d4d">↑</span> <span id="t-max">--</span>°C | <span style="color:#4da6ff">↓</span> <span id="t-min">--</span>°C</p>
-<p>Υγρασία: Max <span id="h-max">--</span>% | Min <span id="h-min">--</span>%</p>
-<p style="border-top: 1px solid rgba(255,255,255,0.2); padding-top: 10px;">
-<strong>Βροχόπτωση Έτους:</strong> <span id="r-total-year" style="font-size:1.2rem; color:#4da6ff">--</span> mm
-</p>
+<h3 style="border-bottom:1px solid white">Μέγιστες/Ελάχιστες</h3>
+<p>Θερμοκρασία: <span id="t-max">--</span>°C | <span id="t-min">--</span>°C</p>
+<p>Βροχόπτωση Έτους: <span id="r-total-year">--</span> mm</p>
 </div>
 </div>
 
-<h2 class="section-title">Γεωργική Επίβλεψη</h2>
 <div class="dashboard">
-<div class="card">
-<h3>Προειδοποιήσεις Καλλιέργειας</h3>
-<div id="alert-box" class="alert-normal">Έλεγχος συνθηκών...</div>
+<div class="card white-text-card">
+<h3>Γεωργικές Προειδοποιήσεις</h3>
+<div id="alert-box" class="alert-normal">Φόρτωση...</div>
 </div>
 </div>
 
 <h2 class="section-title">Τρέχουσες Ενδείξεις</h2>
 <div class="dashboard">
-<div class="card">
-<h3>Θερμοκρασία</h3>
-<canvas id="gauge-temp"></canvas>
-</div>
-<div class="card">
-<h3>Υγρασία</h3>
-<canvas id="gauge-hum"></canvas>
-</div>
-<div class="card">
-<h3>Βαρομετρική Πίεση</h3>
-<canvas id="gauge-press"></canvas>
-</div>
-<div class="card">
+<div class="card"><h3>Θερμοκρασία</h3><canvas id="gauge-temp"></canvas></div>
+<div class="card"><h3>Υγρασία</h3><canvas id="gauge-hum"></canvas></div>
+<div class="card"><h3>Πίεση</h3><canvas id="gauge-press"></canvas></div>
+<div class="card white-text-card">
 <h3>Βροχόπτωση (Live)</h3>
-<!-- Άσπρα γράμματα στη βροχόπτωση -->
-<div style="font-size: 4.5rem; font-weight: bold; color: white; margin: 15px 0;">
-<span id="r-val">--</span><span style="font-size: 1.5rem;">mm</span>
-</div>
-<small style="color: rgba(255,255,255,0.6);">Σημερινή καταγραφή</small>
+<div style="font-size: 4rem; font-weight: bold; color: white; margin: 20px 0;"><span id="r-val">--</span><span style="font-size: 1.5rem;">mm</span></div>
 </div>
 </div>
 
@@ -162,7 +81,7 @@ padding: 20px; background: rgba(0,0,0,0.3); border-radius: 15px; max-width: 1200
 <div class="dashboard">
 <div class="card widget-card">
 <h3 class="widget-title">Πρόγνωση: Νέος Μυλότοπος</h3>
-<iframe class="forecast-frame" src="https://www.meteoblue.com/el/weather/widget/three/neos-mylon-topos_%ce%95%ce%bb%ce%bb%ce%ac%ce%b4%ce%b1_844962?geoloc=fixed&nocurrent=0&noforecast=0&days=4&tempunit=CELSIUS&windunit=KILOMETER_PER_HOUR&layout=light" frameborder="0" scrolling="NO" allowtransparency="true"></iframe>
+<iframe class="forecast-frame" src="https://www.meteoblue.com/el/weather/widget/three/neos-mylon-topos_%ce%95%ce%bb%ce%bb%ce%ac%ce%b4%ce%b1_844962?geoloc=fixed&nocurrent=0&noforecast=0&days=4&tempunit=CELSIUS&windunit=KILOMETER_PER_HOUR&layout=light" frameborder="0" scrolling="NO"></iframe>
 </div>
 <div class="card widget-card">
 <h3 class="widget-title">Ζωντανό Ραντάρ Βροχής</h3>
@@ -170,113 +89,66 @@ padding: 20px; background: rgba(0,0,0,0.3); border-radius: 15px; max-width: 1200
 </div>
 </div>
 
-<h2 class="section-title">Ιστορικά Γραφήματα (24h)</h2>
+<h2 class="section-title">Ιστορικά Γραφήματα</h2>
 <div class="charts-dashboard">
-<div class="card">
-<h3 style="color: white;">Πορεία Θερμοκρασίας</h3>
-<div class="chart-container"><canvas id="chart-temp"></canvas></div>
-</div>
-<div class="card">
-<h3 style="color: white;">Πορεία Υγρασίας</h3>
-<div class="chart-container"><canvas id="chart-hum"></canvas></div>
-</div>
-<div class="card">
-<h3 style="color: white;">Πορεία Βροχόπτωσης</h3>
-<div class="chart-container"><canvas id="chart-rain"></canvas></div>
-</div>
+<div class="card white-text-card"><h3>Θερμοκρασία</h3><div style="height:200px"><canvas id="chart-temp"></canvas></div></div>
+<div class="card white-text-card"><h3>Υγρασία</h3><div style="height:200px"><canvas id="chart-hum"></canvas></div></div>
+<div class="card white-text-card"><h3>Βροχόπτωση</h3><div style="height:200px"><canvas id="chart-rain"></canvas></div></div>
 </div>
 
 <div class="bottom-dashboard">
-<div class="card">
-<h3>Μπαταρία Συστήματος</h3>
-<!-- Άσπρα γράμματα στη μπαταρία -->
-<div style="font-size: 3.5rem; font-weight: bold; color: white;">
-<span id="b-val">--</span><span style="font-size: 1.2rem;">%</span>
-</div>
-<div id="b-label" style="font-weight:bold; letter-spacing:1px;">--</div>
+<div class="card white-text-card">
+<h3>Μπαταρία Σταθμού</h3>
+<div style="font-size: 3rem; font-weight: bold; color: white;"><span id="b-val">--</span>%</div>
+<div id="b-label">--</div>
 </div>
 </div>
 
-<footer>
-&copy; 2026 Agro Meteo Ls | Σχεδιασμός & Ανάπτυξη: Χρήστος Τσαβαλακόγλου IoT Systems
-</footer>
+<footer>&copy; 2026 Agro Meteo Ls | Χρήστος Τσαβαλακόγλου</footer>
 </div>
 
 <script>
-// Ρυθμίσεις Γραφημάτων με Άσπρα Γράμματα (Ticks & Labels)
+// Ρυθμίσεις Γραφημάτων για Άσπρα Γράμματα
 Chart.defaults.color = '#ffffff';
-Chart.defaults.borderColor = 'rgba(255,255,255,0.1)';
 
 function createChart(canvasId, label, color) {
 return new Chart(document.getElementById(canvasId), {
 type: 'line',
-data: {
-labels: [],
-datasets: [{
-label: label,
-data: [],
-borderColor: color,
-backgroundColor: color + '33',
-fill: true,
-tension: 0.4
-}]
-},
+data: { labels: [], datasets: [{ label: label, data: [], borderColor: color, backgroundColor: color+'33', fill: true }] },
 options: {
 responsive: true,
 maintainAspectRatio: false,
-plugins: { legend: { display: false } },
 scales: {
-y: { ticks: { color: '#ffffff' }, grid: { color: 'rgba(255,255,255,0.1)' } },
-x: { ticks: { color: '#ffffff' }, grid: { display: false } }
+x: { ticks: { color: '#ffffff' } },
+y: { ticks: { color: '#ffffff' } }
 }
 }
 });
 }
 
-// Τα υπόλοιπα Gauges και Logic παραμένουν ίδια όπως τα κλειδώσαμε
-var gTemp = new RadialGauge({
-renderTo: 'gauge-temp', width: 240, height: 240, units: "°C", minValue: -10, maxValue: 60,
-colorPlate: "rgba(255,255,255,0.1)", colorNumbers: "#fff", colorUnits: "#fff", colorTitle: "#fff",
-needleType: "arrow", needleWidth: 3, borderShadowWidth: 0, borders: false,
-highlights: [{ from: -10, to: 0, color: "rgba(0,255,255,0.3)" }, { from: 35, to: 60, color: "rgba(255,0,0,0.3)" }]
-}).draw();
+var cTemp = createChart('chart-temp', '°C', '#ff4d4d');
+var cHum = createChart('chart-hum', '%', '#4da6ff');
+var cRain = createChart('chart-rain', 'mm', '#2ecc71');
 
-var gHum = new RadialGauge({
-renderTo: 'gauge-hum', width: 240, height: 240, units: "%", minValue: 0, maxValue: 100,
-colorPlate: "rgba(255,255,255,0.1)", colorNumbers: "#fff", colorUnits: "#fff",
-needleType: "arrow", borders: false
-}).draw();
-
-var gPress = new RadialGauge({
-renderTo: 'gauge-press', width: 240, height: 240, units: "hPa", minValue: 950, maxValue: 1050,
-colorPlate: "rgba(255,255,255,0.1)", colorNumbers: "#fff", colorUnits: "#fff",
-needleType: "arrow", borders: false
-}).draw();
-
-var cTemp = createChart('chart-temp', 'Θερμοκρασία', '#ff4d4d');
-var cHum = createChart('chart-hum', 'Υγρασία', '#4da6ff');
-var cRain = createChart('chart-rain', 'Βροχή', '#2ecc71');
+// Gauges (Όπως πριν)
+var gTemp = new RadialGauge({ renderTo: 'gauge-temp', width: 240, height: 240, units: "°C", minValue: -10, maxValue: 60 }).draw();
+var gHum = new RadialGauge({ renderTo: 'gauge-hum', width: 240, height: 240, units: "%", minValue: 0, maxValue: 100 }).draw();
+var gPress = new RadialGauge({ renderTo: 'gauge-press', width: 240, height: 240, units: "hPa", minValue: 950, maxValue: 1050 }).draw();
 
 function update() {
 const d = new Date();
 document.getElementById('clock').innerText = d.toLocaleTimeString('el-GR');
 document.getElementById('date').innerText = d.toLocaleDateString('el-GR', {weekday:'long', day:'numeric', month:'long'});
 
-fetch("https://api.thingspeak.com/channels/3365350/feeds.json?results=24")
+fetch("https://api.thingspeak.com/channels/3365350/feeds.json?results=20")
 .then(res => res.json())
 .then(data => {
 const last = data.feeds[data.feeds.length - 1];
-if(last.field1) gTemp.value = last.field1;
-if(last.field2) gHum.value = last.field2;
-if(last.field3) gPress.value = last.field3;
-if(last.field4) document.getElementById('r-val').innerText = parseFloat(last.field4).toFixed(2);
-
-let b = parseFloat(last.field5);
-document.getElementById('b-val').innerText = b.toFixed(0);
-let lbl = document.getElementById('b-label');
-if(b > 75) { lbl.innerText="ΙΣΧΥΡΗ"; lbl.style.color="#00FF00"; }
-else if(b > 30) { lbl.innerText="ΜΕΤΡΙΑ"; lbl.style.color="#FFA500"; }
-else { lbl.innerText="ΧΑΜΗΛΗ"; lbl.style.color="#FF4D4D"; }
+gTemp.value = last.field1;
+gHum.value = last.field2;
+gPress.value = last.field3;
+document.getElementById('r-val').innerText = parseFloat(last.field4 || 0).toFixed(2);
+document.getElementById('b-val').innerText = parseFloat(last.field5 || 0).toFixed(0);
 
 // Update Charts
 let labels = data.feeds.map(f => new Date(f.created_at).toLocaleTimeString('el-GR', {hour: '2-digit', minute:'2-digit'}));
@@ -285,8 +157,7 @@ cHum.data.labels = labels; cHum.data.datasets[0].data = data.feeds.map(f => f.fi
 cRain.data.labels = labels; cRain.data.datasets[0].data = data.feeds.map(f => f.field4); cRain.update();
 });
 }
-update();
-setInterval(update, 30000);
+update(); setInterval(update, 30000);
 </script>
 </body>
 </html>
