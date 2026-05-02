@@ -18,30 +18,32 @@ header { text-align: center; color: white; margin-bottom: 20px; }
 
 .ads-dashboard { max-width: 1200px; margin: 0 auto 20px auto; }
 
-/* --- ΑΛΛΑΓΗ: ΔΙΑΦΑΝΕΙΑ ΚΑΙ ΑΝΑΣΗΚΩΜΑ ΚΑΡΤΑΣ --- */
 .card {
-background: rgba(255, 255, 255, 0.15); /* Διαφάνεια */
-backdrop-filter: blur(10px); /* Θόλωμα πίσω από την κάρτα */
+background: rgba(255, 255, 255, 0.15);
+backdrop-filter: blur(10px);
 border-radius: 12px;
 padding: 15px;
 text-align: center;
 box-shadow: 0 8px 32px rgba(0,0,0,0.3);
 position: relative;
 overflow: hidden;
-transition: transform 0.3s ease, box-shadow 0.3s ease; /* Εφέ κίνησης */
+transition: transform 0.3s ease, box-shadow 0.3s ease;
 border: 1px solid rgba(255, 255, 255, 0.1);
+color: white; /* Όλα τα κείμενα λευκά */
 }
 
 .card:hover {
-transform: translateY(-10px); /* Ανασήκωμα */
+transform: translateY(-10px);
 box-shadow: 0 15px 40px rgba(0,0,0,0.5);
 }
 
-.card h3 { color: white; } /* Τίτλοι καρτών άσπροι */
+/* Διόρθωση για άσπρα mm και % */
+.card span, .card small { color: white !important; }
+
+.card h3 { color: white; }
 
 .info-card { background: rgba(45, 90, 39, 0.7) !important; color: white !important; text-align: left !important; }
 
-/* --- ΑΛΛΑΓΗ: ΑΣΠΡΑ ΓΡΑΜΜΑΤΑ ΣΕ ΡΟΛΟΙ, ΒΡΟΧΗ, ΜΠΑΤΑΡΙΑ --- */
 #clock, #date, #r-val, #b-val, #reset-msg { color: white !important; }
 
 .slideshow-container { position: relative; width: 100%; height: 200px; max-height: 250px; overflow: hidden; border-radius: 8px; margin-top: 10px; display: flex; justify-content: center; align-items: center; background: rgba(255,255,255,0.1); }
@@ -192,7 +194,6 @@ max-width: 1200px; font-size: 0.9rem; border: 1px solid rgba(255, 255, 255, 0.2)
 </div>
 
 <script>
-// Ο ΚΩΔΙΚΑΣ ΣΟΥ ΠΑΡΑΜΕΝΕΙ 100% Ο ΙΔΙΟΣ
 let currentSlide = 0;
 const slides = document.querySelectorAll('#ad-slider img');
 function nextSlide() {
@@ -243,18 +244,32 @@ highlights: [
 colorPlate: "#fff", borders: true, needleType: "arrow", needleWidth: 4, animationDuration: 1500
 }).draw();
 
-function createChart(canvasId, label, color) {
+function createChart(canvasId, label, color, minVal = null, maxVal = null) {
 return new Chart(document.getElementById(canvasId), {
 type: 'line',
 data: { labels: [], datasets: [{ label: label, data: [], borderColor: color, backgroundColor: color + '22', borderWidth: 3, tension: 0.3, fill: true }] },
-options: { responsive: true, maintainAspectRatio: false, scales: { x: { grid: { display: false }, ticks: { color: '#ffffff' } }, y: { grid: { color: 'rgba(255,255,255,0.1)' }, ticks: { color: '#ffffff' } } }, plugins: { legend: { labels: { color: '#fff' } } } }
+options: {
+responsive: true,
+maintainAspectRatio: false,
+scales: {
+x: { grid: { display: false }, ticks: { color: '#ffffff' } },
+y: {
+min: minVal, // Διόρθωση για τη βροχή
+max: maxVal, // Διόρθωση για τη βροχή
+grid: { color: 'rgba(255,255,255,0.1)' },
+ticks: { color: '#ffffff' }
+}
+},
+plugins: { legend: { labels: { color: '#fff' } } }
+}
 });
 }
 
 var cTemp = createChart('chart-temp', 'Θερμοκρασία (°C)', '#d53a35');
 var cHum = createChart('chart-hum', 'Υγρασία (%)', '#2f89fc');
 var cPress = createChart('chart-press', 'Πίεση (hPa)', '#ff9f43');
-var cRain = createChart('chart-rain', 'Βροχόπτωση (mm)', '#28a745');
+// Κλείδωμα άξονα βροχής 0 έως 50
+var cRain = createChart('chart-rain', 'Βροχόπτωση (mm)', '#28a745', 0, 50);
 
 function update() {
 const d = new Date();
