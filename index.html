@@ -74,22 +74,6 @@ max-width: 1200px; font-size: 0.9rem; border: 1px solid rgba(255, 255, 255, 0.2)
 </div>
 </div>
 
-<h2 class="section-title">Πρόγνωση & Ραντάρ</h2>
-<div class="dashboard">
-<!-- ΝΕΟ ΚΟΥΤΑΚΙ ΠΡΟΓΝΩΣΗΣ -->
-<div class="card" style="padding: 10px; display: flex; flex-direction: column; justify-content: center;">
-<a class="weatherwidget-io" href="https://forecast7.com/el/40d8022d40/neos-mylon-topos/" data-label_1="ΝΕΟΣ ΜΥΛΟΤΟΠΟΣ" data-label_2="ΠΡΟΓΝΩΣΗ ΚΑΙΡΟΥ" data-font="Arial" data-icons="Climacons Animated" data-theme="pure" >ΝΕΟΣ ΜΥΛΟΤΟΠΟΣ ΠΡΟΓΝΩΣΗ</a>
-<script>
-!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src='https://weatherwidget.io/js/widget.min.js';fjs.parentNode.insertBefore(js,fjs);}}(document,'script','weatherwidget-io-js');
-</script>
-</div>
-
-<div class="card" style="padding: 0; overflow: hidden; min-height: 350px;">
-<h3 style="position: absolute; top: 10px; left: 15px; margin: 0; z-index: 10; color: white; background: rgba(0,0,0,0.5); padding: 2px 5px; border-radius: 4px;">Ζωντανό Ραντάρ Βροχής (RainViewer)</h3>
-<iframe src="https://www.rainviewer.com/map.html?loc=40.7922,22.39,12&oFa=0&oC=1&oU=0&oF=0&oSt=1&oT=1&oB=1&oP=1&oR=1&oS=0&oW=0&mT=3&ls=1&lm=1&th=1&oN=1" width="100%" height="350" frameborder="0" style="border:0; border-radius: 12px;" allowfullscreen></iframe>
-</div>
-</div>
-
 <div class="dashboard">
 <div class="card">
 <h3>Γεωργικές Προειδοποιήσεις</h3>
@@ -118,6 +102,22 @@ max-width: 1200px; font-size: 0.9rem; border: 1px solid rgba(255, 255, 255, 0.2)
 <h3>Βροχόπτωση (Live)</h3>
 <div style="font-size: 4rem; font-weight: bold; color: #111; margin: 20px 0;"><span id="r-val">--</span><span style="font-size: 1.5rem;">mm</span></div>
 <small id="reset-msg" style="color: #666;">Μηδενίζει αυτόματα στις 00:00</small>
+</div>
+</div>
+
+<!-- Η ΠΡΟΓΝΩΣΗ ΚΑΙ ΤΟ ΡΑΝΤΑΡ ΜΠΗΚΑΝ ΕΔΩ ΚΑΤΩ ΟΠΩΣ ΖΗΤΗΣΕΣ -->
+<h2 class="section-title">Πρόγνωση & Ραντάρ</h2>
+<div class="dashboard">
+<!-- ΝΕΑ ΠΡΟΓΝΩΣΗ OPENWEATHER -->
+<div class="card" style="padding: 10px; min-height: 350px; display: flex; align-items: center; justify-content: center;">
+<div id="openweathermap-widget-15"></div>
+<script>window.myWidgetParam ? window.myWidgetParam : window.myWidgetParam = []; window.myWidgetParam.push({id: 15,cityid: '256428',appid: 'e51969282200ef6ef9149f87459ef4e1',units: 'metric',containerid: 'openweathermap-widget-15', }); (function() {var script = document.createElement('script');script.async = true;script.charset = "utf-8";script.src = "//openweathermap.org/themes/openweathermap/assets/vendor/owm/js/widget-main.js";var s = document.getElementsByTagName('script')[0];s.parentNode.insertBefore(script, s); })();</script>
+</div>
+
+<!-- ΡΑΝΤΑΡ ΒΡΟΧΗΣ -->
+<div class="card" style="padding: 0; overflow: hidden; min-height: 350px;">
+<h3 style="position: absolute; top: 10px; left: 15px; margin: 0; z-index: 10; color: white; background: rgba(0,0,0,0.5); padding: 2px 5px; border-radius: 4px;">Ζωντανό Ραντάρ Βροχής</h3>
+<iframe src="https://www.rainviewer.com/map.html?loc=40.7922,22.39,12&oFa=0&oC=1&oU=0&oF=0&oSt=1&oT=1&oB=1&oP=1&oR=1&oS=0&oW=0&mT=3&ls=1&lm=1&th=1&oN=1" width="100%" height="350" frameborder="0" style="border:0; border-radius: 12px;" allowfullscreen></iframe>
 </div>
 </div>
 
