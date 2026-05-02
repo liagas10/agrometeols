@@ -30,9 +30,9 @@ canvas { max-width: 100%; height: auto; }
 #status-badge { font-weight: bold; padding: 2px 8px; border-radius: 4px; }
 .section-title { width: 100%; max-width: 1200px; margin: 20px auto 10px auto; color: white; border-left: 5px solid #fff; padding-left: 10px; }
 
-/* ΤΟ ΝΕΟ ΣΤΥΛ ΓΙΑ ΤΗ ΛΟΥΡΙΔΑ ΚΑΤΩ */
+/* ΤΟ FOOTER ΚΕΝΤΡΑΡΙΣΜΕΝΟ */
 footer {
-text-align: right;
+text-align: center; /* Κεντράρισμα κειμένου */
 color: #ffffff;
 margin: 30px auto 10px auto;
 padding: 12px 25px;
@@ -42,6 +42,7 @@ border-radius: 10px;
 max-width: 1200px;
 font-size: 0.9rem;
 border: 1px solid rgba(255, 255, 255, 0.2);
+box-sizing: border-box;
 }
 </style>
 </head>
@@ -198,7 +199,7 @@ highlights: [
 colorPlate: "#fff", borders: true, needleType: "arrow", needleWidth: 4, animationDuration: 1500
 }).draw();
 
-// Charts Initialisation
+// Charts
 function createChart(canvasId, label, color) {
 return new Chart(document.getElementById(canvasId), {
 type: 'line',
