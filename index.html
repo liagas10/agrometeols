@@ -6,9 +6,6 @@
 <title>Agro Meteo Ls</title>
 <script src="https://cdn.rawgit.com/Mikhus/canvas-gauges/gh-pages/download/2.1.7/all/gauge.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<!-- Προσθήκη Leaflet για τον χάρτη -->
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
 body { margin: 0; padding: 0; background: #2d5a27 url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1920&q=80') no-repeat center center fixed; background-size: cover; font-family: sans-serif; }
 .overlay { min-height: 100vh; background: rgba(0,0,0,0.4); padding: 20px; box-sizing: border-box; }
@@ -84,8 +81,6 @@ max-width: 1200px; font-size: 0.9rem; border: 1px solid rgba(255, 255, 255, 0.2)
 .widget-title { margin: 15px 0; font-size: 1.2rem; color: #ffffff !important; text-align: center; }
 .forecast-frame { width: 100%; height: 380px; border: none; border-radius: 12px; }
 .radar-frame { width: 100%; height: 380px; border: none; border-radius: 12px; }
-/* Στυλ για τον χάρτη */
-#map { width: 100%; height: 380px; border-radius: 12px; }
 </style>
 </head>
 <body>
@@ -160,15 +155,6 @@ max-width: 1200px; font-size: 0.9rem; border: 1px solid rgba(255, 255, 255, 0.2)
 <div class="card widget-card">
 <h3 class="widget-title">Ζωντανό Ραντάρ Βροχής</h3>
 <iframe class="radar-frame" src="https://www.rainviewer.com/map.html?loc=40.7922,22.39,11&oFa=0&oC=1&oU=0&oF=0&oSt=1&oT=1&oB=1&oP=1&oR=1&oS=0&oW=0&mT=3&ls=1&lm=1&th=1&oN=1" allowfullscreen></iframe>
-</div>
-</div>
-
-<!-- ΝΕΑ ΕΝΟΤΗΤΑ GPS MAP -->
-<h2 class="section-title">Τοποθεσία Σταθμού (Live GPS)</h2>
-<div class="dashboard">
-<div class="card widget-card" style="min-height: 450px;">
-<h3 class="widget-title">Ακριβές Στίγμα Χάρτη</h3>
-<div id="map"></div>
 </div>
 </div>
 
@@ -294,13 +280,6 @@ var cHum = createChart('chart-hum', 'Υγρασία (%)', '#2f89fc');
 var cPress = createChart('chart-press', 'Πίεση (hPa)', '#ff9f43');
 var cRain = createChart('chart-rain', 'Βροχόπτωση (mm)', '#28a745', 0, 50);
 
-// Αρχικοποίηση Χάρτη
-var map = L.map('map').setView([40.7922, 22.39], 13);
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-attribution: '© Agro Meteo LS'
-}).addTo(map);
-var marker = L.marker([40.7922, 22.39]).addTo(map).bindPopup('Agro Meteo LS');
-
 function update() {
 const d = new Date();
 const curHour = d.getHours();
@@ -326,27 +305,19 @@ const now = new Date();
 const diffMinutes = (now - lastSeen) / 1000 / 60;
 const statusBadge = document.getElementById('status-badge');
 
+/* --- ΑΛΛΑΓΗ ΜΟΝΟ ΣΤΗΝ ΚΑΤΑΣΤΑΣΗ ONLINE/OFFLINE --- */
 if (diffMinutes < 20) {
 statusBadge.innerText = "ONLINE";
-statusBadge.style.backgroundColor = "#00ff00";
+statusBadge.style.backgroundColor = "#00ff00"; // Πράσινο έντονο
 } else {
 statusBadge.innerText = "OFFLINE";
-statusBadge.style.backgroundColor = "#ff0000";
+statusBadge.style.backgroundColor = "#ff0000"; // Κόκκινο έντονο
 }
+/* -------------------------------------------------- */
 
 if(last.field1) gTemp.value = last.field1;
 if(last.field2) gHum.value = last.field2;
 if(last.field3) gPress.value = last.field3;
-
-// Update GPS Map from Field 8
-if(last.field8 && last.field8 !== "0") {
-const p = last.field8.split(',');
-const latR = parseFloat(p[0]), lonR = parseFloat(p[2]);
-const lat = Math.floor(latR / 100) + ((latR % 100) / 60);
-const lon = Math.floor(lonR / 100) + ((lonR % 100) / 60);
-marker.setLatLng([lat, lon]);
-map.setView([lat, lon]);
-}
 
 const alertBox = document.getElementById('alert-box');
 if (temp <= 2) {
