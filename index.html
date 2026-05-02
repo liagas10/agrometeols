@@ -10,19 +10,30 @@
 body { margin: 0; padding: 0; background: #2d5a27 url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1920&q=80') no-repeat center center fixed; background-size: cover; font-family: sans-serif; }
 .overlay { min-height: 100vh; background: rgba(0,0,0,0.4); padding: 20px; box-sizing: border-box; }
 header { text-align: center; color: white; margin-bottom: 20px; }
-.dashboard { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px; max-width: 1200px; margin: 0 auto; }
+
+/* Dashboard για τις κάρτες πληροφοριών και τα ρολόγια */
+.dashboard { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px; max-width: 1200px; margin: 0 auto 20px auto; }
+
+/* Dashboard ειδικά για τα γραφήματα (λίγο μεγαλύτερα panels) */
+.charts-dashboard { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 15px; max-width: 1200px; margin: 0 auto; }
+
 .card { background: rgba(255, 255, 255, 0.95); border-radius: 12px; padding: 15px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
 .info-card { background: rgba(45, 90, 39, 0.95) !important; color: white !important; text-align: left !important; }
-.chart-frame { height: 160px; margin-top: 10px; border-radius: 5px; overflow: hidden; background: white; border: 1px solid #ccc; }
+
+/* ΑΥΞΗΣΗ ΜΕΓΕΘΟΥΣ ΓΡΑΦΗΜΑΤΩΝ */
+.chart-frame { height: 260px; margin-top: 10px; border-radius: 5px; overflow: hidden; background: white; border: 1px solid #ccc; }
+
 iframe { width: 100%; height: 100%; border: none; }
 footer { text-align: center; color: white; margin-top: 20px; padding: 10px; background: rgba(0,0,0,0.5); }
 canvas { max-width: 240px; width: 100%; height: auto; }
 #status-badge { font-weight: bold; padding: 2px 8px; border-radius: 4px; }
+.section-title { width: 100%; max-width: 1200px; margin: 20px auto 10px auto; color: white; border-left: 5px solid #fff; padding-left: 10px; }
 </style>
 </head>
 <body>
 <div class="overlay">
 <header><h1>Agro Meteo Ls</h1></header>
+
 <div class="dashboard">
 <!-- 1. ΣΤΑΘΜΟΣ -->
 <div class="card info-card">
@@ -45,34 +56,6 @@ canvas { max-width: 240px; width: 100%; height: auto; }
 <p>Υψηλότερη Πίεση: <span id="p-max">--</span> <span id="p-max-t"></span> | Χαμηλότερη: <span id="p-min">--</span> <span id="p-min-t"></span></p>
 </div>
 
-<!-- ΘΕΡΜΟΚΡΑΣΙΑ -->
-<div class="card">
-<h3>Θερμοκρασία</h3>
-<canvas id="gauge-temp"></canvas>
-<div class="chart-frame"><iframe src="https://thingspeak.com/channels/3365350/charts/1?results=15&color=%232d5a27"></iframe></div>
-</div>
-
-<!-- ΥΓΡΑΣΙΑ -->
-<div class="card">
-<h3>Υγρασία</h3>
-<canvas id="gauge-hum"></canvas>
-<div class="chart-frame"><iframe src="https://thingspeak.com/channels/3365350/charts/2?results=15&color=%232d5a27"></iframe></div>
-</div>
-
-<!-- ΠΙΕΣΗ -->
-<div class="card">
-<h3>Βαρομετρική πίεση</h3>
-<canvas id="gauge-press"></canvas>
-<div class="chart-frame"><iframe src="https://thingspeak.com/channels/3365350/charts/3?results=15&color=%232d5a27"></iframe></div>
-</div>
-
-<!-- ΒΡΟΧΗ -->
-<div class="card">
-<h3>Βροχόπτωση</h3>
-<div style="font-size: 3rem; font-weight: bold; color: #111;"><span id="r-val">--</span><span style="font-size: 1.2rem;">mm</span></div>
-<div class="chart-frame"><iframe src="https://thingspeak.com/channels/3365350/charts/4?results=15&color=%232d5a27&type=column"></iframe></div>
-</div>
-
 <!-- ΜΠΑΤΑΡΙΑ -->
 <div class="card">
 <h3>Μπαταρία Σταθμού</h3>
@@ -80,11 +63,66 @@ canvas { max-width: 240px; width: 100%; height: auto; }
 <div id="b-label" style="font-weight:bold">--</div>
 </div>
 </div>
+
+<h2 class="section-title">Τρέχουσες Ενδείξεις</h2>
+<div class="dashboard">
+<!-- ΘΕΡΜΟΚΡΑΣΙΑ GAUGE -->
+<div class="card">
+<h3>Θερμοκρασία</h3>
+<canvas id="gauge-temp"></canvas>
+</div>
+
+<!-- ΥΓΡΑΣΙΑ GAUGE -->
+<div class="card">
+<h3>Υγρασία</h3>
+<canvas id="gauge-hum"></canvas>
+</div>
+
+<!-- ΠΙΕΣΗ GAUGE -->
+<div class="card">
+<h3>Βαρομετρική πίεση</h3>
+<canvas id="gauge-press"></canvas>
+</div>
+
+<!-- ΒΡΟΧΗ ΤΙΜΗ -->
+<div class="card">
+<h3>Βροχόπτωση</h3>
+<div style="font-size: 3rem; font-weight: bold; color: #111;"><span id="r-val">--</span><span style="font-size: 1.2rem;">mm</span></div>
+</div>
+</div>
+
+<h2 class="section-title">Ιστορικά Γραφήματα</h2>
+<div class="charts-dashboard">
+<!-- ΓΡΑΦΗΜΑ ΘΕΡΜΟΚΡΑΣΙΑΣ -->
+<div class="card">
+<h3>Πορεία Θερμοκρασίας</h3>
+<div class="chart-frame"><iframe src="https://thingspeak.com/channels/3365350/charts/1?results=15&color=%232d5a27"></iframe></div>
+</div>
+
+<!-- ΓΡΑΦΗΜΑ ΥΓΡΑΣΙΑΣ -->
+<div class="card">
+<h3>Πορεία Υγρασίας</h3>
+<div class="chart-frame"><iframe src="https://thingspeak.com/channels/3365350/charts/2?results=15&color=%232d5a27"></iframe></div>
+</div>
+
+<!-- ΓΡΑΦΗΜΑ ΠΙΕΣΗΣ -->
+<div class="card">
+<h3>Πορεία Πίεσης</h3>
+<div class="chart-frame"><iframe src="https://thingspeak.com/channels/3365350/charts/3?results=15&color=%232d5a27"></iframe></div>
+</div>
+
+<!-- ΓΡΑΦΗΜΑ ΒΡΟΧΗΣ -->
+<div class="card">
+<h3>Πορεία Βροχόπτωσης</h3>
+<div class="chart-frame"><iframe src="https://thingspeak.com/channels/3365350/charts/4?results=15&color=%232d5a27&type=column"></iframe></div>
+</div>
+</div>
+
 <footer>&copy; 2026 Agro Meteo Ls | Προγραμματισμός Χρήστος Τσαβαλακόγλου Iot System</footer>
 </div>
 
 <script>
-// Ρυθμίσεις Θερμοκρασίας
+// ΤΟ JAVASCRIPT ΣΟΥ ΠΑΡΑΜΕΝΕΙ 100% ΤΟ ΙΔΙΟ
 var gTemp = new RadialGauge({
 renderTo: 'gauge-temp', width: 240, height: 240, units: "°C", minValue: -10, maxValue: 60,
 majorTicks: ["-10","0","10","20","30","40","50","60"], minorTicks: 2, strokeTicks: true,
@@ -100,7 +138,6 @@ colorPlate: "#fff", borderShadowWidth: 0, borders: true, needleType: "arrow", ne
 needleCircleSize: 7, needleCircleOuter: true, needleCircleInner: false, animationDuration: 1500, animationRule: "linear"
 }).draw();
 
-// Ρυθμίσεις Υγρασίας
 var gHum = new RadialGauge({
 renderTo: 'gauge-hum', width: 240, height: 240, units: "%", minValue: 0, maxValue: 100,
 majorTicks: ["0","10","20","30","40","50","60","70","80","90","100"], minorTicks: 2, strokeTicks: true,
@@ -114,7 +151,6 @@ highlights: [
 colorPlate: "#fff", borders: true, needleType: "arrow", needleWidth: 4, animationDuration: 1500
 }).draw();
 
-// Ρυθμίσεις Πίεσης
 var gPress = new RadialGauge({
 renderTo: 'gauge-press', width: 240, height: 240, units: "hPa", minValue: 950, maxValue: 1050,
 majorTicks: ["950","960","970","980","990","1000","1010","1020","1030","1040","1050"],
@@ -138,7 +174,6 @@ fetch("https://api.thingspeak.com/channels/3365350/feeds.json?results=80")
 const feeds = data.feeds;
 const last = feeds[feeds.length - 1];
 
-// Έλεγχος Online/Offline (αν η μέτρηση είναι παλαιότερη από 20 λεπτά)
 const lastSeen = new Date(last.created_at);
 const now = new Date();
 const diffMinutes = (now - lastSeen) / 1000 / 60;
@@ -146,13 +181,12 @@ const statusBadge = document.getElementById('status-badge');
 
 if (diffMinutes < 20) {
 statusBadge.innerText = "ONLINE";
-statusBadge.style.color = "#00FF00"; // Έντονο πράσινο
+statusBadge.style.color = "#00FF00";
 } else {
 statusBadge.innerText = "OFFLINE";
-statusBadge.style.color = "#FF0000"; // Κόκκινο
+statusBadge.style.color = "#FF0000";
 }
 
-// Ενημέρωση Οργάνων
 if(last.field1) gTemp.value = last.field1;
 if(last.field2) gHum.value = last.field2;
 if(last.field3) gPress.value = last.field3;
@@ -165,7 +199,6 @@ if(b > 75) { lbl.innerText="ΚΑΛΗ"; lbl.style.color="green"; }
 else if(b > 30) { lbl.innerText="ΜΕΤΡΙΑ"; lbl.style.color="orange"; }
 else { lbl.innerText="ΧΑΜΗΛΗ"; lbl.style.color="red"; }
 
-// Ακρότατα
 let tArr = feeds.filter(f => f.field1 != null).map(f => ({v: parseFloat(f.field1), t: f.created_at}));
 let hArr = feeds.filter(f => f.field2 != null).map(f => ({v: parseFloat(f.field2), t: f.created_at}));
 let pArr = feeds.filter(f => f.field3 != null).map(f => ({v: parseFloat(f.field3), t: f.created_at}));
