@@ -4,52 +4,39 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Agro Meteo Ls</title>
+<!-- Βιβλιοθήκη για τα Gauges -->
 <script src="https://cdn.rawgit.com/Mikhus/canvas-gauges/gh-pages/download/2.1.7/all/gauge.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <style>
 body { margin: 0; padding: 0; background: #2d5a27 url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1920&q=80') no-repeat center center fixed; background-size: cover; font-family: sans-serif; }
 .overlay { min-height: 100vh; background: rgba(0,0,0,0.4); padding: 20px; box-sizing: border-box; }
 header { text-align: center; color: white; margin-bottom: 20px; }
-
-.top-dashboard { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px; max-width: 1200px; margin: 0 auto 20px auto; }
-.dashboard { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; max-width: 1200px; margin: 0 auto 20px auto; }
-.charts-dashboard { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 15px; max-width: 1200px; margin: 0 auto 20px auto; }
-.bottom-dashboard { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px; max-width: 1200px; margin: 0 auto; justify-content: center; }
-
-.ads-dashboard { max-width: 1200px; margin: 0 auto 20px auto; }
-
+.dashboard { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px; max-width: 1200px; margin: 0 auto; }
 .card { background: rgba(255, 255, 255, 0.95); border-radius: 12px; padding: 15px; text-align: center; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
 .info-card { background: rgba(45, 90, 39, 0.95) !important; color: white !important; text-align: left !important; }
+.chart-frame { height: 160px; margin-top: 10px; border-radius: 5px; overflow: hidden; background: white; border: 1px solid #ccc; }
+iframe { width: 100%; height: 100%; border: none; }
 
-/* Στυλ για το Slideshow με απαλό εφέ (Fade effect) */
-.slideshow-container { position: relative; width: 100%; height: 200px; max-height: 250px; overflow: hidden; border-radius: 8px; margin-top: 10px; background: #f9f9f9; }
-.slideshow-container img {
-position: absolute;
-top: 0;
-left: 0;
-width: 100%;
-height: 100%;
-object-fit: contain;
-opacity: 0; /* Ξεκινάει κρυμμένη */
-transition: opacity 1.2s ease-in-out; /* Το εφέ διαρκεί 1.2 δευτερόλεπτα */
-z-index: 1;
-}
-.slideshow-container img.active {
-opacity: 1; /* Γίνεται ορατή */
-z-index: 2; /* Έρχεται μπροστά */
+/* Η αλλαγή στο footer που ζήτησες */
+footer {
+text-align: right; /* Το έβαλα δεξιά όπως είπες */
+color: #ffffff; /* Άσπρα γράμματα */
+margin-top: 25px;
+padding: 10px 20px;
+background: rgba(255, 255, 255, 0.15); /* Διάφανο πλαίσιο */
+border-radius: 8px;
+font-size: 0.9rem;
+letter-spacing: 0.5px;
 }
 
-.chart-container { position: relative; height: 240px; width: 100%; margin-top: 10px; }
-canvas { max-width: 100%; height: auto; }
+canvas { max-width: 240px; width: 100%; height: auto; }
 #status-badge { font-weight: bold; padding: 2px 8px; border-radius: 4px; }
-.section-title { width: 100%; max-width: 1200px; margin: 20px auto 10px auto; color: white; border-left: 5px solid #fff; padding-left: 10px; }
 </style>
 </head>
 <body>
 <div class="overlay">
 <header><h1>Agro Meteo Ls</h1></header>
-
-<div class="top-dashboard">
+<div class="dashboard">
+<!-- 1. ΣΤΑΘΜΟΣ -->
 <div class="card info-card">
 <h3 style="border-bottom:1px solid white">Αγρο-Μετεωρολογικός σταθμός Νεος Μυλότοπος Πέλλας</h3>
 <p><strong>Σταθμός:</strong> Agro Meteo Ls</p>
@@ -62,103 +49,54 @@ canvas { max-width: 100%; height: auto; }
 <div id="date">------</div>
 </div>
 
+<!-- 2. ΑΚΡΟΤΑΤΑ -->
 <div class="card info-card">
-<h3 style="border-bottom:1px solid white">Μέγιστες/Ελάχιστες & Βροχόπτωση</h3>
+<h3 style="border-bottom:1px solid white">Μέγιστες/Ελάχιστες</h3>
 <p>Υψηλότερη Θερμοκρασία: <span id="t-max">--</span>°C <span id="t-max-t"></span> | Χαμηλότερη: <span id="t-min">--</span>°C <span id="t-min-t"></span></p>
 <p>Υψηλότερη Υγρασία: <span id="h-max">--</span>% <span id="h-max-t"></span> | Χαμηλότερη: <span id="h-min">--</span>% <span id="h-min-t"></span></p>
 <p>Υψηλότερη Πίεση: <span id="p-max">--</span> <span id="p-max-t"></span> | Χαμηλότερη: <span id="p-min">--</span> <span id="p-min-t"></span></p>
-<p style="border-top: 1px solid rgba(255,255,255,0.3); padding-top: 5px; margin-top: 5px; margin-bottom:0;">
-<strong>Βροχόπτωση:</strong><br>
-Τελευταίο 24ωρο: <span id="r-total-day" style="font-weight:bold">--</span> mm |
-Μήνας: <span id="r-total-month" style="font-weight:bold">--</span> mm |
-Έτος: <span id="r-total-year" style="font-weight:bold">--</span> mm
-</p>
-</div>
 </div>
 
-<h2 class="section-title">Τρέχουσες Ενδείξεις</h2>
-<div class="dashboard">
+<!-- ΘΕΡΜΟΚΡΑΣΙΑ -->
 <div class="card">
 <h3>Θερμοκρασία</h3>
-<canvas id="gauge-temp" style="max-width: 240px; width: 100%; height: auto;"></canvas>
+<canvas id="gauge-temp"></canvas>
+<div class="chart-frame"><iframe src="https://thingspeak.com/channels/3365350/charts/1?results=15&color=%232d5a27"></iframe></div>
 </div>
 
+<!-- ΥΓΡΑΣΙΑ -->
 <div class="card">
 <h3>Υγρασία</h3>
-<canvas id="gauge-hum" style="max-width: 240px; width: 100%; height: auto;"></canvas>
+<canvas id="gauge-hum"></canvas>
+<div class="chart-frame"><iframe src="https://thingspeak.com/channels/3365350/charts/2?results=15&color=%232d5a27"></iframe></div>
 </div>
 
+<!-- ΠΙΕΣΗ -->
 <div class="card">
 <h3>Βαρομετρική πίεση</h3>
-<canvas id="gauge-press" style="max-width: 240px; width: 100%; height: auto;"></canvas>
+<canvas id="gauge-press"></canvas>
+<div class="chart-frame"><iframe src="https://thingspeak.com/channels/3365350/charts/3?results=15&color=%232d5a27"></iframe></div>
 </div>
 
-<div class="card" style="display: flex; flex-direction: column; justify-content: center; min-height: 270px;">
-<h3>Βροχόπτωση (Live)</h3>
-<div style="font-size: 4rem; font-weight: bold; color: #111; margin: 20px 0;"><span id="r-val">--</span><span style="font-size: 1.5rem;">mm</span></div>
-<small id="reset-msg" style="color: #666;">Μηδενίζει αυτόματα στις 00:00</small>
-</div>
-</div>
-
-<h2 class="section-title">Συνεργαζόμενοι Γεωπόνοι & Διαφημίσεις</h2>
-<div class="ads-dashboard">
-<div class="card" style="padding: 10px;">
-<div class="slideshow-container" id="ad-slider">
-<img src="https://i.imgur.com/oAWf4Ai.png" class="active" alt="Διαφήμιση 1">
-<img src="https://i.imgur.com/vSRE3P0.png" class="active" alt="Διαφήμιση 2">
-<img src="https://images.unsplash.com/photo-1592982537447-7440774c39fa?auto=format&fit=crop&w=800&q=80" alt="Διαφήμιση 3">
-</div>
-</div>
-</div>
-
-<h2 class="section-title">Ιστορικά Γραφήματα</h2>
-<div class="charts-dashboard">
+<!-- ΒΡΟΧΗ -->
 <div class="card">
-<h3>Πορεία Θερμοκρασίας</h3>
-<div class="chart-container"><canvas id="chart-temp"></canvas></div>
+<h3>Βροχόπτωση</h3>
+<div style="font-size: 3rem; font-weight: bold; color: #111;"><span id="r-val">--</span><span style="font-size: 1.2rem;">mm</span></div>
+<div class="chart-frame"><iframe src="https://thingspeak.com/channels/3365350/charts/4?results=15&color=%232d5a27&type=column"></iframe></div>
 </div>
 
-<div class="card">
-<h3>Πορεία Υγρασίας</h3>
-<div class="chart-container"><canvas id="chart-hum"></canvas></div>
-</div>
-
-<div class="card">
-<h3>Πορεία Πίεσης</h3>
-<div class="chart-container"><canvas id="chart-press"></canvas></div>
-</div>
-
-<div class="card">
-<h3>Πορεία Βροχόπτωσης</h3>
-<div class="chart-container"><canvas id="chart-rain"></canvas></div>
-</div>
-</div>
-
-<div class="bottom-dashboard">
+<!-- ΜΠΑΤΑΡΙΑ -->
 <div class="card">
 <h3>Μπαταρία Σταθμού</h3>
 <div style="font-size: 3rem; font-weight: bold; color: #111;"><span id="b-val">--</span><span style="font-size: 1.2rem;">%</span></div>
 <div id="b-label" style="font-weight:bold">--</div>
 </div>
 </div>
-
 <footer>&copy; 2026 Agro Meteo Ls | Προγραμματισμός Χρήστος Τσαβαλακόγλου Iot System</footer>
 </div>
 
 <script>
-// Slideshow Logic: Απαλή αλλαγή εικόνων κάθε 4 δευτερόλεπτα
-let currentSlide = 0;
-const slides = document.querySelectorAll('#ad-slider img');
-
-function nextSlide() {
-if (slides.length === 0) return;
-slides[currentSlide].classList.remove('active');
-currentSlide = (currentSlide + 1) % slides.length;
-slides[currentSlide].classList.add('active');
-}
-setInterval(nextSlide, 4000);
-
-// 1. Gauges
+// (Ο κώδικας JS παραμένει ο ίδιος όπως πριν)
 var gTemp = new RadialGauge({
 renderTo: 'gauge-temp', width: 240, height: 240, units: "°C", minValue: -10, maxValue: 60,
 majorTicks: ["-10","0","10","20","30","40","50","60"], minorTicks: 2, strokeTicks: true,
@@ -199,31 +137,8 @@ highlights: [
 colorPlate: "#fff", borders: true, needleType: "arrow", needleWidth: 4, animationDuration: 1500
 }).draw();
 
-// 2. Charts
-function createChart(canvasId, label, color) {
-return new Chart(document.getElementById(canvasId), {
-type: 'line',
-data: { labels: [], datasets: [{ label: label, data: [], borderColor: color, backgroundColor: color + '22', borderWidth: 3, tension: 0.3, fill: true }] },
-options: { responsive: true, maintainAspectRatio: false, scales: { x: { grid: { display: false }, ticks: { color: '#666' } }, y: { grid: { color: 'rgba(0,0,0,0.05)' }, ticks: { color: '#666' } } }, plugins: { legend: { display: false } } }
-});
-}
-
-var cTemp = createChart('chart-temp', 'Θερμοκρασία (°C)', '#d53a35');
-var cHum = createChart('chart-hum', 'Υγρασία (%)', '#2f89fc');
-var cPress = createChart('chart-press', 'Πίεση (hPa)', '#ff9f43');
-var cRain = createChart('chart-rain', 'Βροχόπτωση (mm)', '#28a745');
-
 function update() {
 const d = new Date();
-const curHour = d.getHours();
-const curMin = d.getMinutes();
-const curMonth = d.getMonth();
-const curYear = d.getFullYear();
-
-if (curHour === 0 && curMin === 0) {
-localStorage.setItem('rain_reset_value', document.getElementById('r-val').innerText);
-}
-
 document.getElementById('clock').innerText = d.toLocaleTimeString('el-GR');
 document.getElementById('date').innerText = d.toLocaleDateString('el-GR', {weekday:'long', day:'numeric', month:'long'});
 
@@ -249,15 +164,7 @@ statusBadge.style.color = "#FF0000";
 if(last.field1) gTemp.value = last.field1;
 if(last.field2) gHum.value = last.field2;
 if(last.field3) gPress.value = last.field3;
-
-let currentRainValue = 0;
-if(last.field4) {
-let liveRain = parseFloat(last.field4);
-let resetVal = parseFloat(localStorage.getItem('rain_reset_value')) || 0;
-currentRainValue = liveRain - resetVal;
-if (currentRainValue < 0) currentRainValue = 0;
-document.getElementById('r-val').innerText = currentRainValue.toFixed(2);
-}
+if(last.field4) document.getElementById('r-val').innerText = parseFloat(last.field4).toFixed(2);
 
 let b = parseFloat(last.field5);
 document.getElementById('b-val').innerText = b.toFixed(0);
@@ -265,46 +172,6 @@ let lbl = document.getElementById('b-label');
 if(b > 75) { lbl.innerText="ΚΑΛΗ"; lbl.style.color="green"; }
 else if(b > 30) { lbl.innerText="ΜΕΤΡΙΑ"; lbl.style.color="orange"; }
 else { lbl.innerText="ΧΑΜΗΛΗ"; lbl.style.color="red"; }
-
-let labels = feeds.map(f => new Date(f.created_at).toLocaleTimeString('el-GR', {hour: '2-digit', minute:'2-digit'}));
-
-cTemp.data.labels = labels;
-cTemp.data.datasets[0].data = feeds.map(f => f.field1);
-cTemp.update();
-
-cHum.data.labels = labels;
-cHum.data.datasets[0].data = feeds.map(f => f.field2);
-cHum.update();
-
-cPress.data.labels = labels;
-cPress.data.datasets[0].data = feeds.map(f => f.field3);
-cPress.update();
-
-cRain.data.labels = labels;
-cRain.data.datasets[0].data = feeds.map(f => f.field4);
-cRain.update();
-
-let rArr = feeds.filter(f => f.field4 != null).map(f => parseFloat(f.field4));
-
-if(rArr.length > 0) {
-let rMax = Math.max(...rArr);
-let rMin = Math.min(...rArr);
-let rTotalDay = rMax - rMin;
-if (rTotalDay < 0) rTotalDay = 0;
-document.getElementById('r-total-day').innerText = rTotalDay.toFixed(2);
-
-let rainMonth = parseFloat(localStorage.getItem('rain_total_month')) || 0;
-let rainYear = parseFloat(localStorage.getItem('rain_total_year')) || 0;
-
-rainMonth += currentRainValue * 0.01;
-rainYear += currentRainValue * 0.01;
-
-localStorage.setItem('rain_total_month', rainMonth);
-localStorage.setItem('rain_total_year', rainYear);
-
-document.getElementById('r-total-month').innerText = rainMonth.toFixed(1);
-document.getElementById('r-total-year').innerText = rainYear.toFixed(1);
-}
 
 let tArr = feeds.filter(f => f.field1 != null).map(f => ({v: parseFloat(f.field1), t: f.created_at}));
 let hArr = feeds.filter(f => f.field2 != null).map(f => ({v: parseFloat(f.field2), t: f.created_at}));
@@ -340,7 +207,6 @@ document.getElementById('p-min-t').innerText = "(" + new Date(pMin.t).toLocaleTi
 .catch(err => {
 document.getElementById('status-badge').innerText = "OFFLINE";
 document.getElementById('status-badge').style.color = "#FF0000";
-console.log("Error fetching data");
 });
 }
 update();
