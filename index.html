@@ -6,18 +6,13 @@
 <title>Agro Meteo Ls</title>
 <script src="https://cdn.rawgit.com/Mikhus/canvas-gauges/gh-pages/download/2.1.7/all/gauge.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<!-- Προσθήκη Leaflet για τον χάρτη -->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <style>
 body { margin: 0; padding: 0; background: #2d5a27 url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?auto=format&fit=crop&w=1920&q=80') no-repeat center center fixed; background-size: cover; font-family: sans-serif; }
 .overlay { min-height: 100vh; background: rgba(0,0,0,0.4); padding: 20px; box-sizing: border-box; }
-
-/* --- PREMIUM LOGO SECTION --- */
-header { text-align: center; color: white; margin-bottom: 30px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-.logo-container { display: flex; align-items: center; gap: 15px; background: rgba(255,255,255,0.1); padding: 15px 30px; border-radius: 50px; backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.2); box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
-.logo-svg { filter: drop-shadow(0 0 5px rgba(0,255,0,0.5)); }
-.logo-text-wrapper { text-align: left; line-height: 1; }
-.logo-text-wrapper h1 { margin: 0; font-size: 2.2rem; letter-spacing: 1px; text-transform: uppercase; font-weight: 800; }
-.logo-text-wrapper span { color: #00ff00; font-size: 1.1rem; font-weight: bold; letter-spacing: 6px; text-transform: uppercase; }
-/* ---------------------------- */
+header { text-align: center; color: white; margin-bottom: 20px; }
 
 .top-dashboard { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px; max-width: 1200px; margin: 0 auto 20px auto; }
 .dashboard { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; max-width: 1200px; margin: 0 auto 20px auto; }
@@ -89,27 +84,13 @@ max-width: 1200px; font-size: 0.9rem; border: 1px solid rgba(255, 255, 255, 0.2)
 .widget-title { margin: 15px 0; font-size: 1.2rem; color: #ffffff !important; text-align: center; }
 .forecast-frame { width: 100%; height: 380px; border: none; border-radius: 12px; }
 .radar-frame { width: 100%; height: 380px; border: none; border-radius: 12px; }
+/* Στυλ για τον χάρτη */
+#map { width: 100%; height: 380px; border-radius: 12px; }
 </style>
 </head>
 <body>
 <div class="overlay">
-<header>
-<div class="logo-container">
-<div class="logo-svg">
-<svg width="60" height="60" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M50 5L85 40L50 75L15 40L50 5Z" stroke="white" stroke-width="2"/>
-<path d="M50 15L75 40L50 65L25 40L50 15Z" fill="#00ff00" fill-opacity="0.6"/>
-<path d="M50 10V40" stroke="white" stroke-width="3" stroke-linecap="round"/>
-<circle cx="50" cy="40" r="5" fill="white"/>
-<path d="M30 60C40 55 60 55 70 60" stroke="#00ff00" stroke-width="4" stroke-linecap="round"/>
-</svg>
-</div>
-<div class="logo-text-wrapper">
-<h1>Agro Meteo</h1>
-<span>Ls System</span>
-</div>
-</div>
-</header>
+<header><h1>Agro Meteo Ls</h1></header>
 
 <div class="top-dashboard">
 <div class="card info-card">
@@ -179,6 +160,15 @@ max-width: 1200px; font-size: 0.9rem; border: 1px solid rgba(255, 255, 255, 0.2)
 <div class="card widget-card">
 <h3 class="widget-title">Ζωντανό Ραντάρ Βροχής</h3>
 <iframe class="radar-frame" src="https://www.rainviewer.com/map.html?loc=40.7922,22.39,11&oFa=0&oC=1&oU=0&oF=0&oSt=1&oT=1&oB=1&oP=1&oR=1&oS=0&oW=0&mT=3&ls=1&lm=1&th=1&oN=1" allowfullscreen></iframe>
+</div>
+</div>
+
+<!-- ΝΕΑ ΕΝΟΤΗΤΑ GPS MAP -->
+<h2 class="section-title">Τοποθεσία Σταθμού (Live GPS)</h2>
+<div class="dashboard">
+<div class="card widget-card" style="min-height: 450px;">
+<h3 class="widget-title">Ακριβές Στίγμα Χάρτη</h3>
+<div id="map"></div>
 </div>
 </div>
 
@@ -304,6 +294,13 @@ var cHum = createChart('chart-hum', 'Υγρασία (%)', '#2f89fc');
 var cPress = createChart('chart-press', 'Πίεση (hPa)', '#ff9f43');
 var cRain = createChart('chart-rain', 'Βροχόπτωση (mm)', '#28a745', 0, 50);
 
+// Αρχικοποίηση Χάρτη
+var map = L.map('map').setView([40.7922, 22.39], 13);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+attribution: '© Agro Meteo LS'
+}).addTo(map);
+var marker = L.marker([40.7922, 22.39]).addTo(map).bindPopup('Agro Meteo LS');
+
 function update() {
 const d = new Date();
 const curHour = d.getHours();
@@ -329,19 +326,27 @@ const now = new Date();
 const diffMinutes = (now - lastSeen) / 1000 / 60;
 const statusBadge = document.getElementById('status-badge');
 
-/* --- ΑΛΛΑΓΗ ΜΟΝΟ ΣΤΗΝ ΚΑΤΑΣΤΑΣΗ ONLINE/OFFLINE --- */
 if (diffMinutes < 20) {
 statusBadge.innerText = "ONLINE";
-statusBadge.style.backgroundColor = "#00ff00"; // Πράσινο έντονο
+statusBadge.style.backgroundColor = "#00ff00";
 } else {
 statusBadge.innerText = "OFFLINE";
-statusBadge.style.backgroundColor = "#ff0000"; // Κόκκινο έντονο
+statusBadge.style.backgroundColor = "#ff0000";
 }
-/* -------------------------------------------------- */
 
 if(last.field1) gTemp.value = last.field1;
 if(last.field2) gHum.value = last.field2;
 if(last.field3) gPress.value = last.field3;
+
+// Update GPS Map from Field 8
+if(last.field8 && last.field8 !== "0") {
+const p = last.field8.split(',');
+const latR = parseFloat(p[0]), lonR = parseFloat(p[2]);
+const lat = Math.floor(latR / 100) + ((latR % 100) / 60);
+const lon = Math.floor(lonR / 100) + ((lonR % 100) / 60);
+marker.setLatLng([lat, lon]);
+map.setView([lat, lon]);
+}
 
 const alertBox = document.getElementById('alert-box');
 if (temp <= 2) {
