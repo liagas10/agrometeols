@@ -532,21 +532,22 @@ let rMin = Math.min(...rArr);
 let rTotalDay = rMax - rMin;
 document.getElementById('r-total-day').innerText = (rTotalDay > 0 ? rTotalDay : 0).toFixed(2);
 
-/* --- ΝΕΑ ΠΡΟΣΘΗΚΗ ΜΟΝΟ ΓΙΑ METADATA --- */
-if(data.channel.metadata) {
+// --- Η ΔΙΟΡΘΩΣΗ ΓΙΑ ΜΗΝΑ / ΕΤΟΣ ΑΠΟ ΤΟ METADATA ---
+if (data.channel.metadata) {
 try {
 let meta = JSON.parse(data.channel.metadata);
-let mVal = meta.month || 0;
-let yVal = meta.year || 0;
+let mVal = parseFloat(meta.month) || 0;
+let yVal = parseFloat(meta.year) || 0;
+
 document.getElementById('r-total-month').innerText = mVal.toFixed(1);
 document.getElementById('r-total-year').innerText = yVal.toFixed(1);
-document.getElementById('bar-month').style.height = Math.min((mVal / 50) * 100, 100) + "%";
 document.getElementById('val-month').innerText = mVal.toFixed(1);
-document.getElementById('bar-year').style.height = Math.min((yVal / 300) * 100, 100) + "%";
 document.getElementById('val-year').innerText = yVal.toFixed(1);
-} catch(e) { console.log("Metadata error"); }
+
+document.getElementById('bar-month').style.height = Math.min((mVal / 50) * 100, 100) + "%";
+document.getElementById('bar-year').style.height = Math.min((yVal / 300) * 100, 100) + "%";
+} catch(e) { console.log("Metadata formatting..."); }
 }
-/* -------------------------------------- */
 }
 
 let tArr = feeds.filter(f => f.field1 != null).map(f => ({v: parseFloat(f.field1), t: f.created_at}));
