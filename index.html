@@ -89,26 +89,34 @@ max-width: 1200px; font-size: 0.9rem; border: 1px solid rgba(255, 255, 255, 0.2)
 .widget-title { margin: 15px 0; font-size: 1.2rem; color: #ffffff !important; text-align: center; }
 .forecast-frame { width: 100%; height: 380px; border: none; border-radius: 12px; }
 .radar-frame { width: 100%; height: 380px; border: none; border-radius: 12px; }
+
+/* NEW RAIN BARS STYLING */
+.rain-bars-container { display: flex; justify-content: space-between; align-items: flex-end; gap: 5px; margin-top: 15px; padding: 10px; background: rgba(0,0,0,0.2); border-radius: 8px; }
+.rain-bar-wrapper { flex: 1; display: flex; flex-direction: column; align-items: center; }
+.rain-bar-label { font-size: 0.65rem; color: #eee; margin-bottom: 4px; text-align: center; height: 25px; display: flex; align-items: center; }
+.rain-bar-track { width: 25px; height: 80px; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.3); position: relative; border-radius: 2px; }
+.rain-bar-fill { width: 100%; background: #3498db; position: absolute; bottom: 0; transition: height 0.5s ease; box-shadow: 0 0 8px rgba(52,152,219,0.5); }
+.rain-bar-value { font-size: 0.7rem; margin-top: 4px; font-weight: bold; }
 </style>
 </head>
 <body>
 <div class="overlay">
 <header>
-  <div class="logo-container">
-    <div class="logo-svg">
-      <svg width="60" height="60" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M50 5L85 40L50 75L15 40L50 5Z" stroke="white" stroke-width="2"/>
-        <path d="M50 15L75 40L50 65L25 40L50 15Z" fill="#00ff00" fill-opacity="0.6"/>
-        <path d="M50 10V40" stroke="white" stroke-width="3" stroke-linecap="round"/>
-        <circle cx="50" cy="40" r="5" fill="white"/>
-        <path d="M30 60C40 55 60 55 70 60" stroke="#00ff00" stroke-width="4" stroke-linecap="round"/>
-      </svg>
-    </div>
-    <div class="logo-text-wrapper">
-      <h1>Agro Meteo</h1>
-      <span>Ls System</span>
-    </div>
-  </div>
+<div class="logo-container">
+<div class="logo-svg">
+<svg width="60" height="60" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M50 5L85 40L50 75L15 40L50 5Z" stroke="white" stroke-width="2"/>
+<path d="M50 15L75 40L50 65L25 40L50 15Z" fill="#00ff00" fill-opacity="0.6"/>
+<path d="M50 10V40" stroke="white" stroke-width="3" stroke-linecap="round"/>
+<circle cx="50" cy="40" r="5" fill="white"/>
+<path d="M30 60C40 55 60 55 70 60" stroke="#00ff00" stroke-width="4" stroke-linecap="round"/>
+</svg>
+</div>
+<div class="logo-text-wrapper">
+<h1>Agro Meteo</h1>
+<span>Ls System</span>
+</div>
+</div>
 </header>
 
 <div class="top-dashboard">
@@ -129,12 +137,36 @@ max-width: 1200px; font-size: 0.9rem; border: 1px solid rgba(255, 255, 255, 0.2)
 <p>Υψηλότερη Θερμοκρασία: <span id="t-max">--</span>°C <span id="t-max-t"></span> | Χαμηλότερη: <span id="t-min">--</span>°C <span id="t-min-t"></span></p>
 <p>Υψηλότερη Υγρασία: <span id="h-max">--</span>% <span id="h-max-t"></span> | Χαμηλότερη: <span id="h-min">--</span>% <span id="h-min-t"></span></p>
 <p>Υψηλότερη Πίεση: <span id="p-max">--</span> <span id="p-max-t"></span> | Χαμηλότερη: <span id="p-min">--</span> <span id="p-min-t"></span></p>
-<p style="border-top: 1px solid rgba(255,255,255,0.3); padding-top: 5px; margin-top: 5px; margin-bottom:0;">
+<div style="border-top: 1px solid rgba(255,255,255,0.3); padding-top: 5px; margin-top: 5px; margin-bottom:0;">
 <strong>Βροχόπτωση:</strong><br>
-Τελευταίο 24ωρο: <span id="r-total-day" style="font-weight:bold">--</span> mm |
-Μήνας: <span id="r-total-month" style="font-weight:bold">--</span> mm |
-Έτος: <span id="r-total-year" style="font-weight:bold">--</span> mm
-</p>
+<div class="rain-bars-container">
+<div class="rain-bar-wrapper">
+<div class="rain-bar-label">Day<br>Rain</div>
+<div class="rain-bar-track"><div id="bar-day" class="rain-bar-fill" style="height: 0%;"></div></div>
+<div class="rain-bar-value"><span id="r-total-day">0.0</span></div>
+</div>
+<div class="rain-bar-wrapper">
+<div class="rain-bar-label">Storm<br>Rain</div>
+<div class="rain-bar-track"><div id="bar-storm" class="rain-bar-fill" style="height: 0%;"></div></div>
+<div class="rain-bar-value"><span id="r-storm">0.0</span></div>
+</div>
+<div class="rain-bar-wrapper">
+<div class="rain-bar-label">Rain<br>Rate</div>
+<div class="rain-bar-track"><div id="bar-rate" class="rain-bar-fill" style="height: 0%; background: #e74c3c;"></div></div>
+<div class="rain-bar-value"><span id="r-rate">0.0</span></div>
+</div>
+<div class="rain-bar-wrapper">
+<div class="rain-bar-label">Month<br>Rain</div>
+<div class="rain-bar-track"><div id="bar-month" class="rain-bar-fill" style="height: 0%;"></div></div>
+<div class="rain-bar-value"><span id="r-total-month">0.0</span></div>
+</div>
+<div class="rain-bar-wrapper">
+<div class="rain-bar-label">Year<br>Rain</div>
+<div class="rain-bar-track"><div id="bar-year" class="rain-bar-fill" style="height: 0%;"></div></div>
+<div class="rain-bar-value"><span id="r-total-year">0.0</span></div>
+</div>
+</div>
+</div>
 </div>
 </div>
 
@@ -329,15 +361,13 @@ const now = new Date();
 const diffMinutes = (now - lastSeen) / 1000 / 60;
 const statusBadge = document.getElementById('status-badge');
 
-/* --- ΑΛΛΑΓΗ ΜΟΝΟ ΣΤΗΝ ΚΑΤΑΣΤΑΣΗ ONLINE/OFFLINE --- */
 if (diffMinutes < 20) {
 statusBadge.innerText = "ONLINE";
-statusBadge.style.backgroundColor = "#00ff00"; // Πράσινο έντονο
+statusBadge.style.backgroundColor = "#00ff00";
 } else {
 statusBadge.innerText = "OFFLINE";
-statusBadge.style.backgroundColor = "#ff0000"; // Κόκκινο έντονο
+statusBadge.style.backgroundColor = "#ff0000";
 }
-/* -------------------------------------------------- */
 
 if(last.field1) gTemp.value = last.field1;
 if(last.field2) gHum.value = last.field2;
@@ -390,9 +420,23 @@ if(rArr.length > 0) {
 let rMax = Math.max(...rArr);
 let rMin = Math.min(...rArr);
 let rTotalDay = rMax - rMin;
-document.getElementById('r-total-day').innerText = (rTotalDay > 0 ? rTotalDay : 0).toFixed(2);
-document.getElementById('r-total-month').innerText = (parseFloat(localStorage.getItem('rain_total_month')) || 0).toFixed(1);
-document.getElementById('r-total-year').innerText = (parseFloat(localStorage.getItem('rain_total_year')) || 0).toFixed(1);
+if (rTotalDay < 0) rTotalDay = 0;
+
+// Υπολογισμοί για τις μπάρες
+let rMonth = parseFloat(localStorage.getItem('rain_total_month')) || 0;
+let rYear = parseFloat(localStorage.getItem('rain_total_year')) || 0;
+let rRateVal = 0; // Αν έχεις πεδίο για rate, το βάζεις εδώ
+
+document.getElementById('r-total-day').innerText = rTotalDay.toFixed(2);
+document.getElementById('r-total-month').innerText = rMonth.toFixed(1);
+document.getElementById('r-total-year').innerText = rYear.toFixed(1);
+
+// Ενημέρωση των γραφικών Bars (κλίμακες βάσει image.png)
+document.getElementById('bar-day').style.height = Math.min((rTotalDay / 1.0) * 100, 100) + "%";
+document.getElementById('bar-storm').style.height = "0%"; // Placeholder αν δεν υπάρχει storm
+document.getElementById('bar-rate').style.height = "0%"; // Placeholder για rate
+document.getElementById('bar-month').style.height = Math.min((rMonth / 10.0) * 100, 100) + "%";
+document.getElementById('bar-year').style.height = Math.min((rYear / 300.0) * 100, 100) + "%";
 }
 
 let tArr = feeds.filter(f => f.field1 != null).map(f => ({v: parseFloat(f.field1), t: f.created_at}));
