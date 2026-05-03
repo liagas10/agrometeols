@@ -13,6 +13,7 @@ body { margin: 0; padding: 0; background: #2d5a27 url('https://images.unsplash.c
 /* --- PREMIUM LOGO SECTION --- */
 header { text-align: center; color: white; margin-bottom: 30px; display: flex; flex-direction: column; align-items: center; justify-content: center; }
 .logo-container { display: flex; align-items: center; gap: 15px; background: rgba(255,255,255,0.1); padding: 15px 30px; border-radius: 50px; backdrop-filter: blur(5px); border: 1px solid rgba(255,255,255,0.2); box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
+.logo-svg { filter: drop-shadow(0 0 5px rgba(0,255,0,0.5)); }
 .logo-text-wrapper { text-align: left; line-height: 1; }
 .logo-text-wrapper h1 { margin: 0; font-size: 2.2rem; letter-spacing: 1px; text-transform: uppercase; font-weight: 800; }
 .logo-text-wrapper span { color: #00ff00; font-size: 1.1rem; font-weight: bold; letter-spacing: 6px; text-transform: uppercase; }
@@ -22,11 +23,15 @@ header { text-align: center; color: white; margin-bottom: 30px; display: flex; f
 .dashboard { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; max-width: 1200px; margin: 0 auto 20px auto; }
 .charts-dashboard { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 15px; max-width: 1200px; margin: 0 auto 20px auto; }
 .bottom-dashboard { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 15px; max-width: 1200px; margin: 0 auto; justify-content: center; }
+.ads-dashboard { max-width: 1200px; margin: 0 auto 20px auto; }
 
-.card { background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(10px); border-radius: 12px; padding: 15px; text-align: center; box-shadow: 0 8px 32px rgba(0,0,0,0.3); position: relative; border: 1px solid rgba(255, 255, 255, 0.1); color: white; }
+.card { background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(10px); border-radius: 12px; padding: 15px; text-align: center; box-shadow: 0 8px 32px rgba(0,0,0,0.3); position: relative; overflow: hidden; transition: transform 0.3s ease, box-shadow 0.3s ease; border: 1px solid rgba(255, 255, 255, 0.1); color: white; }
+.card:hover { transform: translateY(-10px); box-shadow: 0 15px 40px rgba(0,0,0,0.5); }
+.card span, .card small { color: white !important; }
+.card h3 { color: white; }
 .info-card { background: rgba(45, 90, 39, 0.7) !important; color: white !important; text-align: left !important; }
 
-/* --- RAIN GAUGES CSS (IMAGE_9 STYLE) --- */
+/* --- RAIN GAUGES CSS (IMAGE 9 STYLE) --- */
 .rain-container { display: flex; justify-content: space-between; gap: 4px; margin-top: 10px; }
 .rain-box { flex: 1; background: #e0e0e0; border: 1px solid #000; border-radius: 2px; display: flex; flex-direction: column; align-items: center; padding-bottom: 5px; min-width: 0; }
 .rain-box h4 { background: #2d5a27; color: white; width: 100%; margin: 0; padding: 3px 0; font-size: 0.6rem; text-align: center; border-bottom: 1px solid #000; font-weight: bold; }
@@ -34,38 +39,46 @@ header { text-align: center; color: white; margin-bottom: 30px; display: flex; f
 .gauge-well { width: 18px; height: 100%; background: #fff; border: 1px solid #000; position: relative; }
 .gauge-fill { width: 100%; background: #0099ff; position: absolute; bottom: 0; height: 0%; transition: height 1s ease; }
 .gauge-fill.red { background: red !important; }
-
 .scale-side { display: flex; flex-direction: column; justify-content: space-between; height: 100%; font-size: 0.5rem; color: #000; padding: 0 1px; font-weight: bold; }
 .scale-side span { position: relative; width: 18px; text-align: center; }
 .scale-l span::after { content: ""; position: absolute; right: -4px; top: 50%; width: 4px; height: 1px; background: #000; }
 .scale-r span::before { content: ""; position: absolute; left: -4px; top: 50%; width: 4px; height: 1px; background: #000; }
-
 .rain-footer { font-size: 0.5rem; color: #000; text-align: center; margin-top: 2px; line-height: 1.1; font-family: monospace; }
 .rain-footer b { font-size: 0.55rem; }
 
-/* --- OTHER ELEMENTS --- */
-#clock, #date, #r-val, #b-val { color: white !important; }
+/* --- REST OF STYLES --- */
+#clock, #date, #r-val, #b-val, #reset-msg { color: white !important; }
+.slideshow-container { position: relative; width: 100%; height: 200px; max-height: 250px; overflow: hidden; border-radius: 8px; margin-top: 10px; display: flex; justify-content: center; align-items: center; background: rgba(255,255,255,0.1); }
+.slideshow-container img { max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; display: none; transition: opacity 0.5s ease-in-out; }
+.slideshow-container img.active { display: block; }
 .chart-container { position: relative; height: 240px; width: 100%; margin-top: 10px; }
+#status-badge { font-weight: bold; padding: 5px 15px; border-radius: 4px; color: white !important; text-transform: uppercase; display: inline-block; margin-left: 5px; }
 .section-title { width: 100%; max-width: 1200px; margin: 20px auto 10px auto; color: white; border-left: 5px solid #fff; padding-left: 10px; }
 #alert-box { font-weight: bold; padding: 15px; border-radius: 8px; margin-top: 10px; border: 2px solid transparent; color: white !important; }
-.alert-normal { background: rgba(0, 128, 0, 0.4); border-color: rgba(255,255,255,0.2); }
-.alert-danger { background: rgba(255, 0, 0, 0.5); border-color: rgba(255,255,255,0.2); animation: blink 2s infinite; }
+.alert-normal { background: rgba(0, 128, 0, 0.4); border-color: rgba(255,255,255,0.2) !important; }
+.alert-danger { background: rgba(255, 0, 0, 0.5); border-color: rgba(255,255,255,0.2) !important; animation: blink 2s infinite; }
+.alert-warning { background: rgba(255, 165, 0, 0.5); border-color: rgba(255,255,255,0.2) !important; }
 @keyframes blink { 0% {opacity: 1;} 50% {opacity: 0.7;} 100% {opacity: 1;} }
-
-.slideshow-container { position: relative; width: 100%; height: 200px; overflow: hidden; border-radius: 8px; margin-top: 10px; background: rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; }
-.slideshow-container img { max-width: 100%; max-height: 100%; display: none; }
-.slideshow-container img.active { display: block; }
-
-.widget-card { padding: 0 !important; background: transparent !important; box-shadow: none !important; min-height: 400px; }
-.forecast-frame, .radar-frame { width: 100%; height: 380px; border: none; border-radius: 12px; }
-
-footer { text-align: center; color: #ffffff; margin: 30px auto 10px auto; padding: 15px; background: rgba(255, 255, 255, 0.15); border-radius: 10px; max-width: 1200px; border: 1px solid rgba(255, 255, 255, 0.2); }
+footer { text-align: center; color: #ffffff; margin: 30px auto 10px auto; padding: 12px 25px; background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(5px); border-radius: 10px; max-width: 1200px; font-size: 0.9rem; border: 1px solid rgba(255, 255, 255, 0.2); box-sizing: border-box; }
+.widget-card { padding: 0 !important; background: transparent !important; box-shadow: none !important; border-radius: 12px; min-height: 450px; }
+.widget-title { margin: 15px 0; font-size: 1.2rem; color: #ffffff !important; text-align: center; }
+.forecast-frame { width: 100%; height: 380px; border: none; border-radius: 12px; }
+.radar-frame { width: 100%; height: 380px; border: none; border-radius: 12px; }
 </style>
 </head>
 <body>
 <div class="overlay">
 <header>
 <div class="logo-container">
+<div class="logo-svg">
+<svg width="60" height="60" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M50 5L85 40L50 75L15 40L50 5Z" stroke="white" stroke-width="2"/>
+<path d="M50 15L75 40L50 65L25 40L50 15Z" fill="#00ff00" fill-opacity="0.6"/>
+<path d="M50 10V40" stroke="white" stroke-width="3" stroke-linecap="round"/>
+<circle cx="50" cy="40" r="5" fill="white"/>
+<path d="M30 60C40 55 60 55 70 60" stroke="#00ff00" stroke-width="4" stroke-linecap="round"/>
+</svg>
+</div>
 <div class="logo-text-wrapper">
 <h1>Agro Meteo</h1>
 <span>Ls System</span>
@@ -75,18 +88,22 @@ footer { text-align: center; color: #ffffff; margin: 30px auto 10px auto; paddin
 
 <div class="top-dashboard">
 <div class="card info-card">
-<h3 style="border-bottom:1px solid white">Αγρο-Μετεωρολογικός σταθμός Νεος Μυλότοπος</h3>
+<h3 style="border-bottom:1px solid white">Αγρο-Μετεωρολογικός σταθμός Νεος Μυλότοπος Πέλλας</h3>
 <p><strong>Σταθμός:</strong> Agro Meteo Ls</p>
 <p><strong>Ιδιοκτησία:</strong> Χρήστος Τσαβαλακόγλου</p>
-<p><strong>Κατάσταση:</strong> <span id="status-badge" style="padding:2px 8px; border-radius:4px; font-weight:bold;">ΕΛΕΓΧΟΣ...</span></p>
+<p><strong>Υψόμετρο:</strong> 40m</p>
+<p><strong>Επίβλεψη:</strong> Χρήστος Τσαβαλακόγλου</p>
+<p><strong>Κατάσταση:</strong> <span id="status-badge">ΕΛΕΓΧΟΣ...</span></p>
+<p><strong>Λειτουργία:</strong> 24 ώρες το 24ωρο</p>
 <div id="clock" style="font-size:1.8rem; font-weight:bold">--:--:--</div>
 <div id="date">------</div>
 </div>
 
 <div class="card info-card">
 <h3 style="border-bottom:1px solid white">Μέγιστες/Ελάχιστες & Βροχόπτωση</h3>
-<p>Θερμοκρασία: Max <span id="t-max">--</span>° | Min <span id="t-min">--</span>°</p>
-<p>Υγρασία: Max <span id="h-max">--</span>% | Min <span id="h-min">--</span>%</p>
+<p>Υψηλότερη Θερμοκρασία: <span id="t-max">--</span>°C <span id="t-max-t"></span> | Χαμηλότερη: <span id="t-min">--</span>°C <span id="t-min-t"></span></p>
+<p>Υψηλότερη Υγρασία: <span id="h-max">--</span>% <span id="h-max-t"></span> | Χαμηλότερη: <span id="h-min">--</span>% <span id="h-min-t"></span></p>
+<p>Υψηλότερη Πίεση: <span id="p-max">--</span> <span id="p-max-t"></span> | Χαμηλότερη: <span id="p-min">--</span> <span id="p-min-t"></span></p>
 <p style="border-top: 1px solid rgba(255,255,255,0.3); padding-top: 5px; margin-top: 5px; margin-bottom:0;"><strong>Βροχόπτωση:</strong></p>
 
 <div class="rain-container">
@@ -97,7 +114,7 @@ footer { text-align: center; color: #ffffff; margin: 30px auto 10px auto; paddin
 <div class="gauge-well"><div id="fill-day" class="gauge-fill"></div></div>
 <div class="scale-side scale-r"><span>1.0</span><span>0.8</span><span>0.6</span><span>0.4</span><span>0.2</span><span>0.0</span></div>
 </div>
-<div class="rain-footer">Current: <b id="cur-day">0.0</b><br><span class="live-time">--/--/-- --:--</span></div>
+<div class="rain-footer">Current: <b id="cur-day">0.00</b><br><span class="live-time">--/--/-- --:--</span></div>
 </div>
 <div class="rain-box">
 <h4>Storm Rain (mm)</h4>
@@ -106,7 +123,7 @@ footer { text-align: center; color: #ffffff; margin: 30px auto 10px auto; paddin
 <div class="gauge-well"><div id="fill-storm" class="gauge-fill"></div></div>
 <div class="scale-side scale-r"><span>1.0</span><span>0.8</span><span>0.6</span><span>0.4</span><span>0.2</span><span>0.0</span></div>
 </div>
-<div class="rain-footer">Current: <b>0.0</b><br><span class="live-time">--/--/-- --:--</span></div>
+<div class="rain-footer">Current: <b>0.00</b><br><span class="live-time">--/--/-- --:--</span></div>
 </div>
 <div class="rain-box">
 <h4>Rain Rate (mm/h)</h4>
@@ -115,25 +132,25 @@ footer { text-align: center; color: #ffffff; margin: 30px auto 10px auto; paddin
 <div class="gauge-well"><div id="fill-rate" class="gauge-fill red"></div></div>
 <div class="scale-side scale-r"><span>25.0</span><span>20.0</span><span>15.0</span><span>10.0</span><span>5.0</span><span>0.0</span></div>
 </div>
-<div class="rain-footer">Current: <b>0.0</b><br><span class="live-time">--/--/-- --:--</span></div>
+<div class="rain-footer">Current: <b>0.00</b><br><span class="live-time">--/--/-- --:--</span></div>
 </div>
 <div class="rain-box">
 <h4>Month Rain (mm)</h4>
 <div class="gauge-wrapper">
-<div class="scale-side scale-l"><span>10</span><span>8</span><span>6</span><span>4</span><span>2</span><span>0</span></div>
+<div class="scale-side scale-l"><span>50</span><span>40</span><span>30</span><span>20</span><span>10</span><span>0</span></div>
 <div class="gauge-well"><div id="fill-month" class="gauge-fill"></div></div>
-<div class="scale-side scale-r"><span>10</span><span>8</span><span>6</span><span>4</span><span>2</span><span>0</span></div>
+<div class="scale-side scale-r"><span>50</span><span>40</span><span>30</span><span>20</span><span>10</span><span>0</span></div>
 </div>
-<div class="rain-footer">Current: <b id="cur-month">0.0</b><br><span class="live-time">--/--/-- --:--</span></div>
+<div class="rain-footer">Current: <b id="r-total-month">0.0</b><br><span class="live-time">--/--/-- --:--</span></div>
 </div>
 <div class="rain-box">
 <h4>Year Rain (mm)</h4>
 <div class="gauge-wrapper">
-<div class="scale-side scale-l"><span>300</span><span>240</span><span>180</span><span>120</span><span>60</span><span>0</span></div>
+<div class="scale-side scale-l"><span>400</span><span>320</span><span>240</span><span>160</span><span>80</span><span>0</span></div>
 <div class="gauge-well"><div id="fill-year" class="gauge-fill"></div></div>
-<div class="scale-side scale-r"><span>300</span><span>240</span><span>180</span><span>120</span><span>60</span><span>0</span></div>
+<div class="scale-side scale-r"><span>400</span><span>320</span><span>240</span><span>160</span><span>80</span><span>0</span></div>
 </div>
-<div class="rain-footer">Current: <b id="cur-year">240.0</b><br><span class="live-time">--/--/-- --:--</span></div>
+<div class="rain-footer">Current: <b id="r-total-year">0.0</b><br><span class="live-time">--/--/-- --:--</span></div>
 </div>
 </div>
 </div>
@@ -142,37 +159,41 @@ footer { text-align: center; color: #ffffff; margin: 30px auto 10px auto; paddin
 <div class="dashboard">
 <div class="card">
 <h3>Γεωργικές Προειδοποιήσεις</h3>
-<div id="alert-box" class="alert-normal">Σύνδεση...</div>
+<div id="alert-box" class="alert-normal">Φόρτωση δεδομένων...</div>
 </div>
 </div>
 
 <h2 class="section-title">Τρέχουσες Ενδείξεις</h2>
 <div class="dashboard">
-<div class="card"><h3>Θερμοκρασία</h3><canvas id="gauge-temp"></canvas></div>
-<div class="card"><h3>Υγρασία</h3><canvas id="gauge-hum"></canvas></div>
-<div class="card"><h3>Πίεση</h3><canvas id="gauge-press"></canvas></div>
-<div class="card">
+<div class="card"><h3>Θερμοκρασία</h3><canvas id="gauge-temp" style="max-width: 240px; width: 100%; height: auto;"></canvas></div>
+<div class="card"><h3>Υγρασία</h3><canvas id="gauge-hum" style="max-width: 240px; width: 100%; height: auto;"></canvas></div>
+<div class="card"><h3>Βαρομετρική πίεση</h3><canvas id="gauge-press" style="max-width: 240px; width: 100%; height: auto;"></canvas></div>
+<div class="card" style="display: flex; flex-direction: column; justify-content: center; min-height: 270px;">
 <h3>Βροχόπτωση (Live)</h3>
-<div style="font-size: 4rem; font-weight: bold; margin: 20px 0;"><span id="r-val">--</span><small style="font-size:1.5rem">mm</small></div>
+<div style="font-size: 4rem; font-weight: bold; margin: 20px 0;"><span id="r-val">--</span><span style="font-size: 1.5rem;">mm</span></div>
+<small id="reset-msg">Μηδενίζει αυτόματα στις 00:00</small>
 </div>
 </div>
 
 <h2 class="section-title">Πρόγνωση & Ραντάρ</h2>
 <div class="dashboard">
 <div class="card widget-card">
-<iframe class="forecast-frame" src="https://www.meteoblue.com/el/weather/widget/three/neos-mylon-topos_%ce%95%ce%bb%ce%bb%ce%ac%ce%b4%ce%b1_844962?geoloc=fixed&nocurrent=0&noforecast=0&days=4&tempunit=CELSIUS&windunit=KILOMETER_PER_HOUR&layout=light"></iframe>
+<h3 class="widget-title">Πρόγνωση: Νέος Μυλότοπος</h3>
+<iframe class="forecast-frame" src="https://www.meteoblue.com/el/weather/widget/three/neos-mylon-topos_%ce%95%ce%bb%ce%bb%ce%ac%ce%b4%ce%b1_844962?geoloc=fixed&nocurrent=0&noforecast=0&days=4&tempunit=CELSIUS&windunit=KILOMETER_PER_HOUR&layout=light" frameborder="0" scrolling="NO" allowtransparency="true" sandbox="allow-same-origin allow-scripts allow-popups allow-popups-to-escape-sandbox"></iframe>
 </div>
 <div class="card widget-card">
-<iframe class="radar-frame" src="https://www.rainviewer.com/map.html?loc=40.7922,22.39,11&oFa=0&oC=1&oU=0&oF=0&oSt=1&oT=1&oB=1&oP=1&oR=1&oS=0&oW=0&mT=3&ls=1&lm=1&th=1&oN=1"></iframe>
+<h3 class="widget-title">Ζωντανό Ραντάρ Βροχής</h3>
+<iframe class="radar-frame" src="https://www.rainviewer.com/map.html?loc=40.7922,22.39,11&oFa=0&oC=1&oU=0&oF=0&oSt=1&oT=1&oB=1&oP=1&oR=1&oS=0&oW=0&mT=3&ls=1&lm=1&th=1&oN=1" allowfullscreen></iframe>
 </div>
 </div>
 
-<h2 class="section-title">Συνεργαζόμενοι Γεωπόνοι</h2>
-<div class="dashboard">
-<div class="card" style="grid-column: 1 / -1; padding: 10px;">
+<h2 class="section-title">Συνεργαζόμενοι Γεωπόνοι & Διαφημίσεις</h2>
+<div class="ads-dashboard">
+<div class="card" style="padding: 10px;">
 <div class="slideshow-container" id="ad-slider">
-<img src="https://i.imgur.com/oAWf4Ai.png" class="active">
-<img src="https://images.unsplash.com/photo-1628352081506-83c43123ed6d?auto=format&fit=crop&w=800&q=80">
+<img src="https://i.imgur.com/oAWf4Ai.png" class="active" alt="Διαφήμιση 1">
+<img src="https://images.unsplash.com/photo-1628352081506-83c43123ed6d?auto=format&fit=crop&w=800&q=80" alt="Διαφήμιση 2">
+<img src="https://images.unsplash.com/photo-1592982537447-7440774c39fa?auto=format&fit=crop&w=800&q=80" alt="Διαφήμιση 3">
 </div>
 </div>
 </div>
@@ -180,13 +201,15 @@ footer { text-align: center; color: #ffffff; margin: 30px auto 10px auto; paddin
 <h2 class="section-title">Ιστορικά Γραφήματα</h2>
 <div class="charts-dashboard">
 <div class="card"><h3>Πορεία Θερμοκρασίας</h3><div class="chart-container"><canvas id="chart-temp"></canvas></div></div>
+<div class="card"><h3>Πορεία Υγρασία</h3><div class="chart-container"><canvas id="chart-hum"></canvas></div></div>
+<div class="card"><h3>Πoρεία Πίεσης</h3><div class="chart-container"><canvas id="chart-press"></canvas></div></div>
 <div class="card"><h3>Πορεία Βροχόπτωσης</h3><div class="chart-container"><canvas id="chart-rain"></canvas></div></div>
 </div>
 
 <div class="bottom-dashboard">
 <div class="card">
 <h3>Μπαταρία Σταθμού</h3>
-<div style="font-size: 3rem; font-weight: bold;"><span id="b-val">--</span>%</div>
+<div style="font-size: 3rem; font-weight: bold;"><span id="b-val">--</span><span style="font-size: 1.2rem;">%</span></div>
 <div id="b-label" style="font-weight:bold">--</div>
 </div>
 </div>
@@ -195,93 +218,72 @@ footer { text-align: center; color: #ffffff; margin: 30px auto 10px auto; paddin
 </div>
 
 <script>
-// Slideshow
 let currentSlide = 0;
 const slides = document.querySelectorAll('#ad-slider img');
-setInterval(() => {
-if (slides.length === 0) return;
-slides[currentSlide].classList.remove('active');
-currentSlide = (currentSlide + 1) % slides.length;
-slides[currentSlide].classList.add('active');
-}, 4000);
+function nextSlide() { if (slides.length === 0) return; slides[currentSlide].classList.remove('active'); currentSlide = (currentSlide + 1) % slides.length; slides[currentSlide].classList.add('active'); }
+setInterval(nextSlide, 4000);
 
-// Gauges
-var gTemp = new RadialGauge({renderTo:'gauge-temp',width:240,height:240,units:"°C",minValue:-10,maxValue:50,colorPlate:"#fff",needleType:"arrow",animationDuration:1500}).draw();
-var gHum = new RadialGauge({renderTo:'gauge-hum',width:240,height:240,units:"%",minValue:0,maxValue:100,colorPlate:"#fff",needleType:"arrow",animationDuration:1500}).draw();
-var gPress = new RadialGauge({renderTo:'gauge-press',width:240,height:240,units:"hPa",minValue:960,maxValue:1060,colorPlate:"#fff",needleType:"arrow",animationDuration:1500}).draw();
+var gTemp = new RadialGauge({ renderTo: 'gauge-temp', width: 240, height: 240, units: "°C", minValue: -10, maxValue: 60, majorTicks: ["-10","0","10","20","30","40","50","60"], minorTicks: 2, strokeTicks: true, highlights: [{ "from": -10, "to": 0, "color": "rgba(0,255,255,.5)" }, { "from": 0, "to": 10, "color": "rgba(0,128,255,.5)" }, { "from": 10, "to": 20, "color": "rgba(154,205,50,.5)" }, { "from": 20, "to": 30, "color": "rgba(255,215,0,.5)" }, { "from": 30, "to": 40, "color": "rgba(255,165,0,.5)" }, { "from": 40, "to": 60, "color": "rgba(255,0,0,.5)" }], colorPlate: "#fff", borderShadowWidth: 0, borders: true, needleType: "arrow", needleWidth: 4, needleCircleSize: 7, needleCircleOuter: true, needleCircleInner: false, animationDuration: 1500, animationRule: "linear" }).draw();
+var gHum = new RadialGauge({ renderTo: 'gauge-hum', width: 240, height: 240, units: "%", minValue: 0, maxValue: 100, majorTicks: ["0","10","20","30","40","50","60","70","80","90","100"], minorTicks: 2, strokeTicks: true, highlights: [{ "from": 0, "to": 20, "color": "rgba(255,140,0,.5)" }, { "from": 20, "to": 40, "color": "rgba(255,165,0,.5)" }, { "from": 40, "to": 60, "color": "rgba(50,205,50,.5)" }, { "from": 60, "to": 80, "color": "rgba(0,191,255,.5)" }, { "from": 80, "to": 100, "color": "rgba(0,0,255,.5)" }], colorPlate: "#fff", borders: true, needleType: "arrow", needleWidth: 4, animationDuration: 1500 }).draw();
+var gPress = new RadialGauge({ renderTo: 'gauge-press', width: 240, height: 240, units: "hPa", minValue: 950, maxValue: 1050, majorTicks: ["950","960","970","980","990","1000","1010","1020","1030","1040","1050"], minorTicks: 2, strokeTicks: true, highlights: [{ "from": 950, "to": 1000, "color": "rgba(255,0,0,.5)" }, { "from": 1000, "to": 1020, "color": "rgba(0,255,0,.5)" }, { "from": 1020, "to": 1050, "color": "rgba(0,0,255,.5)" }], colorPlate: "#fff", borders: true, needleType: "arrow", needleWidth: 4, animationDuration: 1500 }).draw();
 
-// Charts
-function createChart(id,label,color){
-return new Chart(document.getElementById(id),{type:'line',data:{labels:[],datasets:[{label:label,data:[],borderColor:color,fill:true,backgroundColor:color+'22'}]},options:{responsive:true,maintainAspectRatio:false,scales:{x:{ticks:{color:'#fff'}},y:{ticks:{color:'#fff'}}}}});
-}
-var cTemp = createChart('chart-temp','Θερμοκρασία','#ff4444');
-var cRain = createChart('chart-rain','Βροχόπτωση','#0099ff');
+function createChart(canvasId, label, color, minVal = null, maxVal = null) { return new Chart(document.getElementById(canvasId), { type: 'line', data: { labels: [], datasets: [{ label: label, data: [], borderColor: color, backgroundColor: color + '22', borderWidth: 3, tension: 0.3, fill: true }] }, options: { responsive: true, maintainAspectRatio: false, scales: { x: { grid: { display: false }, ticks: { color: '#ffffff' } }, y: { min: minVal, max: maxVal, grid: { color: 'rgba(255,255,255,0.1)' }, ticks: { color: '#ffffff' } } }, plugins: { legend: { labels: { color: '#fff' } } } } }); }
+var cTemp = createChart('chart-temp', 'Θερμοκρασία (°C)', '#d53a35');
+var cHum = createChart('chart-hum', 'Υγρασία (%)', '#2f89fc');
+var cPress = createChart('chart-press', 'Πίεση (hPa)', '#ff9f43');
+var cRain = createChart('chart-rain', 'Βροχόπτωση (mm)', '#28a745', 0, 50);
 
 function update() {
-const now = new Date();
-document.getElementById('clock').innerText = now.toLocaleTimeString('el-GR');
-document.getElementById('date').innerText = now.toLocaleDateString('el-GR',{weekday:'long',day:'numeric',month:'long'});
+const d = new Date();
+if (d.getHours() === 0 && d.getMinutes() === 0) localStorage.setItem('rain_reset_value', document.getElementById('r-val').innerText);
+document.getElementById('clock').innerText = d.toLocaleTimeString('el-GR');
+document.getElementById('date').innerText = d.toLocaleDateString('el-GR', {weekday:'long', day:'numeric', month:'long'});
 
-const rainTimeStr = now.toLocaleDateString('el-GR',{day:'2-digit',month:'2-digit',year:'2-digit'}) + " " + now.toLocaleTimeString('el-GR',{hour:'2-digit',minute:'2-digit'});
+const rainTimeStr = d.toLocaleDateString('el-GR',{day:'2-digit',month:'2-digit',year:'2-digit'}) + " " + d.toLocaleTimeString('el-GR',{hour:'2-digit',minute:'2-digit'});
 document.querySelectorAll('.live-time').forEach(el => el.innerText = rainTimeStr);
 
-fetch("https://api.thingspeak.com/channels/3365350/feeds.json?results=60")
+fetch("https://api.thingspeak.com/channels/3365350/feeds.json?results=80")
 .then(res => res.json())
 .then(data => {
-const feeds = data.feeds;
-const last = feeds[feeds.length-1];
+const feeds = data.feeds; const last = feeds[feeds.length - 1];
+const statusBadge = document.getElementById('status-badge');
+const diffMinutes = (new Date() - new Date(last.created_at)) / 1000 / 60;
+if (diffMinutes < 20) { statusBadge.innerText = "ONLINE"; statusBadge.style.backgroundColor = "#00ff00"; }
+else { statusBadge.innerText = "OFFLINE"; statusBadge.style.backgroundColor = "#ff0000"; }
 
-gTemp.value = last.field1;
-gHum.value = last.field2;
-gPress.value = last.field3;
+if(last.field1) gTemp.value = last.field1;
+if(last.field2) gHum.value = last.field2;
+if(last.field3) gPress.value = last.field3;
 
-let rain = parseFloat(last.field4) || 0;
-document.getElementById('r-val').innerText = rain.toFixed(2);
-document.getElementById('cur-day').innerText = rain.toFixed(1);
-document.getElementById('fill-day').style.height = Math.min(rain * 100, 100) + "%";
+let liveRain = parseFloat(last.field4) || 0;
+let resetVal = parseFloat(localStorage.getItem('rain_reset_value')) || 0;
+let dayRain = Math.max(0, liveRain - resetVal);
+document.getElementById('r-val').innerText = dayRain.toFixed(2);
+document.getElementById('cur-day').innerText = dayRain.toFixed(2);
+document.getElementById('fill-day').style.height = Math.min(dayRain * 100, 100) + "%";
 
-let bat = parseFloat(last.field5) || 0;
-document.getElementById('b-val').innerText = bat.toFixed(0);
+document.getElementById('r-total-month').innerText = (parseFloat(localStorage.getItem('rain_total_month')) || 0).toFixed(1);
+document.getElementById('r-total-year').innerText = (parseFloat(localStorage.getItem('rain_total_year')) || 0).toFixed(1);
+
+let b = parseFloat(last.field5) || 0;
+document.getElementById('b-val').innerText = b.toFixed(0);
 let lbl = document.getElementById('b-label');
-if(bat > 70) { lbl.innerText="ΚΑΛΗ"; lbl.style.color="#00ff00"; }
-else if(bat > 30) { lbl.innerText="ΜΕΤΡΙΑ"; lbl.style.color="orange"; }
-else { lbl.innerText="ΧΑΜΗΛΗ"; lbl.style.color="red"; }
+if(b > 75) { lbl.innerText="ΚΑΛΗ"; lbl.style.color="green"; } else if(b > 30) { lbl.innerText="ΜΕΤΡΙΑ"; lbl.style.color="orange"; } else { lbl.innerText="ΧΑΜΗΛΗ"; lbl.style.color="red"; }
 
-// Max/Min Calculations
-let tVals = feeds.filter(f => f.field1).map(f => parseFloat(f.field1));
-let hVals = feeds.filter(f => f.field2).map(f => parseFloat(f.field2));
-if(tVals.length > 0) {
-document.getElementById('t-max').innerText = Math.max(...tVals).toFixed(1);
-document.getElementById('t-min').innerText = Math.min(...tVals).toFixed(1);
+let labels = feeds.map(f => new Date(f.created_at).toLocaleTimeString('el-GR', {hour: '2-digit', minute:'2-digit'}));
+cTemp.data.labels = labels; cTemp.data.datasets[0].data = feeds.map(f => f.field1); cTemp.update();
+cHum.data.labels = labels; cHum.data.datasets[0].data = feeds.map(f => f.field2); cHum.update();
+cPress.data.labels = labels; cPress.data.datasets[0].data = feeds.map(f => f.field3); cPress.update();
+cRain.data.labels = labels; cRain.data.datasets[0].data = feeds.map(f => f.field4); cRain.update();
+
+let tArr = feeds.filter(f => f.field1 != null).map(f => ({v: parseFloat(f.field1), t: f.created_at}));
+if(tArr.length > 0) {
+let tMax = tArr.reduce((p, c) => (p.v > c.v) ? p : c); let tMin = tArr.reduce((p, c) => (p.v < c.v) ? p : c);
+document.getElementById('t-max').innerText = tMax.v.toFixed(1); document.getElementById('t-max-t').innerText = "(" + new Date(tMax.t).toLocaleTimeString('el-GR', {hour:'2-digit', minute:'2-digit'}) + ")";
+document.getElementById('t-min').innerText = tMin.v.toFixed(1); document.getElementById('t-min-t').innerText = "(" + new Date(tMin.t).toLocaleTimeString('el-GR', {hour:'2-digit', minute:'2-digit'}) + ")";
 }
-if(hVals.length > 0) {
-document.getElementById('h-max').innerText = Math.max(...hVals).toFixed(0);
-document.getElementById('h-min').innerText = Math.min(...hVals).toFixed(0);
+}).catch(() => { statusBadge.innerText = "OFFLINE"; statusBadge.style.backgroundColor = "#ff0000"; });
 }
-
-// Alert Logic
-const alertBox = document.getElementById('alert-box');
-if(parseFloat(last.field1) < 2) { alertBox.innerText = "⚠️ ΚΙΝΔΥΝΟΣ ΠΑΓΕΤΟΥ!"; alertBox.className="alert-danger"; }
-else { alertBox.innerText = "✅ ΟΜΑΛΕΣ ΣΥΝΘΗΚΕΣ"; alertBox.className="alert-normal"; }
-
-// Update Charts
-let labels = feeds.map(f => new Date(f.created_at).toLocaleTimeString('el-GR',{hour:'2-digit',minute:'2-digit'}));
-cTemp.data.labels = labels;
-cTemp.data.datasets[0].data = feeds.map(f => f.field1);
-cTemp.update();
-cRain.data.labels = labels;
-cRain.data.datasets[0].data = feeds.map(f => f.field4);
-cRain.update();
-
-document.getElementById('status-badge').innerText = "ONLINE";
-document.getElementById('status-badge').style.background = "#00ff00";
-})
-.catch(() => {
-document.getElementById('status-badge').innerText = "OFFLINE";
-document.getElementById('status-badge').style.background = "red";
-});
-}
-
 update();
 setInterval(update, 20000);
 </script>
