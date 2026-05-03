@@ -55,7 +55,7 @@ box-shadow: 0 15px 40px rgba(0,0,0,0.5);
 /* --- ΕΝΗΜΕΡΩΜΕΝΟ ΣΤΥΛ ΓΙΑ ΤΟΥΣ ΜΕΤΡΗΤΕΣ ΜΕ ΚΛΙΜΑΚΕΣ --- */
 .rain-gauges-container {
 display: flex;
-flex-wrap: wrap; /* ΑΥΤΗ ΕΙΝΑΙ Η ΜΟΝΑΔΙΚΗ ΑΛΛΑΓΗ ΓΙΑ ΝΑ ΜΗΝ ΚΟΒΟΝΤΑΙ ΣΤΟ ΚΙΝΗΤΟ */
+flex-wrap: wrap;
 justify-content: center;
 gap: 8px;
 margin-top: 10px;
@@ -65,7 +65,7 @@ border-radius: 8px;
 }
 .rain-box {
 flex: 1;
-min-width: 100px; /* Ελάχιστο πλάτος για να φαίνονται σωστά */
+min-width: 100px;
 display: flex;
 flex-direction: column;
 align-items: center;
@@ -254,11 +254,11 @@ max-width: 1200px; font-size: 0.9rem; border: 1px solid rgba(255, 255, 255, 0.2)
 <div class="rain-box">
 <div class="rain-box-title">Μηνιαίος Υετός</div>
 <div class="rain-visual">
-<div class="rain-num-scale"><span>50</span><span>25</span><span>0</span></div>
+<div class="rain-num-scale"><span>150</span><span>75</span><span>0</span></div>
 <div class="rain-ticks"><span></span><span></span><span></span><span></span><span></span></div>
 <div class="rain-bar-container"><div id="bar-month" class="rain-bar-fill"></div></div>
 <div class="rain-ticks"><span></span><span></span><span></span><span></span><span></span></div>
-<div class="rain-num-scale"><span>50</span><span>25</span><span>0</span></div>
+<div class="rain-num-scale"><span>150</span><span>75</span><span>0</span></div>
 </div>
 <div class="rain-box-footer"><span id="val-month">0.0</span> mm</div>
 </div>
@@ -266,11 +266,11 @@ max-width: 1200px; font-size: 0.9rem; border: 1px solid rgba(255, 255, 255, 0.2)
 <div class="rain-box">
 <div class="rain-box-title">Ετήσιος Yετός</div>
 <div class="rain-visual">
-<div class="rain-num-scale"><span>300</span><span>150</span><span>0</span></div>
+<div class="rain-num-scale"><span>600</span><span>300</span><span>0</span></div>
 <div class="rain-ticks"><span></span><span></span><span></span><span></span><span></span></div>
 <div class="rain-bar-container"><div id="bar-year" class="rain-bar-fill"></div></div>
 <div class="rain-ticks"><span></span><span></span><span></span><span></span><span></span></div>
-<div class="rain-num-scale"><span>300</span><span>150</span><span>0</span></div>
+<div class="rain-num-scale"><span>600</span><span>300</span><span>0</span></div>
 </div>
 <div class="rain-box-footer"><span id="val-year">0.0</span> mm</div>
 </div>
@@ -456,8 +456,8 @@ localStorage.setItem('rain_reset_value', document.getElementById('r-val').innerT
 document.getElementById('clock').innerText = d.toLocaleTimeString('el-GR');
 document.getElementById('date').innerText = d.toLocaleDateString('el-GR', {weekday:'long', day:'numeric', month:'long'});
 
-// ΕΔΩ ΕΙΝΑΙ Η ΑΛΛΑΓΗ: ΖΗΤΑΜΕ ΚΑΙ ΤΟ metadata ΑΠΟ ΤΟ CHANNEL
-fetch("https://api.thingspeak.com/channels/3365350/feeds.json?results=80")
+// ΠΡΟΣΟΧΗ: Προστέθηκε το &metadata=true στο τέλος του URL για να έρθουν τα δεδομένα!
+fetch("https://api.thingspeak.com/channels/3365350/feeds.json?results=80&metadata=true")
 .then(res => res.json())
 .then(data => {
 const feeds = data.feeds;
@@ -476,8 +476,8 @@ document.getElementById('r-total-month').innerText = mVal.toFixed(1);
 document.getElementById('r-total-year').innerText = yVal.toFixed(1);
 document.getElementById('val-month').innerText = mVal.toFixed(1);
 document.getElementById('val-year').innerText = yVal.toFixed(1);
-document.getElementById('bar-month').style.height = Math.min((mVal / 50) * 100, 100) + "%";
-document.getElementById('bar-year').style.height = Math.min((yVal / 300) * 100, 100) + "%";
+document.getElementById('bar-month').style.height = Math.min((mVal / 150) * 100, 100) + "%";
+document.getElementById('bar-year').style.height = Math.min((yVal / 600) * 100, 100) + "%";
 } catch(e) { console.log("Metadata error"); }
 }
 
