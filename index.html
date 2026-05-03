@@ -55,7 +55,7 @@ box-shadow: 0 15px 40px rgba(0,0,0,0.5);
 /* --- ΕΝΗΜΕΡΩΜΕΝΟ ΣΤΥΛ ΓΙΑ ΤΟΥΣ ΜΕΤΡΗΤΕΣ ΜΕ ΚΛΙΜΑΚΕΣ --- */
 .rain-gauges-container {
 display: flex;
-flex-wrap: wrap; /* ΑΥΤΗ ΕΙΝΑΙ Η ΜΟΝΑΔΙΚΗ ΑΛΛΑΓΗ ΓΙΑ ΝΑ ΜΗΝ ΚΟΒΟΝΤΑΙ ΣΤΟ ΚΙΝΗΤΟ */
+flex-wrap: wrap;
 justify-content: center;
 gap: 8px;
 margin-top: 10px;
@@ -65,7 +65,7 @@ border-radius: 8px;
 }
 .rain-box {
 flex: 1;
-min-width: 100px; /* Ελάχιστο πλάτος για να φαίνονται σωστά */
+min-width: 100px;
 display: flex;
 flex-direction: column;
 align-items: center;
@@ -532,21 +532,21 @@ let rMin = Math.min(...rArr);
 let rTotalDay = rMax - rMin;
 document.getElementById('r-total-day').innerText = (rTotalDay > 0 ? rTotalDay : 0).toFixed(2);
 
-// --- Η ΔΙΟΡΘΩΣΗ ΓΙΑ ΜΗΝΑ / ΕΤΟΣ ΑΠΟ ΤΟ METADATA ---
-if (data.channel.metadata) {
+// --- ΔΙΟΡΘΩΣΗ: ΔΙΑΒΑΣΜΑ ΑΠΟ METADATA ΓΙΑ ΜΗΝΑ & ΕΤΟΣ ---
+if (data.channel && data.channel.metadata) {
 try {
 let meta = JSON.parse(data.channel.metadata);
 let mVal = parseFloat(meta.month) || 0;
 let yVal = parseFloat(meta.year) || 0;
 
 document.getElementById('r-total-month').innerText = mVal.toFixed(1);
-document.getElementById('r-total-year').innerText = yVal.toFixed(1);
 document.getElementById('val-month').innerText = mVal.toFixed(1);
-document.getElementById('val-year').innerText = yVal.toFixed(1);
-
 document.getElementById('bar-month').style.height = Math.min((mVal / 50) * 100, 100) + "%";
+
+document.getElementById('r-total-year').innerText = yVal.toFixed(1);
+document.getElementById('val-year').innerText = yVal.toFixed(1);
 document.getElementById('bar-year').style.height = Math.min((yVal / 300) * 100, 100) + "%";
-} catch(e) { console.log("Metadata formatting..."); }
+} catch(e) { console.log("Metadata error"); }
 }
 }
 
