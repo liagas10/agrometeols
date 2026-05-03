@@ -211,55 +211,54 @@ max-width: 1200px; font-size: 0.9rem; border: 1px solid rgba(255, 255, 255, 0.2)
 Έτος: <span id="r-total-year" style="font-weight:bold">--</span> mm
 </p>
 
-<!-- ΜΕΤΡΗΤΕΣ ΜΕ ΠΛΗΡΗ ΚΛΙΜΑΚΑ ΚΑΙ ΝΟΥΜΕΡΑ -->
 <div class="rain-gauges-container">
 <!-- DAY RAIN -->
 <div class="rain-box">
 <div class="rain-box-title">Day Rain</div>
 <div class="rain-visual">
-<div class="rain-num-scale"><span>1.0</span><span>0.5</span><span>0.0</span></div>
+<div class="rain-num-scale"><span>50</span><span>25</span><span>0</span></div>
 <div class="rain-ticks"><span></span><span></span><span></span><span></span><span></span></div>
 <div class="rain-bar-container"><div id="bar-day" class="rain-bar-fill"></div></div>
 <div class="rain-ticks"><span></span><span></span><span></span><span></span><span></span></div>
-<div class="rain-num-scale"><span>1.0</span><span>0.5</span><span>0.0</span></div>
+<div class="rain-num-scale"><span>50</span><span>25</span><span>0</span></div>
 </div>
-<div class="rain-box-footer" id="val-day">0.0</div>
+<div class="rain-box-footer"><span id="val-day">0.0</span> mm</div>
 </div>
 <!-- STORM -->
 <div class="rain-box">
 <div class="rain-box-title">Storm</div>
 <div class="rain-visual">
-<div class="rain-num-scale"><span>1.0</span><span>0.5</span><span>0.0</span></div>
+<div class="rain-num-scale"><span>50</span><span>25</span><span>0</span></div>
 <div class="rain-ticks"><span></span><span></span><span></span><span></span><span></span></div>
 <div class="rain-bar-container"><div id="bar-storm" class="rain-bar-fill"></div></div>
 <div class="rain-ticks"><span></span><span></span><span></span><span></span><span></span></div>
-<div class="rain-num-scale"><span>1.0</span><span>0.5</span><span>0.0</span></div>
+<div class="rain-num-scale"><span>50</span><span>25</span><span>0</span></div>
 </div>
-<div class="rain-box-footer">0.0</div>
+<div class="rain-box-footer"><span id="val-storm">0.0</span> mm</div>
 </div>
 <!-- RATE -->
 <div class="rain-box">
 <div class="rain-box-title">Rate</div>
 <div class="rain-visual">
-<div class="rain-num-scale"><span>25</span><span>12</span><span>0</span></div>
+<div class="rain-num-scale"><span>50</span><span>25</span><span>0</span></div>
 <div class="rain-ticks"><span></span><span></span><span></span><span></span><span></span></div>
 <div class="rain-bar-container"><div id="bar-rate" class="rain-bar-fill"></div></div>
 <div class="rain-ticks"><span></span><span></span><span></span><span></span><span></span></div>
-<div class="rain-num-scale"><span>25</span><span>12</span><span>0</span></div>
+<div class="rain-num-scale"><span>50</span><span>25</span><span>0</span></div>
 </div>
-<div class="rain-box-footer">0.0</div>
+<div class="rain-box-footer"><span id="val-rate">0.0</span> mm/h</div>
 </div>
 <!-- MONTH -->
 <div class="rain-box">
 <div class="rain-box-title">Month</div>
 <div class="rain-visual">
-<div class="rain-num-scale"><span>10</span><span>5</span><span>0</span></div>
+<div class="rain-num-scale"><span>50</span><span>25</span><span>0</span></div>
 <div class="rain-ticks"><span></span><span></span><span></span><span></span><span></span></div>
 <div class="rain-bar-container"><div id="bar-month" class="rain-bar-fill"></div></div>
 <div class="rain-ticks"><span></span><span></span><span></span><span></span><span></span></div>
-<div class="rain-num-scale"><span>10</span><span>5</span><span>0</span></div>
+<div class="rain-num-scale"><span>50</span><span>25</span><span>0</span></div>
 </div>
-<div class="rain-box-footer" id="val-month">0.0</div>
+<div class="rain-box-footer"><span id="val-month">0.0</span> mm</div>
 </div>
 <!-- YEAR -->
 <div class="rain-box">
@@ -271,7 +270,7 @@ max-width: 1200px; font-size: 0.9rem; border: 1px solid rgba(255, 255, 255, 0.2)
 <div class="rain-ticks"><span></span><span></span><span></span><span></span><span></span></div>
 <div class="rain-num-scale"><span>300</span><span>150</span><span>0</span></div>
 </div>
-<div class="rain-box-footer" id="val-year">0.0</div>
+<div class="rain-box-footer"><span id="val-year">0.0</span> mm</div>
 </div>
 </div>
 </div>
@@ -499,7 +498,7 @@ let resetVal = parseFloat(localStorage.getItem('rain_reset_value')) || 0;
 currentRainValue = liveRain - resetVal;
 if (currentRainValue < 0) currentRainValue = 0;
 document.getElementById('r-val').innerText = currentRainValue.toFixed(2);
-document.getElementById('bar-day').style.height = Math.min((currentRainValue / 1.0) * 100, 100) + "%";
+document.getElementById('bar-day').style.height = Math.min((currentRainValue / 50) * 100, 100) + "%";
 document.getElementById('val-day').innerText = currentRainValue.toFixed(1);
 }
 
@@ -535,10 +534,10 @@ let yVal = parseFloat(localStorage.getItem('rain_total_year')) || 0;
 document.getElementById('r-total-month').innerText = mVal.toFixed(1);
 document.getElementById('r-total-year').innerText = yVal.toFixed(1);
 
-document.getElementById('bar-month').style.height = Math.min((mVal / 10) * 100, 100) + "%";
+document.getElementById('bar-month').style.height = Math.min((mVal / 50) * 100, 100) + "%";
 document.getElementById('val-month').innerText = mVal.toFixed(1);
 document.getElementById('bar-year').style.height = Math.min((yVal / 300) * 100, 100) + "%";
-document.getElementById('val-year').innerText = yVal.toFixed(0);
+document.getElementById('val-year').innerText = yVal.toFixed(1);
 }
 
 let tArr = feeds.filter(f => f.field1 != null).map(f => ({v: parseFloat(f.field1), t: f.created_at}));
