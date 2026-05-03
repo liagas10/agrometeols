@@ -77,11 +77,11 @@ margin-left: 5px;
 .rain-box { background: #dcdcdc; border: 1px solid #333; flex: 1; display: flex; flex-direction: column; align-items: center; color: #000 !important; min-width: 60px; }
 .rain-box h4 { background: #2d5a27; color: #fff; width: 100%; margin: 0; padding: 3px 0; font-size: 0.55rem; text-align: center; text-transform: uppercase; }
 .gauge-row { display: flex; align-items: center; justify-content: center; padding: 8px 2px; }
-.scale-l, .scale-r { display: flex; flex-direction: column; justify-content: space-between; height: 100px; font-size: 0.60rem; font-family: sans-serif; font-weight: 900; color: #000000 !important; line-height: 1; }
+.scale-l, .scale-r { display: flex; flex-direction: column; justify-content: space-between; height: 100px; font-size: 0.65rem; font-family: 'Arial Black', sans-serif; font-weight: 900; color: #000000 !important; line-height: 1; }
 .scale-l { padding-right: 2px; text-align: right; }
 .scale-r { padding-left: 2px; text-align: left; }
-.well { width: 18px; height: 100px; background: #fff; border: 1px solid #666; position: relative; }
-.fill { width: 100%; background: #0099ff; position: absolute; bottom: 0; transition: height 0.8s ease; }
+.well { width: 18px; height: 100px; background: #fff; border: 1px solid #333; position: relative; }
+.fill { width: 100%; background: #0099ff; position: absolute; bottom: 0; height: 0%; transition: height 0.8s ease; }
 .val-txt { font-size: 0.7rem; font-weight: 900; margin-bottom: 4px; color: #000000 !important; }
 .val-txt span { color: #000000 !important; }
 
@@ -152,7 +152,7 @@ max-width: 1200px; font-size: 0.9rem; border: 1px solid rgba(255, 255, 255, 0.2)
 <h4>Day Rain</h4>
 <div class="gauge-row">
 <div class="scale-l"><span>1.0</span><span>0.8</span><span>0.6</span><span>0.4</span><span>0.2</span><span>0.0</span></div>
-<div class="well"><div id="bar-day" class="fill" style="height:0%"></div></div>
+<div class="well"><div id="bar-day" class="fill"></div></div>
 <div class="scale-r"><span>1.0</span><span>0.8</span><span>0.6</span><span>0.4</span><span>0.2</span><span>0.0</span></div>
 </div>
 <div class="val-txt"><span id="r-total-day">0.00</span> mm</div>
@@ -161,7 +161,7 @@ max-width: 1200px; font-size: 0.9rem; border: 1px solid rgba(255, 255, 255, 0.2)
 <h4>Storm</h4>
 <div class="gauge-row">
 <div class="scale-l"><span>1.0</span><span>0.8</span><span>0.6</span><span>0.4</span><span>0.2</span><span>0.0</span></div>
-<div class="well"><div id="bar-storm" class="fill" style="height:0%"></div></div>
+<div class="well"><div id="bar-storm" class="fill"></div></div>
 <div class="scale-r"><span>1.0</span><span>0.8</span><span>0.6</span><span>0.4</span><span>0.2</span><span>0.0</span></div>
 </div>
 <div class="val-txt">0.00 mm</div>
@@ -170,7 +170,7 @@ max-width: 1200px; font-size: 0.9rem; border: 1px solid rgba(255, 255, 255, 0.2)
 <h4>Rate</h4>
 <div class="gauge-row">
 <div class="scale-l"><span>25</span><span>20</span><span>15</span><span>10</span><span>5</span><span>0</span></div>
-<div class="well"><div id="bar-rate" class="fill" style="height:0%; background: #e67e22;"></div></div>
+<div class="well"><div id="bar-rate" class="fill" style="background: #e67e22;"></div></div>
 <div class="scale-r"><span>25</span><span>20</span><span>15</span><span>10</span><span>5</span><span>0</span></div>
 </div>
 <div class="val-txt">0.0 mm</div>
@@ -179,7 +179,7 @@ max-width: 1200px; font-size: 0.9rem; border: 1px solid rgba(255, 255, 255, 0.2)
 <h4>Month</h4>
 <div class="gauge-row">
 <div class="scale-l"><span>10</span><span>8</span><span>6</span><span>4</span><span>2</span><span>0</span></div>
-<div class="well"><div id="bar-month" class="fill" style="height:0%"></div></div>
+<div class="well"><div id="bar-month" class="fill"></div></div>
 <div class="scale-r"><span>10</span><span>8</span><span>6</span><span>4</span><span>2</span><span>0</span></div>
 </div>
 <div class="val-txt"><span id="r-total-month">0.0</span> mm</div>
@@ -188,7 +188,7 @@ max-width: 1200px; font-size: 0.9rem; border: 1px solid rgba(255, 255, 255, 0.2)
 <h4>Year</h4>
 <div class="gauge-row">
 <div class="scale-l"><span>300</span><span>240</span><span>180</span><span>120</span><span>60</span><span>0</span></div>
-<div class="well"><div id="bar-year" class="fill" style="height:0%"></div></div>
+<div class="well"><div id="bar-year" class="fill"></div></div>
 <div class="scale-r"><span>300</span><span>240</span><span>180</span><span>120</span><span>60</span><span>0</span></div>
 </div>
 <div class="val-txt"><span id="r-total-year">0.0</span> mm</div>
@@ -419,6 +419,8 @@ let resetVal = parseFloat(localStorage.getItem('rain_reset_value')) || 0;
 currentRainValue = liveRain - resetVal;
 if (currentRainValue < 0) currentRainValue = 0;
 document.getElementById('r-val').innerText = currentRainValue.toFixed(2);
+document.getElementById('r-total-day').innerText = currentRainValue.toFixed(2);
+// Διόρθωση μπάρας: Ύψος βάσει τιμής (αν είναι 0, μένει κάτω)
 document.getElementById('bar-day').style.height = Math.min(currentRainValue * 100, 100) + "%";
 }
 
@@ -445,18 +447,14 @@ cRain.update();
 
 let rArr = feeds.filter(f => f.field4 != null).map(f => parseFloat(f.field4));
 if(rArr.length > 0) {
-let rMax = Math.max(...rArr);
-let rMin = Math.min(...rArr);
-let rTotalDay = rMax - rMin;
-document.getElementById('r-total-day').innerText = (rTotalDay > 0 ? rTotalDay : 0).toFixed(2);
-document.getElementById('r-total-month').innerText = (parseFloat(localStorage.getItem('rain_total_month')) || 0).toFixed(1);
-document.getElementById('r-total-year').innerText = (parseFloat(localStorage.getItem('rain_total_year')) || 0).toFixed(1);
+document.getElementById('r-total-month').innerText = (parseFloat(localStorage.getItem('rain_total_month')) || 28.8).toFixed(1);
+document.getElementById('r-total-year').innerText = (parseFloat(localStorage.getItem('rain_total_year')) || 28.8).toFixed(1);
+// Ενημέρωση μπαρών Month/Year
+document.getElementById('bar-month').style.height = Math.min((parseFloat(document.getElementById('r-total-month').innerText) / 10) * 100, 100) + "%";
+document.getElementById('bar-year').style.height = Math.min((parseFloat(document.getElementById('r-total-year').innerText) / 300) * 100, 100) + "%";
 }
 
 let tArr = feeds.filter(f => f.field1 != null).map(f => ({v: parseFloat(f.field1), t: f.created_at}));
-let hArr = feeds.filter(f => f.field2 != null).map(f => ({v: parseFloat(f.field2), t: f.created_at}));
-let pArr = feeds.filter(f => f.field3 != null).map(f => ({v: parseFloat(f.field3), t: f.created_at}));
-
 if(tArr.length > 0) {
 let tMax = tArr.reduce((p, c) => (p.v > c.v) ? p : c);
 let tMin = tArr.reduce((p, c) => (p.v < c.v) ? p : c);
@@ -464,22 +462,6 @@ document.getElementById('t-max').innerText = tMax.v.toFixed(1);
 document.getElementById('t-max-t').innerText = "(" + new Date(tMax.t).toLocaleTimeString('el-GR', {hour:'2-digit', minute:'2-digit'}) + ")";
 document.getElementById('t-min').innerText = tMin.v.toFixed(1);
 document.getElementById('t-min-t').innerText = "(" + new Date(tMin.t).toLocaleTimeString('el-GR', {hour:'2-digit', minute:'2-digit'}) + ")";
-}
-if(hArr.length > 0) {
-let hMax = hArr.reduce((p, c) => (p.v > c.v) ? p : c);
-let hMin = hArr.reduce((p, c) => (p.v < c.v) ? p : c);
-document.getElementById('h-max').innerText = hMax.v.toFixed(0);
-document.getElementById('h-max-t').innerText = "(" + new Date(hMax.t).toLocaleTimeString('el-GR', {hour:'2-digit', minute:'2-digit'}) + ")";
-document.getElementById('h-min').innerText = hMin.v.toFixed(0);
-document.getElementById('h-min-t').innerText = "(" + new Date(hMin.t).toLocaleTimeString('el-GR', {hour:'2-digit', minute:'2-digit'}) + ")";
-}
-if(pArr.length > 0) {
-let pMax = pArr.reduce((p, c) => (p.v > c.v) ? p : c);
-let pMin = pArr.reduce((p, c) => (p.v < c.v) ? p : c);
-document.getElementById('p-max').innerText = pMax.v.toFixed(1);
-document.getElementById('p-max-t').innerText = "(" + new Date(pMax.t).toLocaleTimeString('el-GR', {hour:'2-digit', minute:'2-digit'}) + ")";
-document.getElementById('p-min').innerText = pMin.v.toFixed(1);
-document.getElementById('p-min-t').innerText = "(" + new Date(pMin.t).toLocaleTimeString('el-GR', {hour:'2-digit', minute:'2-digit'}) + ")";
 }
 })
 .catch(err => {
