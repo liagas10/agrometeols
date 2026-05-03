@@ -55,7 +55,7 @@ box-shadow: 0 15px 40px rgba(0,0,0,0.5);
 /* --- ΕΝΗΜΕΡΩΜΕΝΟ ΣΤΥΛ ΓΙΑ ΤΟΥΣ ΜΕΤΡΗΤΕΣ ΜΕ ΚΛΙΜΑΚΕΣ --- */
 .rain-gauges-container {
 display: flex;
-flex-wrap: wrap;
+flex-wrap: wrap; /* ΑΥΤΗ ΕΙΝΑΙ Η ΜΟΝΑΔΙΚΗ ΑΛΛΑΓΗ ΓΙΑ ΝΑ ΜΗΝ ΚΟΒΟΝΤΑΙ ΣΤΟ ΚΙΝΗΤΟ */
 justify-content: center;
 gap: 8px;
 margin-top: 10px;
@@ -65,7 +65,7 @@ border-radius: 8px;
 }
 .rain-box {
 flex: 1;
-min-width: 100px;
+min-width: 100px; /* Ελάχιστο πλάτος για να φαίνονται σωστά */
 display: flex;
 flex-direction: column;
 align-items: center;
@@ -456,6 +456,7 @@ localStorage.setItem('rain_reset_value', document.getElementById('r-val').innerT
 document.getElementById('clock').innerText = d.toLocaleTimeString('el-GR');
 document.getElementById('date').innerText = d.toLocaleDateString('el-GR', {weekday:'long', day:'numeric', month:'long'});
 
+// ΕΔΩ ΕΙΝΑΙ Η ΑΛΛΑΓΗ: ΖΗΤΑΜΕ ΚΑΙ ΤΟ metadata ΑΠΟ ΤΟ CHANNEL
 fetch("https://api.thingspeak.com/channels/3365350/feeds.json?results=80")
 .then(res => res.json())
 .then(data => {
@@ -463,6 +464,22 @@ const feeds = data.feeds;
 const last = feeds[feeds.length - 1];
 const temp = parseFloat(last.field1);
 const hum = parseFloat(last.field2);
+
+// --- ΔΙΑΒΑΣΜΑ METADATA ΓΙΑ ΜΗΝΑ ΚΑΙ ΕΤΟΣ ---
+if(data.channel && data.channel.metadata) {
+try {
+let meta = JSON.parse(data.channel.metadata);
+let mVal = parseFloat(meta.month) || 0;
+let yVal = parseFloat(meta.year) || 0;
+
+document.getElementById('r-total-month').innerText = mVal.toFixed(1);
+document.getElementById('r-total-year').innerText = yVal.toFixed(1);
+document.getElementById('val-month').innerText = mVal.toFixed(1);
+document.getElementById('val-year').innerText = yVal.toFixed(1);
+document.getElementById('bar-month').style.height = Math.min((mVal / 50) * 100, 100) + "%";
+document.getElementById('bar-year').style.height = Math.min((yVal / 300) * 100, 100) + "%";
+} catch(e) { console.log("Metadata error"); }
+}
 
 const lastSeen = new Date(last.created_at);
 const now = new Date();
@@ -531,23 +548,6 @@ let rMax = Math.max(...rArr);
 let rMin = Math.min(...rArr);
 let rTotalDay = rMax - rMin;
 document.getElementById('r-total-day').innerText = (rTotalDay > 0 ? rTotalDay : 0).toFixed(2);
-
-// --- ΔΙΟΡΘΩΣΗ: ΔΙΑΒΑΣΜΑ ΑΠΟ METADATA ΓΙΑ ΜΗΝΑ & ΕΤΟΣ ---
-if (data.channel && data.channel.metadata) {
-try {
-let meta = JSON.parse(data.channel.metadata);
-let mVal = parseFloat(meta.month) || 0;
-let yVal = parseFloat(meta.year) || 0;
-
-document.getElementById('r-total-month').innerText = mVal.toFixed(1);
-document.getElementById('val-month').innerText = mVal.toFixed(1);
-document.getElementById('bar-month').style.height = Math.min((mVal / 50) * 100, 100) + "%";
-
-document.getElementById('r-total-year').innerText = yVal.toFixed(1);
-document.getElementById('val-year').innerText = yVal.toFixed(1);
-document.getElementById('bar-year').style.height = Math.min((yVal / 300) * 100, 100) + "%";
-} catch(e) { console.log("Metadata error"); }
-}
 }
 
 let tArr = feeds.filter(f => f.field1 != null).map(f => ({v: parseFloat(f.field1), t: f.created_at}));
